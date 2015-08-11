@@ -1,6 +1,6 @@
 <?php
 
-class UserData extends BaseModel {
+class User extends BaseModel {
 
 	protected $id;
 	protected $group;
