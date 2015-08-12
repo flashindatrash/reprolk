@@ -8,7 +8,7 @@ try {
 
 	//$config = new Ini("../app/config/config.ini");
 	
-	print 's';
+	$view = new ViewController($_GET['_url']);
 
 } catch (Exception $e) {
 
