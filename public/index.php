@@ -6,7 +6,7 @@ try {
 
 	require_once ('../core/functions.php');
 
-	//$config = new Ini("../app/config/config.ini");
+	$config = parse_ini_file("../app/config/config.ini", true);
 	
 	$view = new ViewController($_GET['_url']);
 
