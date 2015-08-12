@@ -4,7 +4,7 @@ class BaseController {
 
 	protected static $dataBaseManager;
 
-	public function __construct() {
+	public function initDataBase() {
 		if (!self::$db) {
 			global $config;
 			self::$db = new DataBaseManager($config);
