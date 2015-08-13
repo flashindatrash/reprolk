@@ -4,10 +4,14 @@ class Application {
 
 	public $url;
 	
-	private $dataBaseManager;
+	public static $db;
     
 	public function connect($config) {
-		$this->dataBaseManager = new DataBaseManager($config);
+		self::$db = new DataBaseManager($config);
+	}
+	
+	public function addResource($name, $path) {
+		
 	}
 	
 	public function getContent() {
