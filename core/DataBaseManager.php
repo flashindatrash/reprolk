@@ -9,7 +9,7 @@ class DataBaseManager {
 		$this->prefix = $config['prefix'];
 		$this->connection = mysql_connect($config['host'], $config['username'], $config['password']);
 		if ($this->connection) {
-			mysql_select_db($config['name'], $this->connection)
+			mysql_select_db($config['name'], $this->connection);
 		}
 	}
 	
