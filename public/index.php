@@ -6,9 +6,15 @@ try {
 
 	require_once ('../core/functions.php');
 
-	$config = parse_ini_file("../app/config/config.ini", true);
+	$config = parse_ini_file('../app/config/config.ini', true);
 	
-	$view = new ViewController($_GET['_url']);
+	$app = new Application();
+	
+	$app->url = $_GET['_url'];
+	
+	$app->connect($config['database']);
+	
+	$app->getContent();
 
 } catch (Exception $e) {
 
