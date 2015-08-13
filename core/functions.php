@@ -1,5 +1,7 @@
 <?php
 
+include '../core/Application.php';
+include '../core/DataBaseManager.php';
 
 function p($x=''){
    print ps($x);
@@ -14,10 +16,4 @@ function ps($x=''){
 
 function pr($x=null){
    return print_r($x, true);
-}
-
-if(! function_exists('boolval')){
-   function boolval($val){
-      return !! $val;
-   }
 }
