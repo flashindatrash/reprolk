@@ -12,6 +12,9 @@ try {
 	
 	$app->url = $_GET['_url'];
 	
+	$app->addResource('Index', '/');
+	$app->addResource('Login', '/login');
+	
 	$app->connect($config['database']);
 	
 	$app->getContent();
