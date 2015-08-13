@@ -6,10 +6,10 @@ class DataBaseManager {
 	private $prefix;
    
 	public function __construct($config) {
-		$this->prefix = $config['database']['prefix'];
-		$this->connection = mysql_connect($config['database']['host'], $config['database']['username'], $config['database']['password']);
+		$this->prefix = $config['prefix'];
+		$this->connection = mysql_connect($config['host'], $config['username'], $config['password']);
 		if ($this->connection) {
-			mysql_select_db($config['database']['name'], $this->connection)
+			mysql_select_db($config['name'], $this->connection)
 		}
 	}
 	
