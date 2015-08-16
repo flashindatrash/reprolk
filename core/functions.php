@@ -2,6 +2,8 @@
 
 include '../core/Application.php';
 include '../core/DataBaseManager.php';
+include '../core/BaseController.php';
+include '../core/BaseModel.php';
 
 function p($x=''){
    print ps($x);

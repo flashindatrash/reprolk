@@ -13,12 +13,6 @@ class DataBaseManager {
 		}
 	}
 	
-	//--------------------------------------------------------------------------
-	//
-	//  Public methods
-	//
-	//--------------------------------------------------------------------------
-	
 	public function selectRow($from, $select = "*", $where = "1", $className = NULL) {
 		$query = mysql_query("select ".$select." from ".$this->tableName($from)." where ".$where, $this->connection);
 		if ($query) {
@@ -26,12 +20,6 @@ class DataBaseManager {
 		}
 		return NULL;
 	}
-	
-	//--------------------------------------------------------------------------
-	//
-	//  Private methods
-	//
-	//--------------------------------------------------------------------------
 	
 	private function tableName($name) {
 		return $this->prefix.$name;
