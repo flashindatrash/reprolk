@@ -1,0 +1,170 @@
+body {
+	background: #d9d9d9;
+}
+
+.container#main {
+    width: auto;
+    max-width: 900px;
+	padding: 0px;
+}
+
+.container#cols {
+	width: 100%;
+	border-top: 2px solid #92c3d2;
+	border-bottom: 5px solid #0079a6;
+	padding: 0px;
+}
+
+.drop-shadow {
+	-webkit-box-shadow: 0 0 10px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0 0 10px 2px rgba(0, 0, 0, .2);
+}
+
+.white-bg {
+	background-color: #ffffff;
+}
+
+.blue-bg {
+	background-color: #015673;
+}
+
+.top-first-line {
+	width: 100%;
+	height: 5px;
+}
+
+.top-second-line {
+	width: 100%;
+	height: 20px;
+}
+
+.left {
+	width: 200px;
+	padding-bottom: 100px;
+	border-right: 2px dotted #92c3d2;
+}
+
+.left .menu {
+	vertical-align: baseline;
+	clear: both;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.left .menu li {
+	list-style: none;
+	list-style-image: none;
+	list-style-position: outside;
+	line-height: 2.5em;
+	font-size: 9pt;
+	
+}
+
+.menu li a {
+	position: relative;
+	display: block;
+}
+
+
+.left .menu a,
+.left .menu a:visited {
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #0190c8;
+	padding-left: 33px!important;
+	border-bottom: 1px solid #ccc;
+}
+
+.left .menu li li a {
+	border-bottom: 1px dotted #ccc;
+}
+
+.left .menu li a.active,
+.left .menu li a.active:visited {
+	color: #fff;
+}
+
+/* Level 1 */
+.left .menu li.expanded a {
+	background-image: url('img/expanded.png');
+	background-repeat: no-repeat;
+	padding-left: 33px!important;
+	background-position: 175px 50%;
+	padding-right: 30px;
+}
+
+.left .menu li.collapsed a {
+	background-image: url('img/collapsed.png');
+	background-repeat: no-repeat;
+	background-position: 175px 50%;
+	padding-right: 30px;
+	
+	padding-left: 33px!important;
+}
+
+/* Level 2 */
+.left .menu li li.collapsed a,
+.left .menu li li.expanded a,
+.left .menu li li.leaf a {
+	padding-left: 40px!important;
+	color: #666;
+	line-height: 2.3em;
+	font-size: 8pt;
+}
+
+.left .menu li li.leaf a {
+	background-image: none;
+}
+
+/* Level 3 */
+.left .menu li li li.collapsed a,
+.left .menu li li li.expanded a,
+.left .menu li li li.leaf a {
+	padding-left: 50px!important;
+	color: #666;
+	line-height: 2.3em;
+	font-size: 8pt;
+}
+
+.left .menu li li li.leaf a {
+	background-image: none;
+}
+
+/* Level 4 */
+.left .menu li li li li.collapsed a,
+.left .menu li li li li.expanded a,
+.left .menu li li li li.leaf a {
+	padding-left: 60px!important;
+	color: #666;
+	line-height: 2.3em;
+	font-size: 8pt;
+}
+
+.left .menu li li li li.leaf a {
+	background-image: none;
+}
+
+/* Leaf */
+
+/* Hover/Active */
+.left .menu li.expanded a:hover,
+.left .menu li.collapsed a:hover,
+.left .menu li.leaf a:hover,
+.left .menu a:hover,
+.left .menu a.active {
+	background: #0190c8;
+	color: #fff!important;
+}
+
+.left .menu a.active {
+	background: #0190c8 url('img/active.png') no-repeat 5px 50%!important;
+}
+
+.left .menu li li:last-child a {
+  border-color: #ddd;
+}
+
+.left ul li {
+  color: #888;
+}
