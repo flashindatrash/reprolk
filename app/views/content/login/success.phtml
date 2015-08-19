@@ -1,0 +1,3 @@
+<div class="alert alert-success" role="alert"><?php echo $this->str('SIGN_SUCCESSFULY'); ?></div>
+<p><?php echo sprintf($this->str('SIGN_REDIRECT'), '<a href="' . post('_url') . '">' . $this->str('HERE') . '</a>'); ?></p>
+<?php echo '<script type="text/javascript">redirect("' . post('_url') . '", 700);</script>'; ?>

@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="/css/repropark.css">
 		<script src="/js/jquery-1.11.3.min.js"></script>
 		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/repropark.js"></script>
 		<title>Repropark</title>
 	</head>
 	<body>
@@ -16,18 +17,28 @@
 		<div class="top-second-line"></div>
 		<div class="white-bg container drop-shadow" id="main">
 			<div class="container header">
-				<a href="#"><img src="/img/repropark.jpg" id="logo"></a>
+				<a href="/"><img src="/img/repropark.jpg" id="logo"></a>
 			</div>
 			<div class="container" id="cols">
-				<div class="left">
-					<ul class="menu">
-						<li class="leaf first active-trail"><a href="/home" class="active">Главная</a></li>
-						<li class="leaf"><a href="/account">Аккаунт</a></li>
-						<li class="leaf last"><a href="/contacts">Контакты</a></li>
-					</ul>
-				</div>
-				<div class="content">
-					<?php echo $this->getContent(); ?>
+				<div class="row">
+					<div class="col-sm-3 left">
+						<ul class="menu">
+							<?php
+								foreach (Application::$routes as $route) {
+									$active = Application::$route->name==$route->name;
+									if ($route->inMenu) echo '<li class="leaf' . ($active ? ' active-trail' : '') . '"><a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->name . '</a></li>';
+								}
+							?>
+						</ul>
+					</div>
+					<div class="col-sm-9 content">
+						<?php 
+							foreach ($this->errors as $error) {
+								echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+							}
+							$this->getContent();
+						?>
+					</div>
 				</div>
 			</div>
 		</div>

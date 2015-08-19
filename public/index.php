@@ -11,7 +11,10 @@ try {
 	
 	$app = new Application($config);
 	
-	$app->addRoute('Login', '/login');
+	$app->addLang('../app/config/lang.php');
+	
+	$app->addRoute(new Route('Account', '/account'));
+	$app->addRoute(new Route('Contact', '/contact'));
 	
 	$app->connect();
 	
