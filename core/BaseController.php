@@ -3,11 +3,10 @@
 class BaseController {
 	
 	public $template = 'base';
-	public $user;
 	public $errors = array();
 	
 	public function __construct() {
-		if (isset($_SESSION['user_id'])) $this->user = User::byId($_SESSION['user_id']);
+		
 	}
 	
 	public function addError($message) {
@@ -19,7 +18,7 @@ class BaseController {
 	}
 	
 	public function str($name) {
-		return isset(Application::$lang) && isset(Application::$lang[$name]) ? Application::$lang[$name] : $name;
+		return Application::str($name);
 	}
 	
 	public function pick($name) {
