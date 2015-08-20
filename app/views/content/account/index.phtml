@@ -1,10 +1,10 @@
 <dl class="dl-horizontal">
-	<dt>firstname</dt>
-	<dd><?php echo $this->user->firstname; ?></dd>
-	<dt>lastname</dt>
-	<dd><?php echo $this->user->lastname; ?></dd>
-	<dt>e-mail</dt>
-	<dd><?php echo $this->user->email; ?></dd>
-	<dt>group</dt>
-	<dd><?php echo $this->user->group; ?></dd>
+	<dt><?php echo $this->str('FIRSTNAME'); ?>:</dt>
+	<dd><?php echo Application::$user->firstname; ?></dd>
+	<dt><?php echo $this->str('LASTNAME'); ?>:</dt>
+	<dd><?php echo Application::$user->lastname; ?></dd>
+	<dt><?php echo $this->str('EMAIL'); ?>:</dt>
+	<dd><?php echo Application::$user->email; ?></dd>
+	<dt><?php echo $this->str('GROUP'); ?>:</dt>
+	<dd><?php echo Application::$user->group; ?></dd>
 </dl>

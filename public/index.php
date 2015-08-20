@@ -14,7 +14,7 @@ try {
 	$app->addLang('../app/config/lang.php');
 	
 	$app->addRoute(new Route('Account', '/account'));
-	$app->addRoute(new Route('Contact', '/contact'));
+	$app->addRoute(new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD));
 	
 	$app->connect();
 	

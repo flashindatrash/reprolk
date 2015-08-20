@@ -10,7 +10,7 @@ class LoginController extends BaseController {
 	}
 	
 	public function getContent() {
-		if (is_null($this->user)) {
+		if (is_null(Application::$user)) {
 			echo $this->pick('login/index');
 		} else {
 			echo $this->pick('login/success');
@@ -18,8 +18,8 @@ class LoginController extends BaseController {
 	}
 	
 	private function login($email, $password) {
-		$user = User::login($email, $password);
-		if (!is_null($user)) $_SESSION['user_id'] = $user->id;
+		Application::$user = User::login($email, $password);
+		if (!is_null(Application::$user)) $_SESSION['user_id'] = Application::$user->id;
 		else $this->addError($this->str('ERROR_SIGN_IN'));
 	}
 	

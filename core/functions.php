@@ -35,5 +35,6 @@ function require_class($fileName, $className) {
 }
 
 function __autoload($class_name) {
-    include '../app/models/' . $class_name . '.php';
+	$file = '../app/models/' . $class_name . '.php';
+    if (file_exists($file)) include $file;
 }
