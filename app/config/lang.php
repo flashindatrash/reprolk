@@ -10,7 +10,11 @@ return array(
 	'FIRSTNAME' => 'Firstname',
 	'LASTNAME' => 'Lastname',
 	'GROUP' => 'Group',
+	'ACCESS_DENIED' => 'Access is denied',
+	'NOT_FOUND' => '%s not found',
+	
 	'MENU_ORDERADD' => 'Add Order',
+	'MENU_USERADD' => 'User Add',
 	'MENU_ACCOUNT' => 'Account',
 	
 	'ERROR_SIGN_IN' => 'incorrect email/password',

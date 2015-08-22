@@ -33,8 +33,13 @@ class Application {
 		$controller = $this->getFactory(self::$route->name);
 		
 		if (is_null($controller)) {
-			$controller = $this->getFactory('Error');
+			//контроллер не найден
+			$controller = $this->getFactory('NotFound');
+		} else if (!self::$route->isAvailable()) {
+			//если нет доступа к текущему роуту
+			$controller = $this->getFactory('AccessDenied');
 		} else if (is_null(self::$user)) {
+			//пользователь не залогинен
 			$controller = $this->getFactory('Login');
 		}
 		
@@ -54,9 +59,15 @@ class Application {
 	
 	private function getRoute() {
 		if (!isset($_GET['_url'])) return new Route('Index');
-		foreach (self::$routes as $route)
-			if ($route->path==strtolower(substr($_GET['_url'], 0, strlen($route->path)))) return $route;
-		return new Route('Error', $_GET['_url']);
+		$u = strtolower($_GET['_url']);
+		
+		$delim = strpos($u, '?');
+		if ($delim!==false) $u = substr($u, 0, $delim);
+		
+		foreach (self::$routes as $route) {
+			if ($route->path==$u) return $route;
+		}
+		return new Route('Error', $u);
 	}
 }
 

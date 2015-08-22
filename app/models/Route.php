@@ -16,8 +16,8 @@ class Route {
 		return Application::str('MENU_' . $this->name);
 	}
 	
-	public function inMenu() {
-		return is_null($this->permission) || (!is_null(Application::$user) && UserAccess::check($this->permission, Application::$user->group));
+	public function isAvailable() {
+		return is_null($this->permission) || UserAccess::check($this->permission);
 	}
 	
 }

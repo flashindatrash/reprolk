@@ -7,7 +7,7 @@ class AccountController extends BaseController {
 	}
 	
 	public function getContent() {
-		$this->pick('account/index');
+		$this->pick('user/get');
 	}
 	
 }
