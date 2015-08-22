@@ -3,7 +3,7 @@
 class Application {
 
 	public static $db;
-    public static $config;
+	public static $config;
 	public static $routes = array();
 	public static $route;
 	public static $user;
