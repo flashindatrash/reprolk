@@ -2,9 +2,7 @@
 
 class AccessDeniedController extends BaseController {
 	
-	public function __construct() {
-		parent::__construct();
-		
+	public function beforeRender() {
 		$this->addError($this->str('ACCESS_DENIED'));
 	}
 	

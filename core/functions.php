@@ -28,6 +28,14 @@ function get($val) {
 	return isset($_GET[$val]) ? $_GET[$val] : '';
 }
 
+function hasPost($val) {
+	return post($val)!='';
+}
+
+function hasGet($val) {
+	return get($val)!='';
+}
+
 function require_class($fileName, $className) {
 	if (file_exists($fileName)) require_once ($fileName);
 	if (class_exists($className)) return new $className;

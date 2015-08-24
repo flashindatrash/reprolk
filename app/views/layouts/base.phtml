@@ -26,7 +26,7 @@
 							<?php
 								foreach (Application::$routes as $route) {
 									$active = Application::$route->name==$route->name;
-									if ($route->isAvailable()) echo '<li class="leaf' . ($active ? ' active-trail' : '') . '"><a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->getValue() . '</a></li>';
+									if ($route->isVisible()) echo '<li class="leaf' . ($active ? ' active-trail' : '') . '"><a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->getValue() . '</a></li>';
 								}
 							?>
 						</ul>

@@ -2,19 +2,26 @@
 
 class LoginController extends BaseController {
 	
-	public function __construct() {
+	public function beforeRender() {
 		if (isset($_POST['email']) && isset($_POST['password'])) {
 			$this->login(post('email'), post('password'));
 		}
-		parent::__construct();
 	}
 	
 	public function getContent() {
 		if (is_null(Application::$user)) {
-			echo $this->pick('login/index');
+			$this->pick('login/index');
 		} else {
-			echo $this->pick('login/success');
+			$this->pick('system/redirect');
 		}
+	}
+	
+	public function getMessage() {
+		return $this->str('SIGN_SUCCESSFULY');
+	}
+	
+	public function getURL() {
+		return post('_url');
 	}
 	
 	private function login($email, $password) {
