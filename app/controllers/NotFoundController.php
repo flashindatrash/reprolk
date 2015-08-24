@@ -2,10 +2,8 @@
 
 class NotFoundController extends BaseController {
 	
-	public function __construct() {
-		parent::__construct();
-		
-		$this->addError(sprintf($this->str('NOT_FOUNT'), get('_url')));
+	public function beforeRender() {
+		$this->addError(sprintf($this->str('NOT_FOUND'), get('_url')));
 	}
 	
 }

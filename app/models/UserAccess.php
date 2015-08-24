@@ -2,21 +2,26 @@
 
 class UserAccess extends BaseModel {
 	
-	const ORDER_ADD = 'orderAdd';
-	const USER_GET = 'userGet';
-	const USER_ADD = 'userAdd';
+	const NONE = 'none';
+	const ALL = 'all';
+	const AUTH = 'auth';
 	
-	private static $permissions = array (
+	const ORDER_ADD = 'orderAdd';
+	const USER_ADD = 'userAdd';
+	const USER_ALL = 'userAll';
+	
+	public static $permissions = array (
+		'none' => [],
+		'auth' => [User::ADMIN, User::MANAGER, User::CLIENT],
+		'all' => [User::ADMIN, User::MANAGER, User::CLIENT, User::ANONYMOUS],
 		'orderAdd' => [User::ADMIN, User::MANAGER],
-		'userGet' => [User::ADMIN, User::MANAGER, User::CLIENT],
 		'userAdd' => [User::ADMIN],
+		'userAll' => [User::ADMIN],
 	);
 	
 	public static function check($group) {
-		return 
-			!is_null(Application::$user) && 
-			isset(self::$permissions[$group]) && 
-			in_array(Application::$user->group, self::$permissions[$group]);
+		$user_group = !is_null(Application::$user) ? Application::$user->group : User::ANONYMOUS;
+		return isset(self::$permissions[$group]) && in_array($user_group, self::$permissions[$group]);
 	}
 	
 }

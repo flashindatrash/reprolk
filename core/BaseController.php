@@ -13,6 +13,10 @@ class BaseController {
 		$this->errors[] = $message;
 	}
 	
+	public function beforeRender() {
+		
+	}
+	
 	public function getContent() {
 		echo '';
 	}

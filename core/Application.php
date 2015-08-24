@@ -43,6 +43,7 @@ class Application {
 			$controller = $this->getFactory('Login');
 		}
 		
+		$controller->beforeRender();
 		$controller->render();
 	}
 	

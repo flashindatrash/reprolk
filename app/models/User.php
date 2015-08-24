@@ -15,6 +15,8 @@ class User extends BaseModel {
 	public $lastname;
 	public $uid;
 	
+	public static $fields_mandatory = array('email', 'password', 'firstname', 'lastname', 'group');
+	
 	public static function byId($id) {
 		return Application::$db->selectRow('users', '*', '`id` = ' . $id, 'User');
 	}
@@ -23,6 +25,9 @@ class User extends BaseModel {
 		return Application::$db->selectRow('users', '*', '`email` = "' . $email . '" and `password` = "' . $password . '"', 'User');
 	}
 	
+	public static function add($fields, $values) {
+		return Application::$db->insertRow('users', $fields, $values);
+	}
 }
 
 ?>

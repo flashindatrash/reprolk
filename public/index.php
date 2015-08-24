@@ -13,9 +13,12 @@ try {
 	
 	$app->addLang('../app/config/lang.php');
 	
-	$app->addRoute(new Route('Account', '/user', UserAccess::USER_GET));
+	$app->addRoute(new Route('Login', '/login', UserAccess::ALL, true));
+	$app->addRoute(new Route('Account', '/user', UserAccess::AUTH));
 	$app->addRoute(new Route('UserAdd', '/user/add', UserAccess::USER_ADD));
+	$app->addRoute(new Route('UserAll', '/user/all', UserAccess::USER_ALL));
 	$app->addRoute(new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD));
+	$app->addRoute(new Route('Logout', '/logout', UserAccess::AUTH));
 	
 	$app->connect();
 	

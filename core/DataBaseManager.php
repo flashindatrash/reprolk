@@ -15,11 +15,25 @@ class DataBaseManager {
 	}
 	
 	public function selectRow($from, $select = '*', $where = '1', $className = NULL) {
-		$query = mysql_query('select ' . $select . ' from ' . $this->tableName($from) . ' where ' . $where, $this->connection);
+		$str = 'select ' . $select . ' from ' . $this->tableName($from) . ' where ' . $where;
+		$query = mysql_query($str, $this->connection);
 		if ($query) {
 			$return = mysql_fetch_object($query, $className);
 			if ($return===false) return null;
 			return $return;
+		}
+		return null;
+	}
+	
+	public function insertRow($from, $fields, $values) {
+		if (count($fields)==0 || count($values)==0 || count($fields)!=count($values)) return null;
+		$f = '`' . join('`, `', $fields) . '`';
+		$v = '"' . join('", "', $values) . '"';
+		
+		$str = 'INSERT INTO `' . $this->tableName($from) . '` (' . $f . ') VALUES (' . $v . ');';
+		$query = mysql_query($str, $this->connection);
+		if ($query) {
+			return mysql_insert_id();
 		}
 		return null;
 	}

@@ -1,0 +1,3 @@
+<div class="alert alert-success" role="alert"><?php echo $this->getMessage(); ?></div>
+<p><?php echo sprintf($this->str('REDIRECT'), '<a href="' . $this->getURL() . '">' . $this->str('HERE') . '</a>'); ?></p>
+<?php echo '<script type="text/javascript">redirect("' . $this->getURL() . '", 2000);</script>'; ?>

@@ -1,6 +1,6 @@
 <?php
 
-class OrderAddController extends BaseController {
+class UserAllController extends BaseController {
 	
 	public function getContent() {
 		$this->pick('system/in_progress');
