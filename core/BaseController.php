@@ -14,7 +14,7 @@ class BaseController {
 	}
 	
 	public function beforeRender() {
-		
+		//до того как загрузиться шаблон мы должны заинитить контроллер
 	}
 	
 	public function getContent() {
