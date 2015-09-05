@@ -21,6 +21,8 @@ return array(
 	'IN_PROGRESS' => 'In Progress...',
 	'SUCCESS_SAVE' => 'Success Saved!',
 	'MUST_ENTER' => 'You must fill in the <b>%s</b>',
+	'ADD' => 'Add',
+	'USERNAME' => 'Username',
 	
 	'MENU_ORDERADD' => 'Add Order',
 	'MENU_USERADD' => 'Add User',

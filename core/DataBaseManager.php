@@ -14,18 +14,27 @@ class DataBaseManager {
 		}
 	}
 	
-	public function selectRow($from, $select = '*', $where = '1', $className = NULL) {
-		$str = 'select ' . $select . ' from ' . $this->tableName($from) . ' where ' . $where;
+	public function select($from, $select = '*', $where = '1', $className = NULL, $range = '0, 1') {
+		$str = 'select ' . $select . ' from ' . $this->tableName($from) . ' where ' . $where . ' limit ' . $range;
 		$query = mysql_query($str, $this->connection);
-		if ($query) {
-			$return = mysql_fetch_object($query, $className);
-			if ($return===false) return null;
-			return $return;
-		}
-		return null;
+		return $query ? $query : null;
 	}
 	
-	public function insertRow($from, $fields, $values) {
+	public function selectRow($from, $select = '*', $where = '1', $className = NULL) {
+		$result = $this->select($from, $select, $where, $className);
+		return !is_null($result) ? mysql_fetch_object($result, $className) : null;
+	}
+	
+	public function selectRows($from, $select = '*', $where = '1', $className = NULL, $range = '0, 10') {
+		$result = $this->select($from, $select, $where, $className, $range);
+		$rows = array();
+		while ($row = mysql_fetch_object($result, $className)) {
+			$rows[] = $row;
+		}
+		return $rows;
+	}
+	
+	public function insert($from, $fields, $values) {
 		if (count($fields)==0 || count($values)==0 || count($fields)!=count($values)) return null;
 		$f = '`' . join('`, `', $fields) . '`';
 		$v = '"' . join('", "', $values) . '"';

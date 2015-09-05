@@ -26,7 +26,11 @@ class User extends BaseModel {
 	}
 	
 	public static function add($fields, $values) {
-		return Application::$db->insertRow('users', $fields, $values);
+		return Application::$db->insert('users', $fields, $values);
+	}
+	
+	public static function getAll() {
+		return Application::$db->selectRows('users', '*', '1', 'User', '0, 300');
 	}
 }
 
