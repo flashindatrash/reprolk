@@ -23,6 +23,7 @@ return array(
 	'MUST_ENTER' => 'You must fill in the <b>%s</b>',
 	'ADD' => 'Add',
 	'USERNAME' => 'Username',
+	'ALL_USERS_RESULT' => 'Results <b>%d</b> users',
 	
 	'MENU_ORDERADD' => 'Add Order',
 	'MENU_USERADD' => 'Add User',

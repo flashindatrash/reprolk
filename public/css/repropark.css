@@ -48,6 +48,7 @@ a:hover {
 }
 
 .content {
+	min-height: 300px;
 	padding: 15px;
 	border-left: 2px dotted #92c3d2;
 }
