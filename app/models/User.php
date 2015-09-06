@@ -29,8 +29,8 @@ class User extends BaseModel {
 		return Application::$db->insert('users', $fields, $values);
 	}
 	
-	public static function getAll() {
-		return Application::$db->selectRows('users', '*', '1', 'User', '0, 300');
+	public static function getAll($group = null) {
+		return Application::$db->selectRows('users', '*', is_null($group) ? '1' : '`group` = "' . $group . '"', 'User', '0, 300');
 	}
 }
 

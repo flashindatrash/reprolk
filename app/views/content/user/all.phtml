@@ -1,27 +1,42 @@
-
-
-<table class="table">
-	<thead>
-		<tr>
-			<th>#</th>
+<div class="panel panel-default">
+	<div class="panel-heading"><?php print sprintf($this->str('all_users_result'), count($this->users)); ?></div>
+	
+	<div class="panel-body">
+		<ul class="nav nav-pills">
 			<?php
-			foreach (array('username', 'email', 'group', 'uid') as $th) {
-				print '<th>' . $this->str($th) . '</th>';
+				foreach (UserAccess::$permissions[UserAccess::ALL] as $group) {
+					$disabled = $this->currentGroup==$group;
+					print	'<li role="presentation"' . ($disabled ? ' class="disabled"' : '') . '>
+								<a href="' . ($disabled ? '#' : '?group=' . $group) . '">' . $this->str($group) . '</a>
+							</li>';
+				}
+			?>
+		</ul>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<?php
+				foreach (array('username', 'email', 'group', 'uid') as $th) {
+					print '<th>' . $this->str($th) . '</th>';
+				}
+				?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->users as $n => $user) {
+				print 	'<tr>
+						<th scope="row">' . ($n+1) . '</th>
+						<td>' . $user->firstname . ' ' . $user->lastname . '</td>
+						<td>' . $user->email . '</td>
+						<td>' . $user->group . '</td>
+						<td>' . $user->uid . '</td>
+						</tr>';
 			}
 			?>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-		foreach ($this->users as $n => $user) {
-			print 	'<tr>
-					<th scope="row">' . ($n+1) . '</th>
-					<td>' . $user->firstname . ' ' . $user->lastname . '</td>
-					<td>' . $user->email . '</td>
-					<td>' . $user->group . '</td>
-					<td>' . $user->uid . '</td>
-					</tr>';
-		}
-		?>
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
