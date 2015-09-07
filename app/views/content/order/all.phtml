@@ -1,0 +1,34 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><?php print sprintf($this->str('all_orders_result'), count($this->orders)); ?></div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<?php
+				foreach (Order::$fields_view as $th) {
+					print '<th>' . $this->str($th) . '</th>';
+				}
+				print '<th>' . $this->str('actions') . '</th>';
+				?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->orders as $n => $order) {
+				print '<tr>';
+				foreach (Order::$fields_view as $td) {
+					print '<td>' . $order->$td . '</td>';
+				}
+				print	'<td>'.
+						'<a href="/order/approve?id=' . $order->id . ' " data-toggle="tooltip" data-placement="left" title="' . $this->str('tooltip_order_approve') . '" class="btn btn-success btn-xs glyphicon glyphicon-ok"></a>'.
+						'&nbsp;'.
+						'<a href="/order/edit?id=' . $order->id . ' " data-toggle="tooltip" data-placement="top" title="' . $this->str('tooltip_order_edit') . '" class="btn btn-primary btn-xs glyphicon glyphicon-pencil"></a>'.
+						'&nbsp;'.
+						'<a href="/order/delete?id=' . $order->id . ' " data-toggle="tooltip" data-placement="right" title="' . $this->str('tooltip_order_delete') . '" class="btn btn-danger btn-xs glyphicon glyphicon-remove"></a>'.
+						'</td>'.
+						'</tr>';
+			}
+			?>
+		</tbody>
+	</table>
+</div>

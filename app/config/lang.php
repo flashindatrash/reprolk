@@ -24,11 +24,18 @@ return array(
 	'ADD' => 'Add',
 	'USERNAME' => 'Username',
 	'ALL_USERS_RESULT' => 'Results <b>%d</b> users',
+	'ALL_ORDERS_RESULT' => 'Results <b>%d</b> orders',
+	'ACTIONS' => 'Actions',
+	
+	'TOOLTIP_ORDER_APPROVE' => 'Approve this order',
+	'TOOLTIP_ORDER_EDIT' => 'Edit this order',
+	'TOOLTIP_ORDER_DELETE' => 'Delete this order',
 	
 	'MENU_ORDERADD' => 'Add Order',
 	'MENU_USERADD' => 'Add User',
 	'MENU_USERALL' => 'All users',
-	'MENU_ACCOUNT' => 'Account',
+	'MENU_ACCOUNT' => 'Profile',
+	'MENU_ORDERALL' => 'All orders',
 	'MENU_LOGOUT' => 'Logout',
 	
 	'ERROR_SIGN_IN' => 'incorrect email/password',

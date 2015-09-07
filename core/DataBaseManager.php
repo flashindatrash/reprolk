@@ -36,15 +36,20 @@ class DataBaseManager {
 	
 	public function insert($from, $fields, $values) {
 		if (count($fields)==0 || count($values)==0 || count($fields)!=count($values)) return null;
-		$f = '`' . join('`, `', $fields) . '`';
-		$v = '"' . join('", "', $values) . '"';
-		
-		$str = 'INSERT INTO `' . $this->tableName($from) . '` (' . $f . ') VALUES (' . $v . ');';
+		$str = 'INSERT INTO `' . $this->tableName($from) . '` (' . self::array2fields($fields) . ') VALUES (' . self::array2values($values) . ');';
 		$query = mysql_query($str, $this->connection);
 		if ($query) {
 			return mysql_insert_id();
 		}
 		return null;
+	}
+	
+	public static function array2fields($arr) {
+		return '`' . join('`, `', $arr) . '`';
+	}
+	
+	public static function array2values($arr) {
+		return '"' . join('", "', $arr) . '"';
 	}
 	
 	private function tableName($name) {

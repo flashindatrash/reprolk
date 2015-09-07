@@ -18,6 +18,7 @@ try {
 	$app->addRoute(new Route('UserAdd', '/user/add', UserAccess::USER_ADD));
 	$app->addRoute(new Route('UserAll', '/user/all', UserAccess::USER_ALL));
 	$app->addRoute(new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD));
+	$app->addRoute(new Route('OrderAll', '/order/all', UserAccess::ORDER_ADD));
 	$app->addRoute(new Route('Logout', '/logout', UserAccess::AUTH));
 	
 	$app->connect();

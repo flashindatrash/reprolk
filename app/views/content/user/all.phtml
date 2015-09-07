@@ -6,9 +6,9 @@
 			<?php
 				foreach (UserAccess::$permissions[UserAccess::ALL] as $group) {
 					$disabled = $this->currentGroup==$group;
-					print	'<li role="presentation"' . ($disabled ? ' class="disabled"' : '') . '>
-								<a href="' . ($disabled ? '#' : '?group=' . $group) . '">' . $this->str($group) . '</a>
-							</li>';
+					print	'<li role="presentation"' . ($disabled ? ' class="disabled"' : '') . '>'.
+							'<a href="' . ($disabled ? '#' : '?group=' . $group) . '">' . $this->str($group) . '</a>'.
+							'</li>';
 				}
 			?>
 		</ul>
@@ -19,7 +19,7 @@
 			<tr>
 				<th>#</th>
 				<?php
-				foreach (array('username', 'email', 'group', 'uid') as $th) {
+				foreach (array('username', 'email', 'group') as $th) {
 					print '<th>' . $this->str($th) . '</th>';
 				}
 				?>
@@ -28,13 +28,12 @@
 		<tbody>
 			<?php
 			foreach ($this->users as $n => $user) {
-				print 	'<tr>
-						<th scope="row">' . ($n+1) . '</th>
-						<td>' . $user->firstname . ' ' . $user->lastname . '</td>
-						<td>' . $user->email . '</td>
-						<td>' . $user->group . '</td>
-						<td>' . $user->uid . '</td>
-						</tr>';
+				print 	'<tr>'.
+						'<th scope="row">' . ($n+1) . '</th>'.
+						'<td>' . $user->firstname . ' ' . $user->lastname . '</td>'.
+						'<td>' . $user->email . '</td>'.
+						'<td>' . $user->group . '</td>'.
+						'</tr>';
 			}
 			?>
 		</tbody>
