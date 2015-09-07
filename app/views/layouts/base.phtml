@@ -23,19 +23,12 @@
 				<div class="row">
 					<div class="col-sm-3 left">
 						<ul class="menu">
-							<?php
-								foreach (Application::$routes as $route) {
-									$active = Application::$route->name==$route->name;
-									if ($route->isVisible()) echo '<li class="leaf' . ($active ? ' active-trail' : '') . '"><a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->getValue() . '</a></li>';
-								}
-							?>
+							<?php $this->getMenu(); ?>
 						</ul>
 					</div>
 					<div class="col-sm-9 content">
 						<?php 
-							foreach ($this->errors as $error) {
-								echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-							}
+							$this->getErrors();
 							$this->getContent();
 						?>
 					</div>

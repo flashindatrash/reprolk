@@ -3,3 +3,7 @@ function redirect(url, timeout) {
 		window.location.href = url;
 	}, timeout);
 }
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});

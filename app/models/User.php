@@ -15,7 +15,7 @@ class User extends BaseModel {
 	public $lastname;
 	public $uid;
 	
-	public static $fields_mandatory = array('email', 'password', 'firstname', 'lastname', 'group');
+	public static $fields_view = array('firstname', 'lastname', 'email', 'group');
 	
 	public static function byId($id) {
 		return Application::$db->selectRow('users', '*', '`id` = ' . $id, 'User');
@@ -30,7 +30,7 @@ class User extends BaseModel {
 	}
 	
 	public static function getAll($group = null) {
-		return Application::$db->selectRows('users', '*', is_null($group) ? '1' : '`group` = "' . $group . '"', 'User', '0, 300');
+		return Application::$db->selectRows('users', DataBaseManager::array2fields(self::$fields_view), is_null($group) ? '1' : '`group` = "' . $group . '"', 'User', '0, 300');
 	}
 }
 

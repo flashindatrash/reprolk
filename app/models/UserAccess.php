@@ -7,6 +7,7 @@ class UserAccess extends BaseModel {
 	const AUTH = 'auth';
 	
 	const ORDER_ADD = 'orderAdd';
+	const ORDER_ALL = 'orderAll';
 	const USER_ADD = 'userAdd';
 	const USER_ALL = 'userAll';
 	
@@ -15,6 +16,7 @@ class UserAccess extends BaseModel {
 		'auth' => [User::ADMIN, User::MANAGER, User::CLIENT],
 		'all' => [User::ADMIN, User::MANAGER, User::CLIENT, User::ANONYMOUS],
 		'orderAdd' => [User::ADMIN, User::MANAGER],
+		'orderAll' => [User::ADMIN],
 		'userAdd' => [User::ADMIN],
 		'userAll' => [User::ADMIN],
 	);

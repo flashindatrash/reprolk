@@ -17,6 +17,19 @@ class BaseController {
 		//до того как загрузиться шаблон мы должны заинитить контроллер
 	}
 	
+	public function getErrors() {
+		foreach ($this->errors as $error) {
+			echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+		}
+	}
+	
+	public function getMenu() {
+		foreach (Application::$routes as $route) {
+			$active = Application::$route->name==$route->name;
+			if ($route->isVisible()) echo '<li class="leaf' . ($active ? ' active-trail' : '') . '"><a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->getValue() . '</a></li>';
+		}
+	}
+	
 	public function getContent() {
 		echo '';
 	}
