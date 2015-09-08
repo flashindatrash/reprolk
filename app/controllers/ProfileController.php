@@ -1,6 +1,6 @@
 <?php
 
-class AccountController extends BaseController {
+class ProfileController extends BaseController {
 	
 	public function getContent() {
 		$this->pick('user/index');

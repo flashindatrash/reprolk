@@ -24,10 +24,7 @@ class BaseController {
 	}
 	
 	public function getMenu() {
-		foreach (Application::$routes as $route) {
-			$active = Application::$route->name==$route->name;
-			if ($route->isVisible()) echo '<li class="leaf' . ($active ? ' active-trail' : '') . '"><a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->getValue() . '</a></li>';
-		}
+		$this->pick('system/menu');
 	}
 	
 	public function getContent() {

@@ -4,7 +4,7 @@ class Application {
 
 	public static $db;
     public static $config;
-	public static $routes = array();
+	public static $routes;
 	public static $route;
 	public static $user;
 	
@@ -24,8 +24,8 @@ class Application {
 		if (file_exists($file)) self::$lang = require $file;
 	}
 	
-	public function addRoute($route) {
-		self::$routes[$route->name] = $route;
+	public function setRoutes($routes) {
+		self::$routes = $routes;
 	}
 	
 	public function getContent() {
@@ -65,10 +65,19 @@ class Application {
 		$delim = strpos($u, '?');
 		if ($delim!==false) $u = substr($u, 0, $delim);
 		
-		foreach (self::$routes as $route) {
-			if ($route->path==$u) return $route;
+		$route = $this->checkRoute($u, self::$routes);
+		if (is_null($route)) $route = new Route('Error', $u);
+		
+		return $route;
+	}
+	
+	private function checkRoute($path, $routes) {
+		foreach ($routes as $route) {
+			if ($route->path==$path) return $route;
+			$sub = $this->checkRoute($path, $route->routes);
+			if (!is_null($sub)) return $sub;
 		}
-		return new Route('Error', $u);
+		return null;
 	}
 }
 

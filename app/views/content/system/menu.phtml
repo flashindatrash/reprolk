@@ -1,0 +1,46 @@
+<?php
+
+print printRoutes(Application::$routes);
+
+function printRoutes($v) {
+	$str = '<ul class="menu">';
+	
+	$n = 0;
+	
+	foreach ($v as $route) {
+		if (!$route->isVisible()) continue;
+		
+		$active = Application::$route->name==$route->name;
+		$collapsed = count($route->routes)>0;
+		$finded = $active || findInArray($route->routes);
+		$expanded = $collapsed && $finded;
+		$li = 'leaf';
+		if ($expanded) $li = 'expanded';
+		else if ($collapsed) $li = 'collapsed'; 
+		if ($finded) $li .= ' active-trail';
+		if ($n==0) $li .= ' first';
+		if ($n==count($v)-1) $li .= ' last';
+		
+		$str .= '<li class="' . $li . '">';
+		$str .= '<a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . Application::str('menu_' . $route->name) . '</a>';
+		if ($expanded) {
+			$str .= printRoutes($route->routes);
+		}
+		$str .= '</li>';
+		
+		$n++;
+	}
+	
+	$str .= '</ul>';
+	
+	return $str;
+}
+
+function findInArray($j) {
+	foreach ($j as $route) {
+		if ($route->name == Application::$route->name || findInArray($route->routes)) return true;
+	}
+	return false;
+}
+
+?>
