@@ -13,13 +13,19 @@ try {
 	
 	$app->addLang('../app/config/lang.php');
 	
-	$app->addRoute(new Route('Login', '/login', UserAccess::ALL, true));
-	$app->addRoute(new Route('Account', '/user', UserAccess::AUTH));
-	$app->addRoute(new Route('UserAdd', '/user/add', UserAccess::USER_ADD));
-	$app->addRoute(new Route('UserAll', '/user/all', UserAccess::USER_ALL));
-	$app->addRoute(new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD));
-	$app->addRoute(new Route('OrderAll', '/order/all', UserAccess::ORDER_ADD));
-	$app->addRoute(new Route('Logout', '/logout', UserAccess::AUTH));
+	$app->setRoutes([
+		new Route('Profile', '/user', UserAccess::AUTH, false, [
+			new Route('UserAdd', '/user/add', UserAccess::USER_ADD),
+			new Route('UserAll', '/user/all', UserAccess::USER_ALL)
+		]),
+		new Route('Order', '/order', UserAccess::AUTH, false, [
+			new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD),
+			new Route('OrderAll', '/order/all', UserAccess::ORDER_ADD)
+		]),
+		new Route('Logout', '/logout', UserAccess::AUTH),
+		
+		new Route('Login', '/login', UserAccess::ALL, true)
+	]);
 	
 	$app->connect();
 	

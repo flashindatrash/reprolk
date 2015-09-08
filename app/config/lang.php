@@ -34,7 +34,8 @@ return array(
 	'MENU_ORDERADD' => 'Add Order',
 	'MENU_USERADD' => 'Add User',
 	'MENU_USERALL' => 'All users',
-	'MENU_ACCOUNT' => 'Profile',
+	'MENU_PROFILE' => 'Profile',
+	'MENU_ORDER' => 'Orders',
 	'MENU_ORDERALL' => 'All orders',
 	'MENU_LOGOUT' => 'Logout',
 	
