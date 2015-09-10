@@ -25,11 +25,15 @@ return array(
 	'USERNAME' => 'Username',
 	'ALL_USERS_RESULT' => 'Results <b>%d</b> users',
 	'ALL_ORDERS_RESULT' => 'Results <b>%d</b> orders',
-	'ACTIONS' => 'Actions',
+	'ORDER_NAME' => 'Order',
+	'ORDER_STATUS' => 'Status',
+	'ORDER_DATE_DUE' => 'Due date',
+	
+	/*'ACTIONS' => 'Actions',
 	
 	'TOOLTIP_ORDER_APPROVE' => 'Approve this order',
 	'TOOLTIP_ORDER_EDIT' => 'Edit this order',
-	'TOOLTIP_ORDER_DELETE' => 'Delete this order',
+	'TOOLTIP_ORDER_DELETE' => 'Delete this order',*/
 	
 	'MENU_ORDERADD' => 'Add Order',
 	'MENU_USERADD' => 'Add User',

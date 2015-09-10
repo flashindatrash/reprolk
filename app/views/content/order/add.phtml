@@ -1,3 +1,12 @@
-<?php
-
-?>
+<form method="post" class="form-horizontal">
+	<?php 
+		print View::input('send', 'hidden', '1');
+		print View::group('jobname');
+		print View::group('jobid1c');
+	?>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<?php print View::input('add', 'submit'); ?>
+		</div>
+	</div>
+</form>

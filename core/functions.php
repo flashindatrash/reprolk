@@ -4,6 +4,7 @@ include '../core/Application.php';
 include '../core/DataBaseManager.php';
 include '../core/BaseController.php';
 include '../core/BaseModel.php';
+include '../core/View.php';
 
 function p($x=''){
    print ps($x);
