@@ -6,8 +6,11 @@ class OrderAllController extends BaseController {
 	public $fields;
 	
 	public function beforeRender() {
-		$this->fields = array('id', 'jobname', 'jobid1c');
-		$this->orders = Order::getAll($this->fields);
+		$this->fields = Order::$fields_table_view;
+		$this->orders = Order::getAll(Order::$fields_table_select);
+		
+		$this->addJS('order.table');
+		$this->addJSparams('view_url', '/order/view?id=');
 	}
 	
 	public function getContent() {

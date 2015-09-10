@@ -6,27 +6,27 @@
 			<tr>
 				<?php
 				foreach ($this->fields as $th) {
-					print '<th>' . $this->str($th) . '</th>';
+					print '<th>' . $this->str('order_' . $th) . '</th>';
 				}
-				print '<th>' . $this->str('actions') . '</th>';
+				//print '<th>' . $this->str('actions') . '</th>';
 				?>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
 			foreach ($this->orders as $n => $order) {
-				print '<tr>';
+				print '<tr class="order_row" id="' . $order->id . '">';
 				foreach ($this->fields as $td) {
 					print '<td>' . $order->$td . '</td>';
 				}
-				print	'<td>'.
+				/*print	'<td>'.
 						'<a href="/order/approve?id=' . $order->id . ' " data-toggle="tooltip" data-placement="left" title="' . $this->str('tooltip_order_approve') . '" class="btn btn-success btn-xs glyphicon glyphicon-ok"></a>'.
 						'&nbsp;'.
 						'<a href="/order/edit?id=' . $order->id . ' " data-toggle="tooltip" data-placement="top" title="' . $this->str('tooltip_order_edit') . '" class="btn btn-primary btn-xs glyphicon glyphicon-pencil"></a>'.
 						'&nbsp;'.
 						'<a href="/order/delete?id=' . $order->id . ' " data-toggle="tooltip" data-placement="right" title="' . $this->str('tooltip_order_delete') . '" class="btn btn-danger btn-xs glyphicon glyphicon-remove"></a>'.
 						'</td>'.
-						'</tr>';
+						'</tr>';*/
 			}
 			?>
 		</tbody>

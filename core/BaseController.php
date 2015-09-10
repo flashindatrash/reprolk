@@ -2,11 +2,21 @@
 
 class BaseController {
 	
-	public $template = 'base';
-	public $errors = array();
+	private $template = 'base';
+	private $javascripts = array();
+	private $javascript_params = array();
+	private $errors = array();
 	
 	public function __construct() {
 		
+	}
+	
+	public function addJS($js) {
+		$this->javascripts[] = $js;
+	}
+	
+	public function addJSparams($name, $value) {
+		$this->javascript_params[$name] = $value;
 	}
 	
 	public function addError($message) {
@@ -15,6 +25,21 @@ class BaseController {
 	
 	public function beforeRender() {
 		//до того как загрузиться шаблон мы должны заинитить контроллер
+	}
+	
+	public function getJavascriptParams() {
+		$s = '<script>var params = {';
+		foreach ($this->javascript_params as $key => $value) {
+			$s .= $key . ': "' . $value . '"';
+		}
+		$s .= '}</script>';
+		echo $s;
+	}
+	
+	public function getJavascripts() {
+		foreach ($this->javascripts as $js) {
+			echo '<script src="/js/' . $js . '.js"></script>';
+		}
 	}
 	
 	public function getErrors() {

@@ -8,7 +8,7 @@ class LoginController extends BaseController implements IRedirect {
 	public $isLoggined;
 	
 	public function beforeRender() {
-		$this->hasInput = isset($_POST['email']) && isset($_POST['password']);
+		$this->hasInput = hasPost('email') && hasPost('password');
 		if ($this->hasInput) $this->login(post('email'), post('password'));
 		
 		$this->isLoggined = !is_null(Application::$user);
