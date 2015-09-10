@@ -15,6 +15,7 @@ class User extends BaseModel {
 	public $lastname;
 	public $uid;
 	
+	public static $fields_mandatory = array('email', 'password', 'firstname', 'lastname', 'group');
 	public static $fields_view = array('firstname', 'lastname', 'email', 'group');
 	
 	public static function byId($id) {

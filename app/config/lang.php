@@ -6,7 +6,7 @@ return array(
 	'SIGNIN' => 'Sign in',
 	'SIGN_SUCCESSFULY' => 'You successfully sign in...',
 	'LOGOUT_SUCCESSFULY' => 'You successfully log out...',
-	'REDIRECT' => '2 seconds later you will be redirected. If it does not, click %s',
+	'REDIRECT' => '<b>%d</b> seconds later you will be redirected. If it does not, click %s',
 	'HERE' => 'here',
 	'FIRSTNAME' => 'Firstname',
 	'LASTNAME' => 'Lastname',
@@ -35,12 +35,12 @@ return array(
 	'MENU_USERADD' => 'Add User',
 	'MENU_USERALL' => 'All users',
 	'MENU_PROFILE' => 'Profile',
-	'MENU_ORDER' => 'Orders',
-	'MENU_ORDERALL' => 'All orders',
+	'MENU_ORDERALL' => 'Orders',
 	'MENU_LOGOUT' => 'Logout',
 	
 	'ERROR_SIGN_IN' => 'incorrect email/password',
 	'ERROR_NEED_SIGN' => 'You need sign in',
+	'ERROR_IS_NOT_IREDIRECT' => 'Controller <b>%s</b> not implemented IRedirect',
 );
 
 ?>

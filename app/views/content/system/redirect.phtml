@@ -1,3 +1,12 @@
-<div class="alert alert-success" role="alert"><?php echo $this->getMessage(); ?></div>
-<p><?php echo sprintf($this->str('REDIRECT'), '<a href="' . $this->getURL() . '">' . $this->str('HERE') . '</a>'); ?></p>
-<?php echo '<script type="text/javascript">redirect("' . $this->getURL() . '", 2000);</script>'; ?>
+<?php
+	if (!$this instanceof IRedirect) {
+		print '<div class="alert alert-danger" role="alert">' . sprintf($this->str('error_is_not_iredirect'), Application::$route->name) . '</div>';
+		die;
+	}
+	
+	$redirect = $this->getRedirect();
+?>
+
+<div class="alert alert-success" role="alert"><?php echo  $redirect->message; ?></div>
+<p><?php echo sprintf($this->str('redirect'), $redirect->sTimeout(), '<a href="' . $redirect->url . '">' . $this->str('here') . '</a>'); ?></p>
+<?php echo '<script type="text/javascript">redirect("' . $redirect->url . '", ' . $redirect->timeout . ');</script>'; ?>

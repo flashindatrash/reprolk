@@ -2,8 +2,12 @@
 
 class OrderAddController extends BaseController {
 	
+	public function beforeRender() {
+		
+	}
+	
 	public function getContent() {
-		$this->pick('system/in_progress');
+		$this->pick('order/add');
 	}
 	
 }

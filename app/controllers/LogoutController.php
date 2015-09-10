@@ -1,18 +1,19 @@
 <?php
 
-class LogoutController extends BaseController {
+include '../core/IRedirect.php';
+
+class LogoutController extends BaseController implements IRedirect {
+	
+	public function beforeRender() {
+		Application::$user = $_SESSION['user_id'] = null;
+	}
 	
 	public function getContent() {
-		Application::$user = $_SESSION['user_id'] = null;
 		$this->pick('system/redirect');
 	}
 	
-	public function getMessage() {
-		return $this->str('LOGOUT_SUCCESSFULY');
-	}
-	
-	public function getURL() {
-		return '/';
+	public function getRedirect() {
+		return new Redirect($this->str('logout_successfuly'), '/', 300);
 	}
 	
 }

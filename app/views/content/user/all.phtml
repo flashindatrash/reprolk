@@ -4,7 +4,7 @@
 	<div class="panel-body">
 		<ul class="nav nav-pills">
 			<?php
-				foreach (UserAccess::$permissions[UserAccess::ALL] as $group) {
+				foreach ($this->groups as $group) {
 					$disabled = $this->currentGroup==$group;
 					print	'<li role="presentation"' . ($disabled ? ' class="disabled"' : '') . '>'.
 							'<a href="' . ($disabled ? '#' : '?group=' . $group) . '">' . $this->str($group) . '</a>'.

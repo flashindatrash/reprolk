@@ -8,7 +8,7 @@ class UserAddController extends BaseController {
 	private $values = array();
 	
 	public function beforeRender() {
-		$this->groups = UserAccess::$permissions[UserAccess::ALL];
+		$this->groups = UserAccess::$permissions[UserAccess::AUTH];
 		
 		if ($this->validate()) {
 			$this->user_id = User::add(User::$fields_mandatory, $this->values);
