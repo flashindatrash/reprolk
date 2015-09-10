@@ -6,10 +6,9 @@ class Order extends BaseModel {
 	public $jobname;
 	public $jobid1c;
 	
-	public static $fields_view = array('id', 'jobname', 'jobid1c');
-	
-	public static function getAll() {
-		return Application::$db->selectRows('orders', DataBaseManager::array2fields(self::$fields_view), '1', 'Order', '0, 300');
+	public static function getAll($fields = '*') {
+		if (is_array($fields)) $fields = DataBaseManager::array2fields($fields);
+		return Application::$db->selectRows('orders', $fields, '1', 'Order', '0, 300');
 	}
 }
 

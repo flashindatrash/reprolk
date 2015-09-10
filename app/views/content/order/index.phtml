@@ -5,7 +5,7 @@
 		<thead>
 			<tr>
 				<?php
-				foreach (Order::$fields_view as $th) {
+				foreach ($this->fields as $th) {
 					print '<th>' . $this->str($th) . '</th>';
 				}
 				print '<th>' . $this->str('actions') . '</th>';
@@ -16,7 +16,7 @@
 			<?php
 			foreach ($this->orders as $n => $order) {
 				print '<tr>';
-				foreach (Order::$fields_view as $td) {
+				foreach ($this->fields as $td) {
 					print '<td>' . $order->$td . '</td>';
 				}
 				print	'<td>'.

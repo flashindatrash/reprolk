@@ -3,14 +3,15 @@
 class OrderAllController extends BaseController {
 	
 	public $orders;
-	public $currentGroup;
+	public $fields;
 	
 	public function beforeRender() {
-		$this->orders = Order::getAll($this->currentGroup);
+		$this->fields = array('id', 'jobname', 'jobid1c');
+		$this->orders = Order::getAll($this->fields);
 	}
 	
 	public function getContent() {
-		$this->pick('order/all');
+		$this->pick('order/index');
 	}
 	
 }
