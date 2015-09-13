@@ -17,9 +17,8 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th>#</th>
 				<?php
-				foreach (array('username', 'email', 'group') as $th) {
+				foreach ($this->fields as $th) {
 					print '<th>' . $this->str($th) . '</th>';
 				}
 				?>
@@ -27,14 +26,15 @@
 		</thead>
 		<tbody>
 			<?php
+			$users = '';
 			foreach ($this->users as $n => $user) {
-				print 	'<tr>'.
-						'<th scope="row">' . ($n+1) . '</th>'.
-						'<td>' . $user->firstname . ' ' . $user->lastname . '</td>'.
-						'<td>' . $user->email . '</td>'.
-						'<td>' . $user->group . '</td>'.
-						'</tr>';
+				$users .= '<tr>';
+				foreach ($this->fields as $td) {
+					$users .= '<td>' . $user->$td . '</td>';
+				}
+				$users .= '</tr>';
 			}
+			print $users;
 			?>
 		</tbody>
 	</table>

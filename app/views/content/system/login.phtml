@@ -2,8 +2,8 @@
 	<?php 
 		print View::input('_url', 'hidden', '/user');
 		print View::input('send', 'hidden', '1');
-		print View::group('email', 'email');
-		print View::group('password', 'password');
+		print View::formNormal('email', 'email');
+		print View::formNormal('password', 'password');
 	?>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">

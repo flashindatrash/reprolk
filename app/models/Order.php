@@ -18,12 +18,22 @@ class Order extends BaseModel {
 	public $date_changed;
 	public $date_due;
 	
-	public static $fields_table_select = array('id', 'name', 'status', 'date_due');
-	public static $fields_table_view = array('name', 'status', 'date_due');
+	public static function getAll($fields) {
+		$table_users = Application::$db->tableName('users');
+		$table_orders = Application::$db->tableName('orders');
+		
+		$fields = DataBaseManager::array2fields($fields);
+		$fields .= ', `user`';
+		$fields .= ', ' . $table_orders . '.id as id';
+		$fields .= ', ' . $table_users . '.username as username';
+		
+		$join = $table_users . ' on ' . $table_orders . '.user=' . $table_users . '.id';
+		
+		return Application::$db->selectRows('orders', $fields, '1', 'Order', '0, 300', $join);
+	}
 	
-	public static function getAll($fields = '*') {
-		if (is_array($fields)) $fields = DataBaseManager::array2fields($fields);
-		return Application::$db->selectRows('orders', $fields, '1', 'Order', '0, 300');
+	public static function byId($id) {
+		return Application::$db->selectRow('orders', '*', '`id` = ' . $id, 'Order');
 	}
 }
 

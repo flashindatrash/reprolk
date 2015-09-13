@@ -1,6 +1,6 @@
 <dl class="dl-horizontal">
 <?php
-	foreach (User::$fields_view as $field) {
+	foreach ($this->fields as $field) {
 		print '<dt>' . $this->str($field) .'</dt>';
 		print '<dd>' . Application::$user->$field . '</dd>';
 	}

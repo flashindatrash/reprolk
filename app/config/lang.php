@@ -8,8 +8,6 @@ return array(
 	'LOGOUT_SUCCESSFULY' => 'You successfully log out...',
 	'REDIRECT' => '<b>%d</b> seconds later you will be redirected. If it does not, click %s',
 	'HERE' => 'here',
-	'FIRSTNAME' => 'Firstname',
-	'LASTNAME' => 'Lastname',
 	'GROUP' => 'Group',
 	'ACCESS_DENIED' => 'Access is denied',
 	'NOT_FOUND' => '%s not found',
@@ -28,12 +26,14 @@ return array(
 	'ORDER_NAME' => 'Order',
 	'ORDER_STATUS' => 'Status',
 	'ORDER_DATE_DUE' => 'Due date',
+	'ORDER_TABLE_HELP' => 'One click for item - selected item, and double click enter to view order',
+	'GID' => 'Group ID',
 	
-	/*'ACTIONS' => 'Actions',
-	
-	'TOOLTIP_ORDER_APPROVE' => 'Approve this order',
+	'TOOLTIP_ORDER_ADD' => 'Add new order',
+	'TOOLTIP_ORDER_VIEW' => 'View this order',
 	'TOOLTIP_ORDER_EDIT' => 'Edit this order',
-	'TOOLTIP_ORDER_DELETE' => 'Delete this order',*/
+	'TOOLTIP_ORDER_DUPLICATE' => 'Duplicate this order',
+	'TOOLTIP_ORDER_DELETE' => 'Delete this order',
 	
 	'MENU_ORDERADD' => 'Add Order',
 	'MENU_USERADD' => 'Add User',
@@ -45,6 +45,7 @@ return array(
 	'ERROR_SIGN_IN' => 'incorrect email/password',
 	'ERROR_NEED_SIGN' => 'You need sign in',
 	'ERROR_IS_NOT_IREDIRECT' => 'Controller <b>%s</b> not implemented IRedirect',
+	'ERROR_ORDER_NOT_FOUND' => 'Order not found',
 );
 
 ?>

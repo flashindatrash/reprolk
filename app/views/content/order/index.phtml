@@ -1,33 +1,35 @@
 <div class="panel panel-default">
-	<div class="panel-heading"><?php print sprintf($this->str('all_orders_result'), count($this->orders)); ?></div>
-
-	<table class="table">
+	<div class="panel-heading"><?php print sprintf($this->str('all_orders_result'), count($this->orders)); ?>
+		<div class="pull-right">
+			<a id="add" href="/order/add" class="btn btn-xs btn-primary glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="left" title="<?php print $this->str('tooltip_order_add'); ?>"></a>&nbsp;
+			<a id="view" href="#" class="btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled" data-toggle="tooltip" data-placement="top" title="<?php print $this->str('tooltip_order_view'); ?>"></a>&nbsp;
+			<a id="edit" href="#" class="btn-action btn btn-xs btn-primary glyphicon glyphicon-pencil disabled" data-toggle="tooltip" data-placement="top" title="<?php print $this->str('tooltip_order_edit'); ?>"></a>&nbsp;
+			<a id="duplicate" href="#" class="btn-action btn btn-xs btn-primary glyphicon glyphicon-duplicate disabled" data-toggle="tooltip" data-placement="right" title="<?php print $this->str('tooltip_order_duplicate'); ?>"></a>&nbsp;
+		</div>
+	</div>
+	
+	<table class="table table-hover">
 		<thead>
 			<tr>
 				<?php
 				foreach ($this->fields as $th) {
 					print '<th>' . $this->str('order_' . $th) . '</th>';
 				}
-				//print '<th>' . $this->str('actions') . '</th>';
+				print '<th>' . $this->str('username') . '</th>';
 				?>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
+			$orders = '';
 			foreach ($this->orders as $n => $order) {
-				print '<tr class="order_row" id="' . $order->id . '">';
+				$orders .= '<tr class="order_row noselect cursor_pointer" id="' . $order->id . '">';
 				foreach ($this->fields as $td) {
-					print '<td>' . $order->$td . '</td>';
+					$orders .= '<td>' . $order->$td . '</td>';
 				}
-				/*print	'<td>'.
-						'<a href="/order/approve?id=' . $order->id . ' " data-toggle="tooltip" data-placement="left" title="' . $this->str('tooltip_order_approve') . '" class="btn btn-success btn-xs glyphicon glyphicon-ok"></a>'.
-						'&nbsp;'.
-						'<a href="/order/edit?id=' . $order->id . ' " data-toggle="tooltip" data-placement="top" title="' . $this->str('tooltip_order_edit') . '" class="btn btn-primary btn-xs glyphicon glyphicon-pencil"></a>'.
-						'&nbsp;'.
-						'<a href="/order/delete?id=' . $order->id . ' " data-toggle="tooltip" data-placement="right" title="' . $this->str('tooltip_order_delete') . '" class="btn btn-danger btn-xs glyphicon glyphicon-remove"></a>'.
-						'</td>'.
-						'</tr>';*/
+				$orders .= '<td>' . $order->username . '</td>';
 			}
+			print $orders;
 			?>
 		</tbody>
 	</table>

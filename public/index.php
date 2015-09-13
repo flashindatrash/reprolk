@@ -19,7 +19,9 @@ try {
 			new Route('UserAll', '/user/all', UserAccess::USER_ALL)
 		]),
 		new Route('OrderAll', '/order/all', UserAccess::AUTH, false, [
-			new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD)
+			new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD),
+			new Route('OrderView', '/order/view', UserAccess::ORDER_ADD, true),
+			new Route('OrderEdit', '/order/edit', UserAccess::ORDER_ADD, true)
 		]),
 		new Route('Logout', '/logout', UserAccess::AUTH),
 		
