@@ -1,12 +1,11 @@
 <form method="post" class="form-horizontal">
 	<?php 
 		print View::input('send', 'hidden', '1');
-		print View::group('email', 'email');
-		print View::group('password', 'password');
-		print View::group('firstname');
-		print View::group('lastname');
-		print View::group('group', 'select', $this->groups);
-		print View::group('uid');
+		print View::formNormal('email', 'email');
+		print View::formNormal('password', 'password');
+		print View::formNormal('username');
+		print View::formNormal('group', 'select', $this->groups);
+		print View::formNormal('gid');
 	?>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">

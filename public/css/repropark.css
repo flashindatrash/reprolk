@@ -2,6 +2,19 @@ body {
 	background: #d9d9d9;
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cursor_pointer {
+	cursor: pointer;
+}
+
 a {
 	color: #1c86af;
 	text-decoration: none;

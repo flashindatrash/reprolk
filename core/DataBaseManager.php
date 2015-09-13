@@ -14,19 +14,19 @@ class DataBaseManager {
 		}
 	}
 	
-	public function select($from, $select = '*', $where = '1', $className = NULL, $range = '0, 1') {
-		$str = 'select ' . $select . ' from ' . $this->tableName($from) . ' where ' . $where . ' limit ' . $range;
+	public function select($from, $select = '*', $where = '1', $className = NULL, $range = '0, 1', $join = NULL) {
+		$str = 'select ' . $select . ' from ' . $this->tableName($from) . (is_null($join) ? '' : ' inner join ' . $join) . ' where ' . $where . ' limit ' . $range;
 		$query = mysql_query($str, $this->connection);
 		return $query ? $query : null;
 	}
 	
-	public function selectRow($from, $select = '*', $where = '1', $className = NULL) {
-		$result = $this->select($from, $select, $where, $className);
+	public function selectRow($from, $select = '*', $where = '1', $className = NULL, $join = NULL) {
+		$result = $this->select($from, $select, $where, $className, '0, 1', $join);
 		return !is_null($result) ? mysql_fetch_object($result, $className) : null;
 	}
 	
-	public function selectRows($from, $select = '*', $where = '1', $className = NULL, $range = '0, 10') {
-		$result = $this->select($from, $select, $where, $className, $range);
+	public function selectRows($from, $select = '*', $where = '1', $className = NULL, $range = '0, 10', $join = NULL) {
+		$result = $this->select($from, $select, $where, $className, $range, $join);
 		$rows = array();
 		while ($row = mysql_fetch_object($result, $className)) {
 			$rows[] = $row;
@@ -52,7 +52,7 @@ class DataBaseManager {
 		return '"' . join('", "', $arr) . '"';
 	}
 	
-	private function tableName($name) {
+	public function tableName($name) {
 		return $this->prefix.$name;
 	}
 	
