@@ -37,6 +37,14 @@ function hasGet($val) {
 	return get($val)!='';
 }
 
+function session($val) {
+	return isset($_SESSION[$val]) ? $_SESSION[$val] : '';
+}
+
+function hasSession($val) {
+	return session($val)!='';
+}
+
 function require_class($fileName, $className) {
 	if (file_exists($fileName)) require_once ($fileName);
 	if (class_exists($className)) return new $className;

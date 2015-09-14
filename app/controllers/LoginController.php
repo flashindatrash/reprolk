@@ -20,7 +20,7 @@ class LoginController extends BaseController implements IRedirect {
 	
 	private function login($email, $password) {
 		Application::$user = User::login($email, $password);
-		if (!is_null(Application::$user)) $_SESSION['user_id'] = Application::$user->id;
+		if (!is_null(Application::$user)) SystemSession::setId(Application::$user->id);
 		else $this->addError($this->str('error_sign_in'));
 	}
 	

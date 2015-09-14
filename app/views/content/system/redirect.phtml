@@ -1,6 +1,6 @@
 <?php
 	if (!$this instanceof IRedirect) {
-		print '<div class="alert alert-danger" role="alert">' . sprintf($this->str('error_is_not_iredirect'), Application::$route->name) . '</div>';
+		print '<div class="alert alert-danger" role="alert">' . sprintf($this->str('error_is_not_iredirect'), Application::$routes->current->name) . '</div>';
 		die;
 	}
 	

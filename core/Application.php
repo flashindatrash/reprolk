@@ -5,7 +5,6 @@ class Application {
 	public static $db;
     public static $config;
 	public static $routes;
-	public static $route;
 	public static $user;
 	
 	private static $lang;
@@ -17,33 +16,38 @@ class Application {
 	
 	public function connect() {
 		self::$db = new DataBaseManager(self::$config['database']);
-		if (isset($_SESSION['user_id'])) self::$user = User::byId($_SESSION['user_id']);
+		self::$user = SystemSession::hasId() ? User::byId(SystemSession::getId()) : null;
+	}
+	
+	public function setRoutes($array) {
+		self::$routes = new SystemRoutes($array);
 	}
 	
 	public function addLang($file) {
 		if (file_exists($file)) self::$lang = require $file;
 	}
 	
-	public function setRoutes($routes) {
-		self::$routes = $routes;
-	}
-	
 	public function getContent() {
-		self::$route = $this->getRoute();
-		$controller = $this->getFactory(self::$route->name);
+		$route = self::$routes->current;
+		$controller = $this->getFactory($route);
 		
 		if (is_null($controller)) {
 			//контроллер не найден
-			$controller = $this->getFactory('NotFound');
-		} else if (!self::$route->isAvailable()) {
+			$controller = $this->getFactory(new Route('NotFound'));
+		} else if (!$route->isAvailable()) {
 			//если нет доступа к текущему роуту
-			$controller = $this->getFactory('AccessDenied');
+			$controller = $this->getFactory(new Route('AccessDenied'));
 		} else if (is_null(self::$user)) {
 			//пользователь не залогинен
-			$controller = $this->getFactory('Login');
+			$controller = $this->getFactory(new Route('Login'));
 		}
 		
 		$controller->beforeRender();
+		
+		if (SystemSession::hasGroup()) {
+			$controller->addWarning(sprintf($this->str('warning_view_as'), self::str(SystemSession::getGroup()), View::link('ViewAsCancel', self::str('cancel'))));
+		}
+		
 		$controller->render();
 	}
 	
@@ -52,33 +56,13 @@ class Application {
 		return isset(self::$lang) && isset(self::$lang[$name]) ? self::$lang[$name] : $name;
 	}
 	
-	private function getFactory($name) {
+	private function getFactory($route) {
+		$name = $route->name;
 		$className = $name . 'Controller';
 		$fileName = self::$config['app']['controllers'] . $className . '.php';
 		return require_class($fileName, $className);
 	}
 	
-	private function getRoute() {
-		if (!isset($_GET['_url'])) return new Route('Index');
-		$u = strtolower($_GET['_url']);
-		
-		$delim = strpos($u, '?');
-		if ($delim!==false) $u = substr($u, 0, $delim);
-		
-		$route = $this->checkRoute($u, self::$routes);
-		if (is_null($route)) $route = new Route('Error', $u);
-		
-		return $route;
-	}
-	
-	private function checkRoute($path, $routes) {
-		foreach ($routes as $route) {
-			if ($route->path==$path) return $route;
-			$sub = $this->checkRoute($path, $route->routes);
-			if (!is_null($sub)) return $sub;
-		}
-		return null;
-	}
 }
 
 ?>

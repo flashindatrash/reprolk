@@ -6,24 +6,36 @@ class UserAccess extends BaseModel {
 	const ALL = 'all';
 	const AUTH = 'auth';
 	
+	const ADMIN = 'admin';
+	const ORDER_VIEW = 'orderView';
 	const ORDER_ADD = 'orderAdd';
-	const ORDER_ALL = 'orderAll';
+	const USER_VIEW = 'userView';
 	const USER_ADD = 'userAdd';
-	const USER_ALL = 'userAll';
 	
 	public static $permissions = array (
 		'none' => [],
-		'auth' => [User::ADMIN, User::MANAGER, User::CLIENT],
-		'all' => [User::ADMIN, User::MANAGER, User::CLIENT, User::ANONYMOUS],
-		'orderAdd' => [User::ADMIN, User::MANAGER],
-		'orderAll' => [User::ADMIN],
-		'userAdd' => [User::ADMIN],
-		'userAll' => [User::ADMIN],
+		'all' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER, User::ANONYMOUS],
+		'auth' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
+		'orderAdd' => [User::MANAGER, User::CLIENT],
+		'orderView' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
+		'userView' => [User::ADMIN, User::MANAGER],
+		'userAdd' => [User::ADMIN, User::MANAGER],
+		'admin' => [User::ADMIN]
 	);
+	
+	public static function groups() {
+		return self::$permissions[self::AUTH];
+	}
 	
 	public static function check($group) {
 		$user_group = !is_null(Application::$user) ? Application::$user->group : User::ANONYMOUS;
-		return isset(self::$permissions[$group]) && in_array($user_group, self::$permissions[$group]);
+		$has_permissions = isset(self::$permissions[$group]);
+		
+		if (SystemSession::hasGroup() && $group!=self::ADMIN) {
+			return $has_permissions && in_array(SystemSession::getGroup(), self::$permissions[$group]) && in_array($user_group, self::$permissions[self::ADMIN]);
+		}
+		
+		return $has_permissions && in_array($user_group, self::$permissions[$group]);
 	}
 	
 }

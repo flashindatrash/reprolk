@@ -3,6 +3,7 @@
 class User extends BaseModel {
 	
 	const ANONYMOUS	= 'anonymous';
+	const VIEWER	= 'viewer';
 	const CLIENT	= 'client';
 	const MANAGER	= 'manager';
 	const ADMIN		= 'admin';

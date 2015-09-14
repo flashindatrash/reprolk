@@ -1,6 +1,6 @@
 <?php
 
-print printRoutes(Application::$routes);
+print printRoutes(Application::$routes->all);
 
 function printRoutes($v) {
 	$str = '<ul class="menu">';
@@ -10,7 +10,7 @@ function printRoutes($v) {
 	foreach ($v as $route) {
 		if (!$route->isVisible()) continue;
 		
-		$active = Application::$route->name==$route->name;
+		$active = Application::$routes->equalRoute($route);
 		$collapsed = count($route->routes)>0;
 		$finded = $active || findInArray($route->routes);
 		$expanded = $collapsed && $finded;
@@ -22,7 +22,7 @@ function printRoutes($v) {
 		if ($n==count($v)-1) $li .= ' last';
 		
 		$str .= '<li class="' . $li . '">';
-		$str .= '<a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . Application::str('menu_' . $route->name) . '</a>';
+		$str .= '<a href="' . $route->path . '"' . ($active ? ' class="active"' : '') . '>' . $route->menuName() . '</a>';
 		if ($expanded) {
 			$str .= printRoutes($route->routes);
 		}
@@ -38,7 +38,7 @@ function printRoutes($v) {
 
 function findInArray($j) {
 	foreach ($j as $route) {
-		if ($route->name == Application::$route->name || findInArray($route->routes)) return true;
+		if (Application::$routes->equalRoute($route) || findInArray($route->routes)) return true;
 	}
 	return false;
 }

@@ -2,10 +2,10 @@
 
 include '../core/ICatalog.php';
 
-class IndexController extends BaseController implements ICatalog {
+class AdminController extends BaseController implements ICatalog {
 	
 	public function getRoutes() {
-		return Application::$routes->all;
+		return Application::$routes->current->routes;
 	}
 	
 	public function getContent() {

@@ -5,7 +5,8 @@ include '../core/IRedirect.php';
 class LogoutController extends BaseController implements IRedirect {
 	
 	public function beforeRender() {
-		Application::$user = $_SESSION['user_id'] = null;
+		Application::$user = null;
+		SystemSession::clear();
 	}
 	
 	public function getContent() {

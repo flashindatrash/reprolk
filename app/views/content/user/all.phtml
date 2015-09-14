@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-	<div class="panel-heading"><?php print sprintf($this->str('all_users_result'), count($this->users)); ?></div>
+	<div class="panel-heading"><?php print sprintf( Application::str('all_users_result'), count($this->users)); ?></div>
 	
 	<div class="panel-body">
 		<ul class="nav nav-pills">
@@ -7,7 +7,7 @@
 				foreach ($this->groups as $group) {
 					$disabled = $this->currentGroup==$group;
 					print	'<li role="presentation"' . ($disabled ? ' class="disabled"' : '') . '>'.
-							'<a href="' . ($disabled ? '#' : '?group=' . $group) . '">' . $this->str($group) . '</a>'.
+							'<a href="' . ($disabled ? '#' : '?group=' . $group) . '">' . Application::str($group) . '</a>'.
 							'</li>';
 				}
 			?>
@@ -19,7 +19,7 @@
 			<tr>
 				<?php
 				foreach ($this->fields as $th) {
-					print '<th>' . $this->str($th) . '</th>';
+					print '<th>' . Application::str($th) . '</th>';
 				}
 				?>
 			</tr>

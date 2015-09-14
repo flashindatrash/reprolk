@@ -16,13 +16,19 @@ try {
 	$app->setRoutes([
 		new Route('Profile', '/user', UserAccess::AUTH, false, [
 			new Route('UserAdd', '/user/add', UserAccess::USER_ADD),
-			new Route('UserAll', '/user/all', UserAccess::USER_ALL)
+			new Route('UserAll', '/user/all', UserAccess::USER_VIEW)
 		]),
-		new Route('OrderAll', '/order/all', UserAccess::AUTH, false, [
+		new Route('OrderAll', '/order/all', UserAccess::ORDER_VIEW, false, [
 			new Route('OrderAdd', '/order/add', UserAccess::ORDER_ADD),
-			new Route('OrderView', '/order/view', UserAccess::ORDER_ADD, true),
+			new Route('OrderView', '/order/view', UserAccess::ORDER_VIEW, true),
 			new Route('OrderEdit', '/order/edit', UserAccess::ORDER_ADD, true)
 		]),
+		
+		new Route('Admin', '/admin', UserAccess::ADMIN, false, [
+			new Route('ViewAs', '/admin/view-as', UserAccess::ADMIN),
+			new Route('ViewAsCancel', '/admin/view-as/cancel', UserAccess::ADMIN, true),
+		]),
+		
 		new Route('Logout', '/logout', UserAccess::AUTH),
 		
 		new Route('Login', '/login', UserAccess::ALL, true)
