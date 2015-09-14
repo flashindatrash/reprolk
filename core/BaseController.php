@@ -8,6 +8,7 @@ class BaseController {
 	private $js_files = array('jquery-1.11.3.min', 'bootstrap.min', 'repropark');
 	private $js_params = array();
 	private $errors = array();
+	private $warnings = array();
 	
 	public function __construct() {
 		
@@ -27,6 +28,10 @@ class BaseController {
 	
 	public function addError($message) {
 		$this->errors[] = $message;
+	}
+	
+	public function addWarning($message) {
+		$this->warnings[] = $message;
 	}
 	
 	public function beforeRender() {
@@ -56,6 +61,12 @@ class BaseController {
 		}
 		$s .= '};</script>';
 		echo $s;
+	}
+	
+	public function getWarnings() {
+		foreach ($this->warnings as $warning) {
+			echo '<div class="alert alert-warning" role="alert">' . $warning . '</div>';
+		}
 	}
 	
 	public function getErrors() {

@@ -8,7 +8,7 @@ class UserAddController extends BaseController {
 	private $values = array();
 	
 	public function beforeRender() {
-		$this->groups = UserAccess::$permissions[UserAccess::AUTH];
+		$this->groups = UserAccess::groups();
 		
 		if ($this->validate()) {
 			$this->user_id = User::add(User::$fields_mandatory, $this->values);
@@ -17,7 +17,7 @@ class UserAddController extends BaseController {
 	
 	public function getContent() {
 		if (!is_null($this->user_id)) {
-			$this->pick('system/success_save');
+			$this->pick('system/success-save');
 		}
 		
 		$this->pick('user/add');
@@ -31,7 +31,7 @@ class UserAddController extends BaseController {
 		foreach (User::$fields_mandatory as $field) {
 			if (!hasPost($field)) {
 				$valid = false;
-				$this->addError(sprintf($this->str('MUST_ENTER'), $this->str($field)));
+				$this->addError(sprintf($this->str('must_enter'), $this->str($field)));
 			} else {
 				$this->values[] = post($field);
 			}

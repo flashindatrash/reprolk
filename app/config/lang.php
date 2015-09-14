@@ -13,6 +13,7 @@ return array(
 	'NOT_FOUND' => '%s not found',
 	'SIGNUP' => 'Sign Up',
 	'ANONYMOUS' => 'Anonymous',
+	'VIEWER' => 'Viewer',
 	'CLIENT' => 'Client',
 	'MANAGER' => 'Manager',
 	'ADMIN' => 'Admin',
@@ -28,6 +29,9 @@ return array(
 	'ORDER_DATE_DUE' => 'Due date',
 	'ORDER_TABLE_HELP' => 'One click for item - selected item, and double click enter to view order',
 	'GID' => 'Group ID',
+	'VIEW_AS' => 'View site as',
+	'VIEW' => 'View',
+	'CANCEL' => 'Cancel',
 	
 	'TOOLTIP_ORDER_ADD' => 'Add new order',
 	'TOOLTIP_ORDER_VIEW' => 'View this order',
@@ -40,11 +44,17 @@ return array(
 	'MENU_USERALL' => 'All users',
 	'MENU_PROFILE' => 'Profile',
 	'MENU_ORDERALL' => 'Orders',
+	'MENU_ADMIN' => 'Administration',
+	'MENU_VIEWAS' => 'View as',
 	'MENU_LOGOUT' => 'Logout',
+	'MENU_TITLE_VIEWAS' => 'To view the site for any group', 
+	
+	'WARNING_VIEW_AS' => 'You are viewing this page as <b>%s</b> [%s]',
 	
 	'ERROR_SIGN_IN' => 'incorrect email/password',
 	'ERROR_NEED_SIGN' => 'You need sign in',
 	'ERROR_IS_NOT_IREDIRECT' => 'Controller <b>%s</b> not implemented IRedirect',
+	'ERROR_IS_NOT_ICATALOG' => 'Controller <b>%s</b> not implemented ICatalog',
 	'ERROR_ORDER_NOT_FOUND' => 'Order not found',
 );
 

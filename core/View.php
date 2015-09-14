@@ -2,10 +2,6 @@
 
 class View {
 	
-	public static function link() {
-		
-	}
-	
 	public static function input() {
 		$nArgs = func_num_args();
 		$args = func_get_args();
@@ -20,7 +16,7 @@ class View {
 				return '<input type="hidden" name="' . $name . '" value="' . $value . '">';
 			case 'submit':
 				//name, type
-				return '<button type="submit" class="btn btn-primary">' .  Application::str($name) . '</button>';
+				return '<button type="submit" class="btn btn-primary">' . Application::str($name) . '</button>';
 			case 'select':
 				//name, type, values
 				$values = $nArgs>=3 ? $args[2] : [];
@@ -64,6 +60,18 @@ class View {
 						'</span>' .
 					'</div>' .
 				'</div>';
+	}
+	
+	public static function link($route_name, $text = '', $id = null, $class = null, $title = null, $get = null, $tooltip = null) {
+		$route = Application::$routes->byName($route_name);
+		if (is_null($route) || !$route->isAvailable()) return '';
+		$href = ' href="' . $route->path . $get . '"';
+		$get = is_null($get) ? '' : '?' . $get;
+		$id = is_null($id) ? '' : ' id="' . $id . '"';
+		$class = is_null($class) ? '' : ' class="' . $class . '"';
+		$title = ' title="' . (is_null($title) ? $text : $title) . '"';
+		$tooltip = is_null($tooltip) ? '' : ' data-toggle="tooltip" data-placement="' . $tooltip . '"';
+		return '<a' . $href . $id . $class . $title . $tooltip . '>' . $text . '</a>';
 	}
 	
 	private static function call($method, $args) {
