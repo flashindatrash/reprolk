@@ -1,10 +1,10 @@
 <div class="panel panel-default">
 	<div class="panel-heading"><?php print sprintf($this->str('all_orders_result'), count($this->orders)); ?>
 		<div class="pull-right">
-			<?php print View::link('OrderAdd', '', 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', Application::str('tooltip_order_add'), null, 'left'); ?>
-			<?php print View::link('OrderView', '', 'view', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled', Application::str('tooltip_order_view'), null, 'top'); ?>
-			<?php print View::link('OrderEdit', '', 'edit', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-pencil disabled', Application::str('tooltip_order_edit'), null, 'top'); ?>
-			<?php print View::link('OrderDuplicate', '', 'duplicate', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-duplicate disabled', Application::str('tooltip_order_duplicate'), null, 'right'); ?>
+			<?php print View::link('OrderAdd', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, null, 'left'); ?>
+			<?php print View::link('OrderView', '', null, 'view', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled', null, 'top'); ?>
+			<?php print View::link('OrderEdit', '', null, 'edit', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-pencil disabled', null, 'top'); ?>
+			<?php print View::link('OrderDuplicate', '', null, 'duplicate', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-duplicate disabled', null, 'right'); ?>
 		</div>
 	</div>
 	
@@ -13,7 +13,7 @@
 			<tr>
 				<?php
 				foreach ($this->fields as $th) {
-					print '<th>' . $this->str('order_' . $th) . '</th>';
+					print '<th>' . $this->str( $th ) . '</th>';
 				}
 				print '<th>' . $this->str('username') . '</th>';
 				?>

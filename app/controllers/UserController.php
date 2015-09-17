@@ -1,6 +1,6 @@
 <?php
 
-class ProfileController extends BaseController {
+class UserController extends BaseController {
 	
 	public $fields;
 	

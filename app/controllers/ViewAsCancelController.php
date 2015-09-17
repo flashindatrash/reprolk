@@ -1,6 +1,6 @@
 <?php
 
-include '../core/IRedirect.php';
+include '../core/interfaces/IRedirect.php';
 
 class ViewAsCancelController extends BaseController implements IRedirect {
 	
@@ -13,7 +13,7 @@ class ViewAsCancelController extends BaseController implements IRedirect {
 	}
 	
 	public function getRedirect() {
-		return new Redirect($this->str('sign_successfuly'), '/');
+		return new Redirect($this->str('sign_successfuly'));
 	}
 
 }

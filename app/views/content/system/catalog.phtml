@@ -10,11 +10,8 @@
 	$list .= '<div class="list-group">';
 	
 	foreach ($routes as $route) {
-		if (!$route->isVisible()) continue;
-		$list .= '<a href="' . $route->path . '" class="list-group-item">';
-		$list .= '<h4 class="list-group-item-heading">' . $route->menuName() . '</h4>';
-		$list .= '<p class="list-group-item-text">' . $route->menuTitle() . '</p>';
-		$list .= '</a>';
+		if ($route->isVisible())
+			$list .= View::link($route->name, '<h4 class="list-group-item-heading">' . $route->linkText() . '</h4><p class="list-group-item-text">' . $route->linkTitle() . '</p>', null, null, 'list-group-item');
 	}
 	
 	$list .= '</div>';

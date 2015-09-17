@@ -29,17 +29,17 @@ class Application {
 	
 	public function getContent() {
 		$route = self::$routes->current;
-		$controller = $this->getFactory($route);
+		$controller = !is_null($route) ? $this->getFactory($route) : null;
 		
 		if (is_null($controller)) {
 			//контроллер не найден
-			$controller = $this->getFactory(new Route('NotFound'));
+			$controller = $this->getFactory(self::$routes->byName(Route::NOT_FOUND));
 		} else if (!$route->isAvailable()) {
 			//если нет доступа к текущему роуту
-			$controller = $this->getFactory(new Route('AccessDenied'));
-		} else if (is_null(self::$user)) {
+			$controller = $this->getFactory(self::$routes->byName(Route::ACCESS_DENIED));
+		} else if (!$this->isLogined()) {
 			//пользователь не залогинен
-			$controller = $this->getFactory(new Route('Login'));
+			$controller = $this->getFactory(self::$routes->byName(Route::LOGIN));
 		}
 		
 		$controller->beforeRender();
@@ -49,6 +49,10 @@ class Application {
 		}
 		
 		$controller->render();
+	}
+	
+	public static function isLogined() {
+		return !is_null(self::$user);
 	}
 	
 	public static function str($name) {

@@ -1,6 +1,6 @@
 <?php
 
-include '../core/IRedirect.php';
+include '../core/interfaces/IRedirect.php';
 
 class LogoutController extends BaseController implements IRedirect {
 	
@@ -14,7 +14,7 @@ class LogoutController extends BaseController implements IRedirect {
 	}
 	
 	public function getRedirect() {
-		return new Redirect($this->str('logout_successfuly'), '/', 300);
+		return new Redirect($this->str('logout_successfuly'));
 	}
 	
 }

@@ -4,7 +4,7 @@ class Order extends BaseModel {
 	
 	public $id;
 	public $user;
-	public $name;
+	public $title;
 	public $id_1c;
 	public $number_1c;
 	public $status;
@@ -18,7 +18,7 @@ class Order extends BaseModel {
 	public $date_changed;
 	public $date_due;
 	
-	public static function getAll($fields) {
+	public static function getAll($fields, $gid = null) {
 		$table_users = Application::$db->tableName('users');
 		$table_orders = Application::$db->tableName('orders');
 		
@@ -29,7 +29,9 @@ class Order extends BaseModel {
 		
 		$join = $table_users . ' on ' . $table_orders . '.user=' . $table_users . '.id';
 		
-		return Application::$db->selectRows('orders', $fields, '1', 'Order', '0, 300', $join);
+		$where = is_null($gid) ? '1' : $table_users . '.gid = ' . $gid;
+		
+		return Application::$db->selectRows('orders', $fields, $where, 'Order', '0, 300', $join);
 	}
 	
 	public static function byId($id) {

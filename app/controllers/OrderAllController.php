@@ -6,15 +6,14 @@ class OrderAllController extends BaseController {
 	public $fields;
 	
 	public function beforeRender() {
-		$this->fields = array('name', 'status', 'date_due');
+		$this->fields = array('title', 'status', 'date_due');
 		
-		$this->orders = Order::getAll($this->fields);
+		$this->orders = Order::getAll($this->fields, Application::$user->gid);
 		
 		$this->addJSfile('order.table');
-		$this->addJSparam('view_url', '/order/view?id=');
-		$this->addJSparam('edit_url', '/order/edit?id=');
-		$this->addJSparam('duplicate_url', '/order/duplicate?id=');
-		
+		$this->addJSparam('view_url', Application::$routes->byName('OrderView')->path);
+		$this->addJSparam('edit_url', Application::$routes->byName('OrderEdit')->path);
+		$this->addJSparam('duplicate_url', Application::$routes->byName('OrderDuplicate')->path);
 	}
 	
 	public function getContent() {
