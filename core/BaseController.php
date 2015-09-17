@@ -9,13 +9,14 @@ class BaseController {
 	private $js_params = array();
 	private $errors = array();
 	private $warnings = array();
+	private $menu = array();
 	
 	public function __construct() {
-		
+		$this->menu = MenuItem::parse(Application::$routes->all);
 	}
 	
 	public function addCSSfile($css) {
-		$this->css_file[] = $css;
+		$this->css_files[] = $css;
 	}
 	
 	public function addJSfile($js) {
@@ -39,48 +40,53 @@ class BaseController {
 	}
 	
 	public function getTitle() {
-		echo $this->title;
+		print $this->title;
 	}
 	
 	public function getCSSfiles() {
 		foreach ($this->css_files as $css) {
-			echo '<link rel="stylesheet" href="' . Application::$config['public']['css'] . $css . '.css">';
+			print '<link rel="stylesheet" href="' . Application::$config['public']['css'] . $css . '.css">';
 		}
 	}
 	
 	public function getJSfiles() {
 		foreach ($this->js_files as $js) {
-			echo '<script src="' . Application::$config['public']['js'] . $js . '.js"></script>';
+			print '<script src="' . Application::$config['public']['js'] . $js . '.js"></script>';
 		}
 	}
 	
 	public function getJSparams() {
-		$s = '<script>var params = {';
+		$js = '<script>var params = {';
 		foreach ($this->js_params as $key => $value) {
-			$s .= $key . ': "' . $value . '",';
+			$js .= $key . ': "' . $value . '",';
 		}
-		$s .= '};</script>';
-		echo $s;
+		$js .= '};</script>';
+		print $js;
 	}
 	
 	public function getWarnings() {
 		foreach ($this->warnings as $warning) {
-			echo '<div class="alert alert-warning" role="alert">' . $warning . '</div>';
+			print '<div class="alert alert-warning" role="alert">' . $warning . '</div>';
 		}
 	}
 	
 	public function getErrors() {
 		foreach ($this->errors as $error) {
-			echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+			print '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 		}
 	}
 	
+	public function getBreadcrumbs() {
+		$breadcrumb = $this->renderBreadcrump($this->menu);
+		print !Application::isLogined() || $breadcrumb=='' ? '' : '<ol class="breadcrumb">' . $breadcrumb . '</ol><hr>';
+	}
+	
 	public function getMenu() {
-		$this->pick('system/menu');
+		print $this->renderMenu($this->menu);
 	}
 	
 	public function getContent() {
-		echo '';
+		print '';
 	}
 	
 	public function str($name) {
@@ -93,6 +99,31 @@ class BaseController {
 	
 	public function render() {
 		$this->include_file(Application::$config['app']['layouts'] . $this->template . '.phtml');
+	}
+	
+	private function renderMenu($items) {
+		$ul = '<ul class="menu">';
+		foreach ($items as $item) {
+			if (!$item->visible) continue;
+			$ul .= '<li class="' . $item->liClass() . '">';
+			$ul .= View::link($item->routeName, null, null, null, $item->isActive() ? 'active' : null);
+			if ($item->isExpanded()) {
+				$ul .= $this->renderMenu($item->items);
+			}
+			$ul .= '</li>';
+		}
+		$ul .= '</ul>';
+		return $ul;
+	}
+	
+	private function renderBreadcrump($items) {
+		foreach ($items as $item) {
+			if ($item->isFinded()) {
+				if ($item->isActive()) return '<li class="active">' . $item->linkText() . '</li>';
+				else return '<li>' . View::link($item->routeName) . '</li>' . $this->renderBreadcrump($item->items);
+			}
+		}
+		return '';
 	}
 	
 	private function include_file($file) {

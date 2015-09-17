@@ -2,6 +2,12 @@
 
 class Route {
 	
+	const INDEX = 'Index';
+	const LOGIN = 'Login';
+	const LOGOUT = 'Logout';
+	const NOT_FOUND = 'NotFound';
+	const ACCESS_DENIED = 'AccessDenied';
+	
 	public $name;
 	public $path;
 	public $permission;
@@ -16,11 +22,11 @@ class Route {
 		$this->routes = is_null($routes) ? [] : $routes;
 	}
 	
-	public function menuName() {
+	public function linkText() {
 		return Application::str('menu_' . $this->name);
 	}
 	
-	public function menuTitle() {
+	public function linkTitle() {
 		return Application::str('menu_title_' . $this->name);
 	}
 	

@@ -35,17 +35,13 @@ class SystemRoutes {
 	}
 	
 	private function getCurrent() {
-		if (!hasGet('_url')) return new Route('Index');
+		if (!hasGet('_url')) return $this->byName(Route::INDEX);
 		$u = strtolower(get('_url'));
 		
 		$delim = strpos($u, '?');
 		if ($delim!==false) $u = substr($u, 0, $delim);
 		
-		$route = $this->byPath($u);
-		
-		if (is_null($route)) $route = new Route('Error', $u);
-		
-		return $route;
+		return $this->byPath($u);
 	}
 }
 

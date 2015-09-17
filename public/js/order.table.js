@@ -26,15 +26,18 @@ $(document).ready(function(){
 		if (last_selected_row) {
 			$( ".btn-action" ).each(function() {
 				var btn_id = $(this).attr('id');
-				$(this).attr('href', params[btn_id+'_url'] + order_id)
+				$(this).attr('href', getPathById(btn_id, order_id))
 			});
 		}
 	});
 	
 	$('.order_row').dblclick(function () {
 		var order_id = $(this).attr('id');
-		var url = params.view_url + order_id;
-		window.location.href = url;
+		window.location.href = getPathById('view', order_id);
 	});
+	
+	function getPathById(btn_id, id) {
+		return params[btn_id+'_url'] + '?id=' + id;
+	}
 	
 });

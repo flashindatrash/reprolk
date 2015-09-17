@@ -1,6 +1,6 @@
 <?php
 
-include '../core/IRedirect.php';
+include '../core/interfaces/IRedirect.php';
 
 class LoginController extends BaseController implements IRedirect {
 	

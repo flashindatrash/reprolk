@@ -6,10 +6,6 @@
 		print View::formNormal('username');
 		print View::formNormal('group', 'select', $this->groups);
 		print View::formNormal('gid');
+		print View::formOffset('add', 'submit');
 	?>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<?php print View::input('add', 'submit'); ?>
-		</div>
-	</div>
 </form>

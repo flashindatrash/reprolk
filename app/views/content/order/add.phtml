@@ -1,12 +1,12 @@
 <form method="post" class="form-horizontal">
 	<?php 
 		print View::input('send', 'hidden', '1');
-		print View::formNormal('jobname');
-		print View::formNormal('jobid1c');
+		print View::formNormal('title');
+		print View::formNormal('date_due', 'date');
+		print View::formNormal('photopolymer', 'select', $this->photopolymers_values);
+		print View::formOffset('buttons', 'any', 
+			View::input('add', 'submit') . '&nbsp;' .
+			View::link('OrderAll', View::str('cancel'), null, null, 'btn btn-warning')
+		);
 	?>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<?php print View::input('add', 'submit'); ?>
-		</div>
-	</div>
 </form>

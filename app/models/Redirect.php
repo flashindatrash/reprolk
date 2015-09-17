@@ -6,7 +6,7 @@ class Redirect extends BaseModel {
 	public $url;
 	public $timeout;
 	
-	public function __construct($message, $url, $timeout = 1000) {
+	public function __construct($message, $url = '/', $timeout = 1000) {
 		$this->message = $message;
 		$this->url = $url;
 		$this->timeout = $timeout;

@@ -1,6 +1,6 @@
 <?php
 
-include '../core/ICatalog.php';
+include '../core/interfaces/ICatalog.php';
 
 class AdminController extends BaseController implements ICatalog {
 	
