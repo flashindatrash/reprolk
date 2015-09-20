@@ -78,7 +78,7 @@ class BaseController {
 	
 	public function getBreadcrumbs() {
 		$breadcrumb = $this->renderBreadcrump($this->menu);
-		print !Application::isLogined() || $breadcrumb=='' ? '' : '<ol class="breadcrumb">' . $breadcrumb . '</ol><hr>';
+		print !Account::isLogined() || $breadcrumb=='' ? '' : '<ol class="breadcrumb">' . $breadcrumb . '</ol><hr>';
 	}
 	
 	public function getMenu() {
@@ -89,8 +89,23 @@ class BaseController {
 		print '';
 	}
 	
-	public function str($name) {
-		return Application::str($name);
+	public function formValidate($fields) {
+		if (post('send')!='1') return null;
+		
+		$values = array();
+		
+		$valid = true;
+		
+		foreach ($fields as $field) {
+			if (!hasPost($field)) {
+				$valid = false;
+				$this->addError(sprintf(View::str('must_enter'), View::str($field)));
+			} else {
+				$values[] = post($field);
+			}
+		}
+		
+		return $valid ? $values : null;
 	}
 	
 	public function pick($name) {

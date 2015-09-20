@@ -1,12 +1,13 @@
 <form method="post" class="form-horizontal">
-	<?php 
-		print View::input('send', 'hidden', '1');
-		print View::formNormal('title');
-		print View::formNormal('date_due', 'date');
-		print View::formNormal('photopolymer', 'select', $this->photopolymers_values);
-		print View::formOffset('buttons', 'any', 
-			View::input('add', 'submit') . '&nbsp;' .
-			View::link('OrderAll', View::str('cancel'), null, null, 'btn btn-warning')
-		);
-	?>
+<?php 
+	print View::input('send', 'hidden', '1');
+	print View::formNormal('title');
+	print View::formNormal('date_due', 'date');
+	print View::formNormal('photopolymer', 'select', $this->photopolymers, true);
+	print View::formOffset('urgent', 'checkbox');
+	print View::formOffset('buttons', 'any', 
+		View::input('add', 'submit') . '&nbsp;' .
+		View::link('OrderAll', View::str('cancel'), null, null, 'btn btn-warning')
+	);
+?>
 </form>

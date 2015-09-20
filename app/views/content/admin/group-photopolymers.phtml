@@ -1,0 +1,8 @@
+<form method="post" class="form-horizontal">
+<?php
+	print View::formValidate();
+	print View::formNormal('photopolymers', 'multiple', $this->photopolymers, true);
+	print View::formNormal('group');
+	print View::formOffset('set', 'submit');
+?>
+</form>

@@ -16,11 +16,11 @@ class Application {
 	
 	public function connect() {
 		self::$db = new DataBaseManager(self::$config['database']);
-		self::$user = SystemSession::hasId() ? User::byId(SystemSession::getId()) : null;
+		self::$user = Session::hasId() ? User::byId(Session::getId()) : null;
 	}
 	
 	public function setRoutes($array) {
-		self::$routes = new SystemRoutes($array);
+		self::$routes = new Routes($array);
 	}
 	
 	public function addLang($file) {
@@ -37,22 +37,27 @@ class Application {
 		} else if (!$route->isAvailable()) {
 			//если нет доступа к текущему роуту
 			$controller = $this->getFactory(self::$routes->byName(Route::ACCESS_DENIED));
-		} else if (!$this->isLogined()) {
+		} else if (!Account::isLogined()) {
 			//пользователь не залогинен
 			$controller = $this->getFactory(self::$routes->byName(Route::LOGIN));
 		}
 		
 		$controller->beforeRender();
 		
-		if (SystemSession::hasGroup()) {
-			$controller->addWarning(sprintf($this->str('warning_view_as'), self::str(SystemSession::getGroup()), View::link('ViewAsCancel', self::str('cancel'))));
+		if (Session::hasGroup()) {
+			//уведомление что пользователь просматривает страницу как ...
+			$controller->addWarning(sprintf($this->str('warning_view_as'), self::str(Session::getGroup()), View::link('ViewAsCancel', self::str('cancel'))));
+		}
+		
+		if (self::$config['admin']['displaySQL']==1) {
+			//все sql запросы в beforeRender отобразятся на странице
+			$sql_history = self::$db->getHistory();
+			foreach ($sql_history as $sql) {
+				$controller->addWarning($sql);
+			}
 		}
 		
 		$controller->render();
-	}
-	
-	public static function isLogined() {
-		return !is_null(self::$user);
 	}
 	
 	public static function str($name) {

@@ -5,6 +5,13 @@ include '../core/DataBaseManager.php';
 include '../core/BaseController.php';
 include '../core/BaseModel.php';
 include '../core/View.php';
+include '../core/objects/Route.php';
+include '../core/objects/Routes.php';
+include '../core/objects/Session.php';
+include '../core/objects/MenuItem.php';
+include '../core/objects/Redirect.php';
+include '../core/objects/UserAccess.php';
+include '../core/objects/Account.php';
 
 function p($x=''){
    print ps($x);

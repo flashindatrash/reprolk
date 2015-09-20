@@ -5,7 +5,8 @@ include '../core/interfaces/IRedirect.php';
 class ViewAsCancelController extends BaseController implements IRedirect {
 	
 	public function beforeRender() {
-		SystemSession::setGroup(null);
+		Session::setGroup(null);
+		Session::setGid(null);
 	}
 	
 	public function getContent() {

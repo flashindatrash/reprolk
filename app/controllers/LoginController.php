@@ -4,23 +4,17 @@ include '../core/interfaces/IRedirect.php';
 
 class LoginController extends BaseController implements IRedirect {
 	
-	public $hasInput;
-	public $isLoggined;
-	
 	public function beforeRender() {
-		$this->hasInput = hasPost('email') && hasPost('password');
-		if ($this->hasInput) $this->login(post('email'), post('password'));
-		
-		$this->isLoggined = !is_null(Application::$user);
+		if (hasPost('email') && hasPost('password')) $this->login(post('email'), post('password'));
 	}
 	
 	public function getContent() {
-		$this->pick($this->isLoggined ? 'system/redirect' : 'system/login');
+		$this->pick(Account::isLogined() ? 'system/redirect' : 'system/login');
 	}
 	
 	private function login($email, $password) {
 		Application::$user = User::login($email, $password);
-		if (!is_null(Application::$user)) SystemSession::setId(Application::$user->id);
+		if (Account::isLogined()) Session::setId(Application::$user->id);
 		else $this->addError($this->str('error_sign_in'));
 	}
 	

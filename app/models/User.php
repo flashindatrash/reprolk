@@ -26,7 +26,7 @@ class User extends BaseModel {
 	}
 	
 	public static function add($fields, $values) {
-		return Application::$db->insert('users', $fields, $values);
+		return Application::$db->insertRow('users', $fields, $values);
 	}
 	
 	public static function getAll($fields, $group = null) {

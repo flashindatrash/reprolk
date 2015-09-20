@@ -5,13 +5,15 @@ class UserAddController extends BaseController {
 	public $groups;
 	
 	private $user_id = null;
-	private $values = array();
 	
 	public function beforeRender() {
 		$this->groups = UserAccess::groups();
 		
-		if ($this->validate()) {
-			$this->user_id = User::add(User::$fields_mandatory, $this->values);
+		$fields = User::$fields_mandatory;
+		$values = $this->formValidate($fields);
+		
+		if (!is_null($values)) {
+			$this->user_id = User::add($fields, $values);
 		}
 	}
 	
@@ -21,23 +23,6 @@ class UserAddController extends BaseController {
 		}
 		
 		$this->pick('user/add');
-	}
-	
-	private function validate() {
-		if (post('send')!='1') return false;
-		
-		$valid = true;
-		
-		foreach (User::$fields_mandatory as $field) {
-			if (!hasPost($field)) {
-				$valid = false;
-				$this->addError(sprintf($this->str('must_enter'), $this->str($field)));
-			} else {
-				$this->values[] = post($field);
-			}
-		}
-		
-		return $valid;
 	}
 	
 }

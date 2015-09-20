@@ -3,15 +3,19 @@
 class ViewAsController extends BaseController {
 	
 	public $groups;
+	public $gid;
 	
 	public function beforeRender() {
 		$this->groups = UserAccess::groups();
 		
 		if ($this->validate()) {
-			$group = post('group');
-			$user_group = Application::$user->group;
-			SystemSession::setGroup($user_group == $group ? null : $group);
+			$has_changes = Account::getRawGroup() != post('group');
+			
+			Session::setGroup($has_changes ? post('group') : null);
+			Session::setGid($has_changes ? post('gid') : null);
 		}
+		
+		$this->gid = Account::getGid();
 	}
 	
 	public function getContent() {
