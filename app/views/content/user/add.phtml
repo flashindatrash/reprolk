@@ -1,6 +1,6 @@
 <form method="post" class="form-horizontal">
 	<?php 
-		print View::input('send', 'hidden', '1');
+		print View::formValidate();
 		print View::formNormal('email', 'email');
 		print View::formNormal('password', 'password');
 		print View::formNormal('username');

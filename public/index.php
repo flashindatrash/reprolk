@@ -29,6 +29,9 @@ try {
 			new Route('ViewAs', '/admin/view-as', UserAccess::ADMIN, false, [
 				new Route('ViewAsCancel', '/admin/view-as/cancel', UserAccess::ADMIN, true),
 			]),
+			new Route('Photopolymers', '/admin/photopolymers', UserAccess::ADMIN, false, [
+				new Route('GroupPhotopolymers', '/admin/photopolymers/group', UserAccess::ADMIN),
+			]),
 		]),
 		
 		new Route(Route::LOGIN, '/login', UserAccess::ALL, true),

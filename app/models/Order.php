@@ -4,6 +4,7 @@ class Order extends BaseModel {
 	
 	public $id;
 	public $user;
+	public $username; //user->username
 	public $title;
 	public $id_1c;
 	public $number_1c;
@@ -34,9 +35,21 @@ class Order extends BaseModel {
 		return Application::$db->selectRows('orders', $fields, $where, 'Order', '0, 300', $join);
 	}
 	
-	public static function byId($id) {
-		return Application::$db->selectRow('orders', '*', '`id` = ' . $id, 'Order');
+	public static function byId($id, $gid = null) {
+		$table_users = Application::$db->tableName('users');
+		$table_orders = Application::$db->tableName('orders');
+		
+		$fields = $table_orders . '.*';
+		$fields .= ', ' . $table_users . '.username as username';
+		
+		$join = $table_users . ' on ' . $table_orders . '.user=' . $table_users . '.id';
+		
+		$where = $table_orders . '.id = ' .$id;
+		$where .= is_null($gid) ? '' : ' and ' . $table_users . '.gid = ' . $gid;
+		
+		return Application::$db->selectRow('orders', $fields, $where, 'Order', $join);
 	}
+	
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class SystemRoutes {
+class Routes {
 	
 	private $dictByName = array();
 	private $dictByPath = array();

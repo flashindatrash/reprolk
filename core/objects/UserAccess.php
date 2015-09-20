@@ -31,8 +31,8 @@ class UserAccess extends BaseModel {
 		$user_group = !is_null(Application::$user) ? Application::$user->group : User::ANONYMOUS;
 		$has_permissions = isset(self::$permissions[$group]);
 		
-		if (SystemSession::hasGroup() && $group!=self::ADMIN) {
-			return $has_permissions && in_array(SystemSession::getGroup(), self::$permissions[$group]) && in_array($user_group, self::$permissions[self::ADMIN]);
+		if (Session::hasGroup() && $group!=self::ADMIN) {
+			return $has_permissions && in_array(Session::getGroup(), self::$permissions[$group]) && in_array($user_group, self::$permissions[self::ADMIN]);
 		}
 		
 		return $has_permissions && in_array($user_group, self::$permissions[$group]);

@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-	<div class="panel-heading"><?php print sprintf($this->str('all_orders_result'), count($this->orders)); ?>
+	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), count($this->orders)); ?>
 		<div class="pull-right">
 			<?php print View::link('OrderAdd', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, null, 'left'); ?>
 			<?php print View::link('OrderView', '', null, 'view', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled', null, 'top'); ?>
@@ -13,9 +13,9 @@
 			<tr>
 				<?php
 				foreach ($this->fields as $th) {
-					print '<th>' . $this->str( $th ) . '</th>';
+					print '<th>' . View::str( $th ) . '</th>';
 				}
-				print '<th>' . $this->str('username') . '</th>';
+				print '<th>' . View::str('username') . '</th>';
 				?>
 			</tr>
 		</thead>

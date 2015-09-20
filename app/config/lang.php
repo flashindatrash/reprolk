@@ -28,10 +28,12 @@ return array(
 	'STATUS' => 'Status',
 	'DATE_DUE' => 'Due date',
 	'GID' => 'Group ID',
-	'VIEW_AS' => 'View site as',
 	'VIEW' => 'View',
 	'CANCEL' => 'Cancel',
 	'PHOTOPOLYMER' => 'Photopolymer',
+	'URGENT' => 'Urgent',
+	'PHOTOPOLYMERS' => 'Photopolymers',
+	'SET' => 'Set',
 	
 	'MENU_INDEX' => 'Index',
 	'MENU_LOGIN' => 'Login',
@@ -47,6 +49,9 @@ return array(
 	'MENU_ORDEREDIT' => 'Order Edit',
 	'MENU_ORDERDUPLICATE' => 'Order Duplicate',
 	'MENU_VIEWASCANCEL' => 'Cancel',
+	'MENU_PHOTOPOLYMERS' => 'Photopolymers',
+	'MENU_GROUPPHOTOPOLYMERS' => 'By group',
+	
 	'MENU_TITLE_USER' => 'This section is intended to work with users, such as viewing, editing and adding new members', 
 	'MENU_TITLE_ORDERALL' => 'The main section, order management and tracking',
 	'MENU_TITLE_ADMIN' => 'Section for site administrators', 
@@ -56,6 +61,8 @@ return array(
 	'MENU_TITLE_ORDEREDIT' => 'Edit this order',
 	'MENU_TITLE_ORDERDUPLICATE' => 'Duplicate this order',
 	'MENU_TITLE_ORDERDELETE' => 'Delete this order',
+	'MENU_TITLE_PHOTOPOLYMERS' => 'Photopolymers and setting binding photopolymers groups',
+	'MENU_TITLE_LOGOUT' => 'Get out of personal cabinet',
 	
 	'WARNING_VIEW_AS' => 'You are viewing this page as <b>%s</b> [%s]',
 	

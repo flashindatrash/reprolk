@@ -1,8 +1,8 @@
-<form method="post" class="form-inline">
-	<?php print View::input('send', 'hidden', '1'); ?>
-	<div class="form-group">
-		<label class="control-label" for="input_group"><?php print View::str('view_as'); ?></label>
-	</div>
-	<div class="form-group"><?php print View::input('group', 'select', $this->groups); ?></div>
-	<div class="form-group"><?php print View::input('view', 'submit'); ?></div>
+<form method="post" class="form-horizontal">
+	<?php
+		print View::input('send', 'hidden', '1');
+		print View::formNormal('group', 'select', $this->groups);
+		print View::formNormal('gid', 'text', $this->gid);
+		print View::formOffset('view', 'submit');
+	?>
 </form>

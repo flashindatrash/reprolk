@@ -8,7 +8,12 @@ class OrderAllController extends BaseController {
 	public function beforeRender() {
 		$this->fields = array('title', 'status', 'date_due');
 		
-		$this->orders = Order::getAll($this->fields, Application::$user->gid);
+		$gid = null;
+		if (Account::isAdmin() && Session::hasGid() || !Account::isAdmin()) {
+			$gid = Account::getGid();
+		}
+		
+		$this->orders = Order::getAll($this->fields, Account::getGid());
 		
 		$this->addJSfile('order.table');
 		$this->addJSparam('view_url', Application::$routes->byName('OrderView')->path);

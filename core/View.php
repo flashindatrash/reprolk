@@ -17,17 +17,18 @@ class View {
 			case 'submit':
 				//name, type
 				return '<button type="submit" class="btn btn-primary">' . self::str($name) . '</button>';
-			case 'select':
-				//name, type, values
+			case 'select': case 'multiple':
+				//name, type, values, useKeys
 				$values = $nArgs>=3 ? $args[2] : [];
-				$str = '<select class="form-control" id ="input_' . $name . '" name="' . $name . '">';
-				foreach ($values as $v) $str .= '<option value="' . $v . '">' . self::str($v). '</option>';
+				$useKeys = $nArgs>=4 ? $args[3] : false;
+				$str = '<select' . ($type=='multiple' ? ' multiple' : ' ') . ' class="form-control" id ="input_' . $name . '" name="' . $name . ($type=='multiple' ? '[]' : '') . '">';
+				foreach ($values as $i => $v) $str .= '<option value="' . ($useKeys ? $i : $v) . '">' . self::str($v). '</option>';
 				$str .= '</select>';
 				return $str;
 			case 'checkbox':
 				//name, type, value
 				$value = $nArgs>=3 ? $args[2] : '';
-				return '<input type="checkbox" aria-label="...">';
+				return '<div class="checkbox"><label><input type="checkbox" name="' . $name . '" id ="input_' . $name . '" aria-label="..."> ' . self::str($name) . '</label></div>';
 			case 'date':
 				$input = '<input class="form-control" size="16" type="text" value="" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
 				$hidden = '<input type="hidden" id="input_' . $name . '" value="" />';
@@ -90,8 +91,20 @@ class View {
 				'</div>';
 	}
 	
+	public static function formValidate() {
+		return self::input('send', 'hidden', '1');
+	}
+	
 	public static function str($name) {
 		return Application::str($name);
+	}
+	
+	public static function convertSelect($array, $key, $value) {
+		$a = array();
+		foreach ($array as $item) {
+			$a[$item->$key] = $item->$value;
+		}
+		return $a;
 	}
 	
 	public static function link($route_name, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null) {
