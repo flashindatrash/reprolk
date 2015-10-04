@@ -1,11 +1,13 @@
 <?php
 
-include '../core/interfaces/IRedirect.php';
+include_once '../core/interfaces/IRedirect.php';
 
 class LoginController extends BaseController implements IRedirect {
 	
 	public function beforeRender() {
-		if (hasPost('email') && hasPost('password')) $this->login(post('email'), post('password'));
+		if ($this->formValidate(['email', 'password'])) {
+			$this->login(post('email'), post('password'));
+		}
 	}
 	
 	public function getContent() {
@@ -15,13 +17,13 @@ class LoginController extends BaseController implements IRedirect {
 	private function login($email, $password) {
 		Application::$user = User::login($email, $password);
 		if (Account::isLogined()) Session::setId(Application::$user->id);
-		else $this->addError($this->str('error_sign_in'));
+		else $this->addAlert(View::str('error_sign_in'));
 	}
 	
 	public function getRedirect() {
 		$url = post('_url');
 		if ($url=='') $url = '/user';
-		return new Redirect($this->str('sign_successfuly'), $url, 1500);
+		return new Redirect(View::str('sign_successfuly'), $url, 1500);
 	}
 	
 }

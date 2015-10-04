@@ -4,22 +4,26 @@ class GroupPhotopolymer extends BaseModel {
 	
 	public $gid;
 	public $pid;
-	public $name;
+	public $name; //photopolymer->name
 	
 	public static $fields = array('gid', 'pid');
 	
+	public static function tableName() {
+		return 'group_photopolymers';
+	}
+	
 	public static function getAll($gid) {
-		$table_group_photopolymers = Application::$db->tableName('group_photopolymers');
-		$table_photopolymers = Application::$db->tableName('photopolymers');
+		$fields = array();
+		$fields[] = self::field('*');
+		$fields[] = self::field('name', Photopolymer::tableName(), 'name');
 		
-		$fields = '`gid`, `pid`';
-		$fields .= ', ' . $table_photopolymers . '.name as name';
+		$join = array();
+		$join[] = self::inner('id', Photopolymer::tableName(), 'pid');
 		
-		$join = $table_photopolymers . ' on ' . $table_group_photopolymers . '.pid=' . $table_photopolymers . '.id';
+		$where = array();
+		$where[] = self::field('gid') . ' = ' . $gid;
 		
-		$where = '`gid` = ' . $gid;
-		
-		return Application::$db->selectRows('group_photopolymers', $fields, $where, 'GroupPhotopolymer', '0, 300', $join);
+		return self::selectRows($fields, $where, $join);
 	}
 	
 	public static function set($group, $photopolymers) {
@@ -28,8 +32,8 @@ class GroupPhotopolymer extends BaseModel {
 			$values[] = array($group, $photopolymer);
 		}
 		
-		$delete = Application::$db->delete('group_photopolymers', '`gid` = ' . $group);
-		$insert = Application::$db->insertRows('group_photopolymers', self::$fields, $values);
+		$delete = self::delete([self::field('gid') . ' = ' . $group]);
+		$insert = self::insertRows(self::$fields, $values);
 		return $delete && !is_null($insert);
 	}
 	

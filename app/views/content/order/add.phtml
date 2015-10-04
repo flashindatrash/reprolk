@@ -1,10 +1,15 @@
 <form method="post" class="form-horizontal">
 <?php 
-	print View::input('send', 'hidden', '1');
+	print View::formValidate();
 	print View::formNormal('title');
 	print View::formNormal('date_due', 'date');
-	print View::formNormal('photopolymer', 'select', $this->photopolymers, true);
+	print View::formNormal('pid', 'select', $this->photopolymers, true, false);
 	print View::formOffset('urgent', 'checkbox');
+	
+	if ($this->commented) {
+		print View::formOffset('comment', 'textarea');
+	}
+	
 	print View::formOffset('buttons', 'any', 
 		View::input('add', 'submit') . '&nbsp;' .
 		View::link('OrderAll', View::str('cancel'), null, null, 'btn btn-warning')

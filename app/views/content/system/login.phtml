@@ -1,13 +1,9 @@
 <form action="/login" method="post" class="form-horizontal">
 	<?php 
+		print View::formValidate();
 		print View::input('_url', 'hidden', '/user');
-		print View::input('send', 'hidden', '1');
 		print View::formNormal('email', 'email');
 		print View::formNormal('password', 'password');
+		print View::formOffset('signup', 'submit');
 	?>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<?php print View::input('signup', 'submit'); ?>
-		</div>
-	</div>
 </form>

@@ -9,17 +9,26 @@ class UserAccess extends BaseModel {
 	const ADMIN = 'admin';
 	const ORDER_VIEW = 'orderView';
 	const ORDER_ADD = 'orderAdd';
-	const USER_VIEW = 'userView';
-	const USER_ADD = 'userAdd';
+	const ORDER_EDIT = 'orderEdit';
+	const USER_ADD = 'userAdd'; //кто может добавлять новых пользователей
+	const USER_ADD_ADMIN = 'auth'; //кого может добавлять админ
+	const USER_ADD_MANAGER = 'userAddManager'; //кого может добавлять манагер
+	const TRANSMIT_RIGHTS = 'transmitRights';
+	const COMMENT_ADD = 'commentAdd';
+	const COMMENT_EDIT = 'commentEdit';
 	
 	public static $permissions = array (
 		'none' => [],
 		'all' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER, User::ANONYMOUS],
 		'auth' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
-		'orderAdd' => [User::MANAGER, User::CLIENT],
+		'orderAdd' => [/*debug*/User::ADMIN, User::MANAGER, User::CLIENT],
+		'orderEdit' => [/*debug*/User::ADMIN, User::MANAGER, User::CLIENT],
 		'orderView' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
-		'userView' => [User::ADMIN, User::MANAGER],
+		'commentAdd' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
+		'commentEdit' => [User::ADMIN, User::MANAGER, User::CLIENT],
 		'userAdd' => [User::ADMIN, User::MANAGER],
+		'userAddManager' => [User::CLIENT, User::VIEWER],
+		'transmitRights' => [/*debug*/User::ADMIN, User::MANAGER],
 		'admin' => [User::ADMIN]
 	);
 	
@@ -29,6 +38,7 @@ class UserAccess extends BaseModel {
 	
 	public static function check($group) {
 		$user_group = !is_null(Application::$user) ? Application::$user->group : User::ANONYMOUS;
+		
 		$has_permissions = isset(self::$permissions[$group]);
 		
 		if (Session::hasGroup() && $group!=self::ADMIN) {

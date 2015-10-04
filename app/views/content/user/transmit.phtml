@@ -1,0 +1,7 @@
+<form method="post" class="form-horizontal">
+<?php 
+	print View::formValidate();
+	print View::formNormal('user', 'select', $this->users, true, false);
+	print View::formOffset('transmit', 'submit');
+?>
+</form>

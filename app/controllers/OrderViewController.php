@@ -1,27 +1,26 @@
 <?php
 
-class OrderViewController extends BaseController {
+include_once '../app/controllers/BaseOrderController.php';
+
+class OrderViewController extends BaseOrderController {
 	
-	public $order;
+	public $comments = [];
+	public $commented;
 	
 	public function beforeRender() {
-		if (!hasGet('id')) {
-			$this->addError($this->str('error_order_not_found'));
-			return;
+		$this->loadOrder();
+		
+		if (!is_null($this->order)) {
+			//добавим коммент, если есть
+			if ($this->formValidate(['comment'])) {
+				Comment::add($this->order->id, post('comment'));
+			}
+			
+			//загрузим комменты
+			$this->comments = Comment::getAll($this->order->id);
 		}
 		
-		$gid = null;
-		if (Account::isAdmin() && Session::hasGid() || !Account::isAdmin()) {
-			$gid = Account::getGid();
-		}
-		
-		$id = get('id');
-		$this->order = Order::byId($id, $gid);
-		
-		if (!$this->order) {
-			$this->addError($this->str('error_order_not_found'));
-			return;
-		}
+		$this->commented = UserAccess::check(UserAccess::COMMENT_ADD);
 	}
 	
 	public function getContent() {

@@ -1,15 +1,17 @@
 <?php
 	if (!$this instanceof IRedirect) {
-		print '<div class="alert alert-danger" role="alert">' . sprintf(View::str('error_is_not_iredirect'), Application::$routes->current->name) . '</div>';
+		print '<div class="alert alert-danger" role="alert">' . sprintf(View::str('error_is_not_implemented'), Application::$routes->current->name, 'IRedirect') . '</div>';
 		die;
 	}
 	
 	$redirect = $this->getRedirect();
-	$redirect_route = Application::$routes->byPath($redirect->url);
+	$route = Application::$routes->parseUrl($redirect->url);
 	
-	if (is_null($redirect_route)) die;
+	if (is_null($route)) die;
+	
+	$route->path = $redirect->url;
 ?>
 
 <div class="alert alert-success" role="alert"><?php echo  $redirect->message; ?></div>
-<p><?php echo sprintf(View::str('redirect'), $redirect->sTimeout(), View::link($redirect_route->name, View::str('here'))); ?></p>
-<?php echo '<script type="text/javascript">redirect("' . $redirect_route->path . '", ' . $redirect->timeout . ');</script>'; ?>
+<p><?php echo sprintf(View::str('redirect'), $redirect->sTimeout(), View::link($route->name, View::str('here'))); ?></p>
+<?php echo '<script type="text/javascript">redirect("' . $route->path . '", ' . $redirect->timeout . ');</script>'; ?>

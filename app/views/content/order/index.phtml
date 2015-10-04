@@ -23,7 +23,17 @@
 			<?php
 			$orders = '';
 			foreach ($this->orders as $n => $order) {
-				$orders .= '<tr class="order_row noselect cursor_pointer" id="' . $order->id . '">';
+				$classes = array();
+				
+				$classes[] = 'order_row';
+				$classes[] = 'noselect';
+				$classes[] = 'cursor_pointer';
+				
+				if ($order->isCanceled()) {
+					$classes[] = 'danger';
+				}
+				
+				$orders .= '<tr class="' . join (' ', $classes) . '" id="' . $order->id . '">';
 				foreach ($this->fields as $td) {
 					$orders .= '<td>' . $order->$td . '</td>';
 				}

@@ -34,26 +34,26 @@ class Application {
 		if (is_null($controller)) {
 			//контроллер не найден
 			$controller = $this->getFactory(self::$routes->byName(Route::NOT_FOUND));
-		} else if (!$route->isAvailable()) {
-			//если нет доступа к текущему роуту
-			$controller = $this->getFactory(self::$routes->byName(Route::ACCESS_DENIED));
 		} else if (!Account::isLogined()) {
 			//пользователь не залогинен
 			$controller = $this->getFactory(self::$routes->byName(Route::LOGIN));
+		} else if (!$route->isAvailable()) {
+			//если нет доступа к текущему роуту
+			$controller = $this->getFactory(self::$routes->byName(Route::ACCESS_DENIED));
 		}
 		
 		$controller->beforeRender();
 		
 		if (Session::hasGroup()) {
 			//уведомление что пользователь просматривает страницу как ...
-			$controller->addWarning(sprintf($this->str('warning_view_as'), self::str(Session::getGroup()), View::link('ViewAsCancel', self::str('cancel'))));
+			$controller->addAlert(sprintf($this->str('warning_view_as'), self::str(Session::getGroup()), View::link(Route::VIEW_AS_CANCEL, self::str('cancel'))), 'warning');
 		}
 		
 		if (self::$config['admin']['displaySQL']==1) {
 			//все sql запросы в beforeRender отобразятся на странице
 			$sql_history = self::$db->getHistory();
 			foreach ($sql_history as $sql) {
-				$controller->addWarning($sql);
+				$controller->addAlert($sql, 'info');
 			}
 		}
 		

@@ -14,7 +14,7 @@ class ViewAsCancelController extends BaseController implements IRedirect {
 	}
 	
 	public function getRedirect() {
-		return new Redirect($this->str('sign_successfuly'));
+		return new Redirect(View::str('sign_successfuly'));
 	}
 
 }

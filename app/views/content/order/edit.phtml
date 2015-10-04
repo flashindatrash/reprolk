@@ -1,0 +1,14 @@
+<form method="post" class="form-horizontal">
+<?php 
+	print View::formValidate();
+	print View::input('id', 'hidden', $this->order->id);
+	print View::formNormal('title', 'text', $this->order->title);
+	print View::formNormal('date_due', 'date', $this->order->date_due);
+	print View::formNormal('pid', 'select', $this->photopolymers, true, false, $this->order->pid);
+	print View::formOffset('urgent', 'checkbox', $this->order->urgent);
+	print View::formOffset('buttons', 'any', 
+		View::input('save', 'submit') . '&nbsp;' .
+		View::link('OrderView', View::str('cancel'), 'id=' . $this->order->id, null, 'btn btn-warning')
+	);
+?>
+</form>

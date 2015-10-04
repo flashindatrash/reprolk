@@ -18,20 +18,31 @@ class View {
 				//name, type
 				return '<button type="submit" class="btn btn-primary">' . self::str($name) . '</button>';
 			case 'select': case 'multiple':
-				//name, type, values, useKeys
+				//name, type (text), values ([]), useKeys (false), localisate (true), value (null)
 				$values = $nArgs>=3 ? $args[2] : [];
 				$useKeys = $nArgs>=4 ? $args[3] : false;
+				$localisate = $nArgs>=5 ? $args[4] : true;
+				$value = $nArgs>=6 ? $args[5] : null;
 				$str = '<select' . ($type=='multiple' ? ' multiple' : ' ') . ' class="form-control" id ="input_' . $name . '" name="' . $name . ($type=='multiple' ? '[]' : '') . '">';
-				foreach ($values as $i => $v) $str .= '<option value="' . ($useKeys ? $i : $v) . '">' . self::str($v). '</option>';
+				if (!is_null($values)) { 
+					foreach ($values as $i => $v) {
+						$c = $useKeys ? $i : $v;
+						$selected = !is_null($value) && $value==$c ? ' selected' : '';
+						$str .= '<option value="' . $c . '"' . $selected . '>' . ($localisate ? self::str($v) : $v). '</option>';
+					}
+				}
 				$str .= '</select>';
 				return $str;
 			case 'checkbox':
 				//name, type, value
-				$value = $nArgs>=3 ? $args[2] : '';
-				return '<div class="checkbox"><label><input type="checkbox" name="' . $name . '" id ="input_' . $name . '" aria-label="..."> ' . self::str($name) . '</label></div>';
+				$value = $nArgs>=3 ? $args[2]==="1" || $args[2]===true : false;
+				$checked = $value ? ' checked' : '';
+				return '<div class="checkbox"><label><input type="checkbox" name="' . $name . '" id ="input_' . $name . '" aria-label="..."' . $checked . '> ' . self::str($name) . '</label></div>';
 			case 'date':
-				$input = '<input class="form-control" size="16" type="text" value="" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
-				$hidden = '<input type="hidden" id="input_' . $name . '" value="" />';
+				//name, type, value
+				$value = $nArgs>=3 ? $args[2] : '';
+				$input = '<input class="form-control" size="16" type="text" value="' . ($value!='' ? date("d F Y", strtotime($value)) : '') . '" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
+				$hidden = '<input type="hidden" name="' . $name . '" id="input_' . $name . '" value="' . $value . '" />';
 				$script = '<script type="text/javascript">$("#' . $name . '").datetimepicker({'.
 							'weekStart: 1,' .
 							'todayBtn:  1,' .
@@ -39,9 +50,16 @@ class View {
 							'todayHighlight: 1,' .
 							'startView: 2,' .
 							'minView: 2,' .
+							'pickerPosition: "bottom-left",' .
+							'language: "en",' .
+							($value!='' ? 'initialDate: new Date("' . $value . '"),' : '') .
 							'forceParse: 0' .
 							'});</script>';
 				return '<div class="input-group date" data-date="" data-date-format="dd MM yyyy" data-link-field="input_' . $name . '" id="' . $name . '" data-link-format="yyyy-mm-dd">' . $input . $script . '</div>' . $hidden;
+			case 'textarea':
+				//name, type, value
+				$value = $nArgs>=3 ? $args[2] : '';
+				return '<textarea class="form-control" name="' . $name . '" id="input_' . $name . '" placeholder="' . self::str($name) . '">' . $value . '</textarea>';
 			case 'any':
 				//name, type, any text
 				return $nArgs>=3 ? $args[2] : '';
@@ -74,8 +92,9 @@ class View {
 		$name = $args[0];
 		$value = $nArgs>=2 ? $args[1] : '';
 		
+		
 		return	'<div class="form-group">' .
-					'<label for="input_' . $name . '" class="col-sm-3 control-label">' . self::str($name) . '</label>' .
+					'<label for="input_' . $name . '" class="col-sm-3 control-label">' . self::str($name) . ':</label>' .
 					'<div class="input-group col-sm-9">' .
 						'<p class="form-control-static">' . $value . '</p>' .
 					'</div>' .
@@ -99,6 +118,10 @@ class View {
 		return Application::str($name);
 	}
 	
+	public static function bool($value) {
+		return self::str($value=='1' ? 'yes' : 'no');
+	}
+	
 	public static function convertSelect($array, $key, $value) {
 		$a = array();
 		foreach ($array as $item) {
@@ -107,12 +130,12 @@ class View {
 		return $a;
 	}
 	
-	public static function link($route_name, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null) {
-		$route = Application::$routes->byName($route_name);
+	public static function link($r, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null) {
+		$route = (!$r instanceof Route) ? Application::$routes->byName($r) : $r;
 		if (is_null($route) || !$route->isAvailable()) return '';
-		$href = ' href="' . $route->path . $get . '"';
 		$text = is_null($text) ? $route->linkText() : $text;
 		$get = is_null($get) ? '' : '?' . $get;
+		$href = ' href="' . $route->path . $get . '"';
 		$id = is_null($id) ? '' : ' id="' . $id . '"';
 		$class = is_null($class) ? '' : ' class="' . $class . '"';
 		$title = ' title="' . (is_null($title) ? $route->linkTitle() : $title) . '"';

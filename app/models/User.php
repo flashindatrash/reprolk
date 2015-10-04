@@ -13,25 +13,68 @@ class User extends BaseModel {
 	public $email;
 	public $password;
 	public $username;
-	public $uid;
+	public $gid;
 	
 	public static $fields_mandatory = array('email', 'password', 'username', 'group', 'gid');
 	
+	public static function tableName() {
+		return 'users';
+	}
+	
+	public function editGroup($group) {
+		return $this->edit(['group'], [$group]);
+	}
+	
+	public function edit($fields, $values) {
+		if (is_null($this->id)) return false;
+		
+		$success = self::editById($this->id, $fields, $values);
+		if ($success) {
+			foreach ($fields as $i => $field) {
+				$this->$field = $values[$i];
+			}
+		}
+		return $success;
+	}
+	
 	public static function byId($id) {
-		return Application::$db->selectRow('users', '*', '`id` = ' . $id, 'User');
+		$where = array();
+		$where[] = self::field('id') . ' = ' . $id;
+		return self::selectRow(null, $where);
 	}
 	
 	public static function login($email, $password) {
-		return Application::$db->selectRow('users', '*', '`email` = "' . $email . '" and `password` = "' . $password . '"', 'User');
+		$where = array();
+		$where[] = self::field('email') . ' = "' . $email . '"';
+		$where[] = self::field('password') . ' = "' . $password . '"';
+		
+		return self::selectRow(null, $where);
 	}
 	
 	public static function add($fields, $values) {
-		return Application::$db->insertRow('users', $fields, $values);
+		return self::insertRow($fields, $values);
 	}
 	
-	public static function getAll($fields, $group = null) {
-		return Application::$db->selectRows('users', DataBaseManager::array2fields($fields), is_null($group) ? '1' : '`group` = "' . $group . '"', 'User', '0, 300');
+	public static function editGroupById($id, $group) {
+		return self::editById($id, ['group'], [$group]);
 	}
+	
+	public static function editById($id, $fields, $values) {
+		$where = array();
+		$where[] = self::field('id') . ' = ' . $id;
+		return self::update($fields, $values, $where);
+	}
+	
+	public static function getAll($fields, $group = null, $gid = null) {
+		$where = array();
+		if (!is_null($group)) 
+			$where[] = self::field('group') . ' = "' . $group . '"';
+		if (!is_null($gid)) 
+			$where[] = self::field('gid') . ' = ' . $gid;
+		
+		return self::selectRows($fields, $where);
+	}
+	
 }
 
 ?>

@@ -5,7 +5,11 @@
 		print View::formNormal('password', 'password');
 		print View::formNormal('username');
 		print View::formNormal('group', 'select', $this->groups);
-		print View::formNormal('gid');
+		if (is_null($this->gid)) {
+			print View::formNormal('gid');
+		} else {
+			print View::input('gid', 'hidden', $this->gid);
+		}
 		print View::formOffset('add', 'submit');
 	?>
 </form>

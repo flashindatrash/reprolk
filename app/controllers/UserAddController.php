@@ -3,25 +3,26 @@
 class UserAddController extends BaseController {
 	
 	public $groups;
+	public $gid;
 	
 	private $user_id = null;
 	
 	public function beforeRender() {
-		$this->groups = UserAccess::groups();
+		$const = 'UserAccess::USER_ADD_' . strtoupper(Account::getGroup());
+		$access = defined($const) ? constant($const) : UserAccess::NONE;
+		
+		$this->groups = UserAccess::$permissions[$access];
+		$this->gid = !Account::isAdmin() ? Account::getGid() : null;
 		
 		$fields = User::$fields_mandatory;
-		$values = $this->formValidate($fields);
 		
-		if (!is_null($values)) {
-			$this->user_id = User::add($fields, $values);
+		if ($this->formValidate($fields)) {
+			$this->user_id = User::add($fields, $this->formValues($fields));
+			if (!is_null($this->user_id)) $this->addAlert(View::str('success_save'), 'success');
 		}
 	}
 	
 	public function getContent() {
-		if (!is_null($this->user_id)) {
-			$this->pick('system/success-save');
-		}
-		
 		$this->pick('user/add');
 	}
 	
