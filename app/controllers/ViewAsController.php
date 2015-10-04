@@ -8,7 +8,7 @@ class ViewAsController extends BaseController {
 	public function beforeRender() {
 		$this->groups = UserAccess::groups();
 		
-		if ($this->validate()) {
+		if ($this->formValidate(['group']) && in_array(post('group'), $this->groups)) {
 			$has_changes = Account::getRawGroup() != post('group');
 			
 			Session::setGroup($has_changes ? post('group') : null);
@@ -20,10 +20,6 @@ class ViewAsController extends BaseController {
 	
 	public function getContent() {
 		$this->pick('admin/view-as');
-	}
-	
-	private function validate() {
-		return post('send')=='1' && hasPost('group') && in_array(post('group'), $this->groups);
 	}
 	
 }

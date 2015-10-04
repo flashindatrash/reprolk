@@ -4,11 +4,9 @@ class BaseController {
 	
 	private $template = 'base';
 	private $title = 'Repropark';
-	private $css_files = array('bootstrap.min', 'bootstrap-theme.min', 'repropark');
-	private $js_files = array('jquery-1.11.3.min', 'bootstrap.min', 'repropark');
+	private $files = array('js' => ['jquery-1.11.3.min', 'bootstrap.min', 'repropark'], 'css' => ['bootstrap.min', 'bootstrap-theme.min', 'repropark']);
 	private $js_params = array();
-	private $errors = array();
-	private $warnings = array();
+	private $alerts = array('danger' => [], 'warning' => [], 'info' => [], 'success' => []);
 	private $menu = array();
 	
 	public function __construct() {
@@ -16,23 +14,19 @@ class BaseController {
 	}
 	
 	public function addCSSfile($css) {
-		$this->css_files[] = $css;
+		$this->files['css'][] = $css;
 	}
 	
 	public function addJSfile($js) {
-		$this->js_files[] = $js;
+		$this->files['js'][] = $js;
 	}
 	
 	public function addJSparam($name, $value) {
 		$this->js_params[$name] = $value;
 	}
 	
-	public function addError($message) {
-		$this->errors[] = $message;
-	}
-	
-	public function addWarning($message) {
-		$this->warnings[] = $message;
+	public function addAlert($message, $type = 'danger') {
+		$this->alerts[$type][] = $message;
 	}
 	
 	public function beforeRender() {
@@ -44,13 +38,13 @@ class BaseController {
 	}
 	
 	public function getCSSfiles() {
-		foreach ($this->css_files as $css) {
+		foreach ($this->files['css'] as $css) {
 			print '<link rel="stylesheet" href="' . Application::$config['public']['css'] . $css . '.css">';
 		}
 	}
 	
 	public function getJSfiles() {
-		foreach ($this->js_files as $js) {
+		foreach ($this->files['js'] as $js) {
 			print '<script src="' . Application::$config['public']['js'] . $js . '.js"></script>';
 		}
 	}
@@ -64,15 +58,9 @@ class BaseController {
 		print $js;
 	}
 	
-	public function getWarnings() {
-		foreach ($this->warnings as $warning) {
-			print '<div class="alert alert-warning" role="alert">' . $warning . '</div>';
-		}
-	}
-	
-	public function getErrors() {
-		foreach ($this->errors as $error) {
-			print '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+	public function getMessages($type) {
+		foreach ($this->alerts[$type] as $message) {
+			print '<div class="alert alert-' . $type . '" role="alert">' . $message . '</div>';
 		}
 	}
 	
@@ -90,22 +78,23 @@ class BaseController {
 	}
 	
 	public function formValidate($fields) {
-		if (post('send')!='1') return null;
-		
-		$values = array();
-		
+		if (post('send')!='1') return false;
 		$valid = true;
-		
 		foreach ($fields as $field) {
 			if (!hasPost($field)) {
 				$valid = false;
-				$this->addError(sprintf(View::str('must_enter'), View::str($field)));
-			} else {
-				$values[] = post($field);
+				$this->addAlert(sprintf(View::str('must_enter'), View::str($field)), 'danger');
 			}
 		}
-		
-		return $valid ? $values : null;
+		return $valid;
+	}
+	
+	public function formValues($fields) {
+		$values = array();
+		foreach ($fields as $field) {
+			$values[] = post($field);
+		}
+		return $values;
 	}
 	
 	public function pick($name) {
@@ -132,10 +121,18 @@ class BaseController {
 	}
 	
 	private function renderBreadcrump($items) {
-		foreach ($items as $item) {
-			if ($item->isFinded()) {
-				if ($item->isActive()) return '<li class="active">' . $item->linkText() . '</li>';
-				else return '<li>' . View::link($item->routeName) . '</li>' . $this->renderBreadcrump($item->items);
+		if (!is_null(Application::$routes->current) && Application::$routes->current->isAvailable()) {
+			foreach ($items as $item) {
+				if ($item->isFinded()) {
+					if ($item->isActive()) return '<li class="active">' . $item->linkText() . '</li>';
+					else {
+						$get = null;
+						if ($item->routeName == Route::ORDER_VIEW && hasGet('id')) {
+							$get = 'id=' . get('id');
+						}
+						return '<li>' . View::link($item->routeName, null, $get) . '</li>' . $this->renderBreadcrump($item->items);
+					}
+				}
 			}
 		}
 		return '';

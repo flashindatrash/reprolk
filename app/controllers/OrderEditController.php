@@ -1,31 +1,47 @@
 <?php
 
-class OrderEditController extends BaseController {
+include '../app/controllers/BaseOrderController.php';
+
+class OrderEditController extends BaseOrderController {
 	
-	public $order;
+	public $photopolymers;
 	
 	public function beforeRender() {
-		if (!hasGet('id')) {
-			$this->addError($this->str('error_order_not_found'));
-			return;
+		$this->loadOrder();
+		
+		if (!is_null($this->order) && $this->edit()) {
+			$this->addAlert(View::str('success_save'), 'success');
 		}
 		
-		$gid = null;
-		if (Account::isAdmin() && Session::hasGid() || !Account::isAdmin()) {
-			$gid = Account::getGid();
+		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
+		if (count($this->photopolymers)==0)  {
+			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
 		}
 		
-		$id = get('id');
-		$this->order = Order::byId($id, $gid);
-		
-		if (!$this->order) {
-			$this->addError($this->str('error_order_not_found'));
-			return;
-		}
+		$this->addJSfile('datetimepicker.min');
+		$this->addCSSfile('datetimepicker');
 	}
 	
 	public function getContent() {
-		if ($this->order) print_r($this->order);
+		if ($this->order) $this->pick('order/edit');
+	}
+	
+	private function edit() {
+		$fields = array('title', 'date_due', 'pid');
+		
+		if ($this->formValidate($fields)) {
+			$values = $this->formValues($fields);
+			
+			$fields[] = 'urgent';
+			$fields[] = 'date_changed';
+			
+			$values[] = checkbox2bool(post('urgent'));
+			$values[] = date('Y-m-d');
+			
+			if ($this->order->edit($fields, $values)) return true;
+		}
+		
+		return false;
 	}
 	
 }

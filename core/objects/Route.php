@@ -7,6 +7,23 @@ class Route {
 	const LOGOUT = 'Logout';
 	const NOT_FOUND = 'NotFound';
 	const ACCESS_DENIED = 'AccessDenied';
+	const ORDER_ADD = 'OrderAdd';
+	const ORDER_VIEW = 'OrderView';
+	const ORDER_EDIT = 'OrderEdit';
+	const ORDER_CANCEL = 'OrderCancel';
+	const ORDER_DUPLICATE = 'OrderDuplicate';
+	const ORDER_ALL = 'OrderAll';
+	const GROUP_POLYMERS = 'GroupPhotopolymers';
+	const POLYMERS = 'Photopolymers';
+	const POLYMER_DELETE = 'PhotopolymerDelete';
+	const PROFILE = 'User';
+	const USER_ADD = 'UserAdd';
+	const USER_ALL = 'UserAll';
+	const TRANSMIT_RIGHTS = 'TransmitRights';
+	const ADMIN = 'Admin';
+	const VIEW_AS = 'ViewAs';
+	const VIEW_AS_CANCEL = 'ViewAsCancel';
+	const COMMENT_DELETE = 'CommentDelete';
 	
 	public $name;
 	public $path;

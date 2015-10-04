@@ -14,7 +14,7 @@ class LogoutController extends BaseController implements IRedirect {
 	}
 	
 	public function getRedirect() {
-		return new Redirect($this->str('logout_successfuly'));
+		return new Redirect(View::str('logout_successfuly'));
 	}
 	
 }

@@ -1,9 +1,19 @@
-<ul class="list-group">
-<?php
-	
+<div class="panel panel-default">
+	<div class="panel-heading"><?php print View::str('photopolymers_all_list_header'); ?></div>
+	<div class="panel-body"><?php print sprintf(View::str('photopolymers_all_list_body'), View::link(Route::GROUP_POLYMERS, View::str('here'))); ?></div>
+	<ul class="list-group">
+	<?php
 	foreach ($this->photopolymers as $photopolymer) {
-		print '<li class="list-group-item">' . $photopolymer->name . '</li>';
+		print '<li class="list-group-item">' . $photopolymer->name . View::link(Route::POLYMER_DELETE, '<div class="pull-right"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>', 'id=' . $photopolymer->id) . '</li>';
 	}
-
+	?>
+	</ul>
+</div>
+<hr>
+<form method="post" class="form-horizontal">
+<?php 
+	print View::formValidate();
+	print View::formNormal('photopolymer');
+	print View::formOffset('add', 'submit');
 ?>
-</ul>
+</form>

@@ -20,19 +20,25 @@ class DataBaseManager {
 		return mysql_query($str, $this->connection);
 	}
 	
-	public function select($from, $select = '*', $where = '1', $className = NULL, $range = '0, 1', $join = NULL) {
-		$str = 'select ' . $select . ' from ' . $this->tableName($from) . (is_null($join) ? '' : ' inner join ' . $join) . ' where ' . $where . ' limit ' . $range;
-		$query = $this->query($str);
+	public function select($from, $select = NULL, $where = NULL, $join = NULL, $order = NULL, $range = NULL) {
+		$select = $this->convertSelect($select);
+		$from = ' from ' . $this->tableName($from);
+		$join = is_null($join) ? '' : ' ' . join(' ', $join);
+		$order = is_null($order) ? '' : ' order by ' . $order;
+		$range = ' limit ' . (is_null($range) ? '0, 1' : $range);
+		
+		$query = $this->query($select . $from . $join . self::convertWhere($where) . $order . $range);
 		return $query ? $query : null;
 	}
 	
-	public function selectRow($from, $select = '*', $where = '1', $className = NULL, $join = NULL) {
-		$result = $this->select($from, $select, $where, $className, '0, 1', $join);
-		return !is_null($result) ? mysql_fetch_object($result, $className) : null;
+	public function selectRow($from, $className = NULL, $select = NULL, $where = NULL, $join = NULL) {
+		$result = $this->select($from, $select, $where, $join);
+		return !is_null($result) && mysql_num_rows($result)>0 ? mysql_fetch_object($result, $className) : null;
 	}
 	
-	public function selectRows($from, $select = '*', $where = '1', $className = NULL, $range = '0, 10', $join = NULL) {
-		$result = $this->select($from, $select, $where, $className, $range, $join);
+	public function selectRows($from, $className = NULL, $select = NULL, $where = NULL, $join = NULL, $order = NULL, $range = NULL) {
+		if (is_null($range)) $range = '0, 300';
+		$result = $this->select($from, $select, $where, $join, $order, $range);
 		$rows = array();
 		while ($row = mysql_fetch_object($result, $className)) {
 			$rows[] = $row;
@@ -40,20 +46,20 @@ class DataBaseManager {
 		return $rows;
 	}
 	
-	public function insert($from, $fields, $values) {
-		$str = 'insert into `' . $this->tableName($from) . '` (' . self::array2fields($fields) . ') values ' . $values .';';
+	public function insert($into, $fields, $values) {
+		$str = 'insert into ' . $this->tableName($into) . ' (' . self::array2fields($fields) . ') values ' . $values .';';
 		if ($this->query($str)) {
 			return mysql_insert_id();
 		}
 		return null;
 	}
 	
-	public function insertRow($from, $fields, $values) {
+	public function insertRow($into, $fields, $values) {
 		if (count($fields)==0 || count($values)==0 || count($fields)!=count($values)) return null;
-		return self::insert($from, $fields, self::array2insert([self::array2values($values)]));
+		return self::insert($into, $fields, self::array2insert([self::array2values($values)]));
 	}
 	
-	public function insertRows($from, $fields, $values) {
+	public function insertRows($into, $fields, $values) {
 		if (count($fields)==0 || count($values)==0) return null;
 		$array = array();
 		foreach ($values as $value) {
@@ -61,11 +67,25 @@ class DataBaseManager {
 			$array[] = self::array2values($value);
 		}
 		if (count($array)==0) return null;
-		return self::insert($from, $fields, self::array2insert($array));
+		return self::insert($into, $fields, self::array2insert($array));
 	}
 	
-	public function delete($from, $where = '1') {
-		$str = 'delete from `' . $this->tableName($from) . '` where ' . $where;
+	public function delete($from, $where = NULL) {
+		if ($this->query('delete from ' . $this->tableName($from) . self::convertWhere($where))) {
+			return true;
+		}
+		return false;
+	}
+	
+	public function update($from, $fields, $values, $where = NULL) {
+		if (count($fields) == 0 || count($fields) != count($values)) return false;
+		
+		$sets = array();
+		foreach ($fields as $i => $field) {
+			$sets[] = $field . ' = "' . $values[$i] . '"';
+		}
+		
+		$str = 'update ' . $this->tableName($from)  . ' set ' . join(', ', $sets) . self::convertWhere($where);
 		if ($this->query($str)) {
 			return true;
 		}
@@ -73,7 +93,10 @@ class DataBaseManager {
 	}
 	
 	public static function array2fields($arr) {
-		return '`' . join('`, `', $arr) . '`';
+		foreach ($arr as $i => $v) {
+			$arr[$i] = strpos($v, '.')===false ? '`' . $v .  '`' : $v;
+		}
+		return join(', ', $arr);
 	}
 	
 	public static function array2values($arr) {
@@ -85,11 +108,19 @@ class DataBaseManager {
 	}
 	
 	public function tableName($name) {
-		return $this->prefix.$name;
+		return $this->prefix . $name;
 	}
 	
 	public function getHistory() {
 		return $this->history;
+	}
+	
+	private function convertSelect($select) {
+		return 'select ' . (is_null($select) || count ($select)==0 ? '*' : self::array2fields($select));
+	}
+	
+	private function convertWhere($where) {
+		return ' where ' . (is_null($where) || count($where)==0 ? '1' : join(' and ', $where));
 	}
 	
 }

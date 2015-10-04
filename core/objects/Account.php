@@ -14,12 +14,20 @@ class Account {
 		return Session::hasGroup() ? Session::getGroup() : self::getRawGroup();
 	}
 	
+	public static function setGroup($value) {
+		return Application::$user->editGroup($value);
+	}
+	
 	public static function getRawGid() {
 		return self::isLogined() ? Application::$user->gid : -1;
 	}
 	
 	public static function getGid() {
 		return Session::hasGid() ? Session::getGid() : self::getRawGid();
+	}
+	
+	public static function getId() {
+		return Application::$user->id;
 	}
 	
 	public static function isAdmin() {

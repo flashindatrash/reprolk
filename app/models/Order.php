@@ -2,14 +2,18 @@
 
 class Order extends BaseModel {
 	
+	const INCOMING = 'incoming';
+	const CANCELED = 'canceled';
+	
 	public $id;
-	public $user;
-	public $username; //user->username
+	public $uid;
+	public $username; //uid->username
 	public $title;
 	public $id_1c;
 	public $number_1c;
 	public $status;
-	public $photopolymer;
+	public $pid;
+	public $photopolymer_name; //pid->name
 	public $form_count;
 	public $area;
 	public $urgent;
@@ -19,35 +23,75 @@ class Order extends BaseModel {
 	public $date_changed;
 	public $date_due;
 	
+	public static function tableName() {
+		return 'orders';
+	}
+	
+	public function isCanceled() {
+		return $this->status==Order::CANCELED;
+	}
+	
+	public function canCancel() {
+		return !$this->isCanceled();
+	}
+	
+	public function cancel() {
+		return !is_null($this->id) && $this->canCancel() && $this->edit(['status'], [Order::CANCELED]);
+	}
+	
+	public function edit($fields, $values) {
+		if (is_null($this->id)) return false;
+		
+		$success = self::editById($this->id, $fields, $values);
+		if ($success) {
+			foreach ($fields as $i => $field) {
+				$this->$field = $values[$i];
+			}
+		}
+		return $success;
+	}
+	
 	public static function getAll($fields, $gid = null) {
-		$table_users = Application::$db->tableName('users');
-		$table_orders = Application::$db->tableName('orders');
+		$fields[] = self::field('uid');
+		$fields[] = self::field('id', null, 'id');
+		$fields[] = self::field('username', User::tableName(), 'username');
 		
-		$fields = DataBaseManager::array2fields($fields);
-		$fields .= ', `user`';
-		$fields .= ', ' . $table_orders . '.id as id';
-		$fields .= ', ' . $table_users . '.username as username';
+		$join = array();
+		$join[] = self::inner('id', User::tableName(), 'uid');
 		
-		$join = $table_users . ' on ' . $table_orders . '.user=' . $table_users . '.id';
+		$where = array();
+		if (!is_null($gid)) 
+			$where[] = self::field('gid', User::tableName()) . ' = ' . $gid;
 		
-		$where = is_null($gid) ? '1' : $table_users . '.gid = ' . $gid;
-		
-		return Application::$db->selectRows('orders', $fields, $where, 'Order', '0, 300', $join);
+		return self::selectRows($fields, $where, $join);
 	}
 	
 	public static function byId($id, $gid = null) {
-		$table_users = Application::$db->tableName('users');
-		$table_orders = Application::$db->tableName('orders');
+		$fields = array();
+		$fields[] = self::field('*');
+		$fields[] = self::field('username', User::tableName(), 'username');
+		$fields[] = self::field('name', Photopolymer::tableName(), 'photopolymer_name');
 		
-		$fields = $table_orders . '.*';
-		$fields .= ', ' . $table_users . '.username as username';
+		$join = array();
+		$join[] = self::inner('id', User::tableName(), 'uid');
+		$join[] = self::inner('id', Photopolymer::tableName(), 'pid');
 		
-		$join = $table_users . ' on ' . $table_orders . '.user=' . $table_users . '.id';
+		$where = array();
+		$where[] = self::field('id') . ' = ' .$id;
+		if (!is_null($gid))
+			$where[] = self::field('gid', User::tableName()) . ' = ' . $gid;
 		
-		$where = $table_orders . '.id = ' .$id;
-		$where .= is_null($gid) ? '' : ' and ' . $table_users . '.gid = ' . $gid;
-		
-		return Application::$db->selectRow('orders', $fields, $where, 'Order', $join);
+		return self::selectRow($fields, $where, $join);
+	}
+	
+	public static function add($fields, $values) {
+		return self::insertRow($fields, $values);
+	}
+	
+	public static function editById($id, $fields, $values) {
+		$where = array();
+		$where[] = self::field('id') . ' = ' . $id;
+		return self::update($fields, $values, $where);
 	}
 	
 }

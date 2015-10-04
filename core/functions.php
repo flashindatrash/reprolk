@@ -52,6 +52,10 @@ function hasSession($val) {
 	return session($val)!='';
 }
 
+function checkbox2bool($value) {
+	return $value=='on' ? 1 : 0;
+}
+
 function require_class($fileName, $className) {
 	if (file_exists($fileName)) require_once ($fileName);
 	if (class_exists($className)) return new $className;

@@ -26,6 +26,13 @@ class Routes {
 		return !is_null($this->current) && $this->current->name == $route->name;
 	}
 	
+	public function parseUrl($url) {
+		$u = strtolower($url);
+		$delim = strpos($u, '?');
+		if ($delim!==false) $u = substr($u, 0, $delim);
+		return $this->byPath($u);
+	}
+	
 	private function parse($routes) {
 		foreach ($routes as $route) {
 			$this->dictByName[$route->name] = $route;
@@ -36,12 +43,7 @@ class Routes {
 	
 	private function getCurrent() {
 		if (!hasGet('_url')) return $this->byName(Route::INDEX);
-		$u = strtolower(get('_url'));
-		
-		$delim = strpos($u, '?');
-		if ($delim!==false) $u = substr($u, 0, $delim);
-		
-		return $this->byPath($u);
+		return $this->parseUrl(get('_url'));
 	}
 }
 

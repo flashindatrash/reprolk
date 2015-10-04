@@ -1,8 +1,10 @@
+<?php if (is_null($this->user)) die; ?>
 <dl class="dl-horizontal">
 <?php
 	foreach ($this->fields as $field) {
 		print '<dt>' . View::str($field) .'</dt>';
-		print '<dd>' . Application::$user->$field . '</dd>';
+		print '<dd>' . $this->user->$field . '</dd>';
 	}
+	
 ?>
 </dl>
