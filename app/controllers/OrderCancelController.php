@@ -32,12 +32,11 @@ class OrderCancelController extends BaseOrderController implements IRedirect, IC
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('order_cancel_successfuly')); 
+		return new Redirect(View::str('order_cancel_successfuly'), Application::$routes->byName(Route::ORDER_VIEW)->path . '?id=' . $this->order->id); 
 	}
 	
 	public function getConfirm() {
-		if (is_null($this->order)) return null;
-		return new Redirect(sprintf(View::str('you_sure_order_cancel'), $this->order->title), Application::$routes->current->path . '?id=' . $this->order->id);
+		return sprintf(View::str('you_sure_order_cancel'), $this->order->title);
 	}
 	
 }

@@ -4,15 +4,9 @@
 		die;
 	}
 	
-	$redirect = $this->getConfirm();
-	$route = Application::$routes->parseUrl($redirect->url);
-	
-	if (is_null($route)) die;
-	
-	$route->path = $redirect->url;
 ?>
 
-<div class="alert alert-success" role="alert"><?php echo  $redirect->message; ?></div>
+<div class="alert alert-success" role="alert"><?php echo $this->getConfirm(); ?></div>
 
 <form method="post" class="form-horizontal">
 	<?php print View::formValidate(); ?>

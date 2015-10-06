@@ -29,12 +29,11 @@ class CommentDeleteController extends BaseController implements IRedirect, IConf
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('order_delete_successfuly')); 
+		return new Redirect(View::str('order_delete_successfuly'), Application::$routes->byName(Route::ORDER_VIEW)->path . '?id=' . $this->comment->oid . '#comments'); 
 	}
 	
 	public function getConfirm() {
-		if (is_null($this->comment)) return null;
-		return new Redirect(View::str('you_sure_comment_delete'), Application::$routes->byName(Route::ORDER_VIEW)->path . '?id=' . $this->comment->oid);
+		return View::str('you_sure_comment_delete');
 	}
 	
 }

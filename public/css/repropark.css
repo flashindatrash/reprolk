@@ -25,6 +25,10 @@ a:hover {
 	text-decoration: none;
 }
 
+.panel-primary a {
+	color: #fff;
+}
+
 .container#main {
     width: auto;
     max-width: 1000px;
