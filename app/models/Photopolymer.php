@@ -9,6 +9,10 @@ class Photopolymer extends BaseModel {
 		return 'photopolymers';
 	}
 	
+	public function remove() {
+		return !is_null($this->id) && self::delete([self::field('id') . ' = ' . $this->id]);
+	}
+	
 	public static function byId($id) {
 		$where = array();
 		$where[] = self::field('id') . ' = ' . $id;
