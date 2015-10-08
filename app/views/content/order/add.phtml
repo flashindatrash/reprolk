@@ -1,10 +1,11 @@
-<form method="post" class="form-horizontal">
+<form method="post" class="form-horizontal" enctype="multipart/form-data">
 <?php 
 	print View::formValidate();
 	print View::formNormal('title');
 	print View::formNormal('date_due', 'date');
 	print View::formNormal('pid', 'select', $this->photopolymers, true, false);
 	print View::formOffset('urgent', 'checkbox');
+	print View::formOffset('files', 'files');
 	
 	if ($this->commented) {
 		print View::formOffset('comment', 'textarea');

@@ -2,17 +2,22 @@
 
 class DataBaseManager {
 
+	private $config;
 	private $connection;
-	private $prefix;
 	private $history = array();
    
 	public function __construct($config) {
-		$this->prefix = $config['prefix'];
-		$this->connection = mysql_connect($config['host'], $config['username'], $config['password']);
+		$this->config = $config;
+	}
+	
+	public function connect() {
+		$this->connection = mysql_connect($this->config['host'], $this->config['username'], $this->config['password']);
 		if ($this->connection) {
 			mysql_query("set names utf8");
-			mysql_select_db($config['name'], $this->connection);
+			mysql_select_db($this->config['name'], $this->connection);
+			return true;
 		}
+		return false;
 	}
 	
 	public function query($str) {
@@ -108,7 +113,7 @@ class DataBaseManager {
 	}
 	
 	public function tableName($name) {
-		return $this->prefix . $name;
+		return $this->config['prefix'] . $name;
 	}
 	
 	public function getHistory() {

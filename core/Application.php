@@ -3,6 +3,7 @@
 class Application {
 
 	public static $db;
+	public static $ftp;
     public static $config;
 	public static $routes;
 	public static $user;
@@ -11,11 +12,13 @@ class Application {
 	
 	public function __construct($config) {
 		self::$config = $config;
+		self::$db = new DataBaseManager(self::$config['database']);
+		self::$ftp = new FTPManager(self::$config['ftp']);
 		session_start();
 	}
 	
 	public function connect() {
-		self::$db = new DataBaseManager(self::$config['database']);
+		self::$db->connect();
 		self::$user = Session::hasId() ? User::byId(Session::getId()) : null;
 	}
 	

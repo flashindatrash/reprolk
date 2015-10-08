@@ -33,7 +33,7 @@ class OrderAddController extends BaseController implements IRedirect {
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_VIEW)->path . '?id=' . $this->oid, 2000);
+		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path, 2000);
 	}
 	
 	public function add() {
@@ -58,6 +58,15 @@ class OrderAddController extends BaseController implements IRedirect {
 			
 			if (!is_null($this->oid)) {
 				
+				if (Application::$ftp->connect()) {
+					//добавляем на ftp
+					$files = isset($_FILES['files']) ? reArrayFiles($_FILES['files']) : [];
+					Application::$ftp->putOrder(Order::byId($this->oid), $files);
+				} else {
+					$this->addAlert(View::str('error_ftp_connect'), 'danger');
+				}
+				
+				//добавляем коммент
 				if (hasPost('comment')) {
 					Comment::add($this->oid, post('comment'));
 				}

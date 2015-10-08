@@ -1,18 +1,19 @@
 <?php
 
-include '../core/Application.php';
-include '../core/DataBaseManager.php';
-include '../core/BaseController.php';
-include '../core/BaseModel.php';
-include '../core/View.php';
-include '../core/objects/Route.php';
-include '../core/objects/Routes.php';
-include '../core/objects/Session.php';
-include '../core/objects/MenuItem.php';
-include '../core/objects/Redirect.php';
-include '../core/objects/UserAccess.php';
-include '../core/objects/Account.php';
-
+include_once '../core/Application.php';
+include_once '../core/DataBaseManager.php';
+include_once '../core/FTPManager.php';
+include_once '../core/BaseController.php';
+include_once '../core/BaseModel.php';
+include_once '../core/View.php';
+include_once '../core/objects/Route.php';
+include_once '../core/objects/Routes.php';
+include_once '../core/objects/Session.php';
+include_once '../core/objects/MenuItem.php';
+include_once '../core/objects/Redirect.php';
+include_once '../core/objects/UserAccess.php';
+include_once '../core/objects/Account.php';
+		
 function p($x=''){
    print ps($x);
 }
@@ -52,8 +53,35 @@ function hasSession($val) {
 	return session($val)!='';
 }
 
+function toBool($b) {
+	return $b=="1";
+}
+
 function checkbox2bool($value) {
 	return $value=='on' ? 1 : 0;
+}
+
+function reArrayFiles(&$file_post) {
+	$file_ary = array();
+    $file_count = count($file_post['name']);
+    $file_keys = array_keys($file_post);
+
+    for ($i=0; $i<$file_count; $i++) {
+        foreach ($file_keys as $key) {
+            $file_ary[$i][$key] = $file_post[$key][$i];
+        }
+    }
+    return $file_ary;
+}
+
+function objectToArray($object) {
+	if(!is_object($object) && !is_array($object)) {
+		return $object;
+	}
+	if (is_object($object)) {
+		$object = get_object_vars($object);
+	}
+	return array_map('objectToArray',$object);
 }
 
 function require_class($fileName, $className) {
