@@ -51,6 +51,7 @@ class View {
 							'startView: 2,' .
 							'minView: 2,' .
 							'pickerPosition: "bottom-left",' .
+							'startDate: new Date(),' .
 							'language: "en",' .
 							($value!='' ? 'initialDate: new Date("' . $value . '"),' : '') .
 							'forceParse: 0' .
@@ -60,6 +61,12 @@ class View {
 				//name, type, value
 				$value = $nArgs>=3 ? $args[2] : '';
 				return '<textarea class="form-control" name="' . $name . '" id="input_' . $name . '" placeholder="' . self::str($name) . '">' . $value . '</textarea>';
+			case 'file':
+				//name, type
+				return '<input type="file" name="' . $name . '">';
+			case 'files':
+				//name, type
+				return '<input type="file" name="' . $name . '[]" multiple>';
 			case 'any':
 				//name, type, any text
 				return $nArgs>=3 ? $args[2] : '';

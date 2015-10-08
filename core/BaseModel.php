@@ -6,6 +6,10 @@ class BaseModel {
 		
 	}
 	
+	public function toArray() {
+		return objectToArray($this);
+	}
+	
 	public static function tableName() {
 		return NULL;
 	}

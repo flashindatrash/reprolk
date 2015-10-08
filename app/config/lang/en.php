@@ -108,6 +108,7 @@ return array(
 	'ERROR_TRANSMIT_NOT_USERS' => 'There are no members who can transfer the rights in gid <b>%d</b> by group <b>%s</b>',
 	'ERROR_USER_NOT_FOUND' => 'User not found',
 	'ERROR_NOT_HAVE_PHOTOPOLYMER' => 'You do not have any photopolymer, please contact your administrator',
+	'ERROR_FTP_CONNECT' => 'Unable to connect FTP, please contact your administrator',
 );
 
 ?>
