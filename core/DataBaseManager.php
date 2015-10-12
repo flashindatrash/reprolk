@@ -1,5 +1,7 @@
 <?php
 
+include_once '../core/objects/SQLOrderBy.php';
+
 class DataBaseManager {
 
 	private $config;
@@ -29,7 +31,7 @@ class DataBaseManager {
 		$select = $this->convertSelect($select);
 		$from = ' from ' . $this->tableName($from);
 		$join = is_null($join) ? '' : ' ' . join(' ', $join);
-		$order = is_null($order) ? '' : ' order by ' . $order;
+		$order = is_null($order) ? '' : ' ' . $order->toString();
 		$range = ' limit ' . (is_null($range) ? '0, 1' : $range);
 		
 		$query = $this->query($select . $from . $join . self::convertWhere($where) . $order . $range);

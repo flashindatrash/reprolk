@@ -129,6 +129,18 @@ class View {
 		return self::str($value=='1' ? 'yes' : 'no');
 	}
 	
+	public static function linkSort($field, $order) {
+		$by = $order->by == 'desc' ? 'asc' : 'desc';
+		$name = 'orderBy' . $field;
+		$html = '<a id="' . $name . '" href="?sort=' . $field . '&by=' . $by . '#' . $name . '">' . self::str( $field ) . '</a>';
+		if ($field==$order->field) $html .= self::orderBy($order);
+		return $html;
+	}
+	
+	public static function orderBy($order) {
+		return '<span class="orderby glyphicon glyphicon-chevron-' . ($order->by=='desc' ? 'down' : 'up') . '" aria-hidden="true"></span>';
+	}
+	
 	public static function convertSelect($array, $key, $value) {
 		$a = array();
 		foreach ($array as $item) {
@@ -137,7 +149,8 @@ class View {
 		return $a;
 	}
 	
-	public static function link($r, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null) {
+	public static function link($r, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null, $data = null) {
+		if ($r=='#') $r = new Route(null, '#');
 		$route = (!$r instanceof Route) ? Application::$routes->byName($r) : $r;
 		if (is_null($route) || !$route->isAvailable()) return '';
 		$text = is_null($text) ? $route->linkText() : $text;
@@ -146,8 +159,20 @@ class View {
 		$id = is_null($id) ? '' : ' id="' . $id . '"';
 		$class = is_null($class) ? '' : ' class="' . $class . '"';
 		$title = ' title="' . (is_null($title) ? $route->linkTitle() : $title) . '"';
-		$tooltip = is_null($tooltip) ? '' : ' data-toggle="tooltip" data-placement="' . $tooltip . '"';
-		return '<a' . $href . $id . $class . $title . $tooltip . '>' . $text . '</a>';
+		$attr = '';
+		if (is_null($data)) {
+			$data = array();
+		}
+		if (!is_null($tooltip)) {
+			$data['toggle'] = 'tooltip';
+			$data['placement'] = $tooltip;
+		}
+		if (is_array($data)) {
+			foreach ($data as $key => $data_value) {
+				$attr .= ' data-' . $key . '="' . $data_value . '"';
+			}
+		}
+		return '<a' . $href . $id . $class . $title . $attr . '>' . $text . '</a>';
 	}
 	
 	private static function call($method, $args) {

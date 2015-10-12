@@ -17,7 +17,7 @@ class Comment extends BaseModel {
 		return !is_null($this->id) && self::delete([self::field('id') . ' = ' . $this->id]);
 	}
 	
-	public static function getAll($order, $by = 'desc') {
+	public static function getAll($order) {
 		$fields = array();
 		$fields[] = self::field('*');
 		$fields[] = self::field('username', User::tableName(), 'username');
@@ -28,9 +28,7 @@ class Comment extends BaseModel {
 		$where = array();
 		$where[] = self::field('oid') . ' = ' . $order;
 		
-		$order_by = self::field('date') . ' ' . $by;
-		
-		return self::selectRows($fields, $where, $join, $order_by);
+		return self::selectRows($fields, $where, $join, new SQLOrderBy(self::field('date'));
 	}
 	
 	public static function byId($id) {

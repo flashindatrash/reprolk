@@ -31,10 +31,7 @@ class FTPManager {
 	}
 	
 	private function addXML($order) {
-		if (!@ftp_chdir($this->connection, $this->config['dir_orders'])) {
-			ftp_mkdir($this->connection, $this->config['dir_orders']);
-			ftp_chdir($this->connection, $this->config['dir_orders']);
-		}
+		$this->dir($this->config['dir_orders']);
 		
 		include_once '../core/objects/XmlConstruct.php';
 		
@@ -48,6 +45,21 @@ class FTPManager {
 		$name = 'order_' . $order->id . '.xml';
 		
 		ftp_fput($this->connection, $name, $file, FTP_ASCII);
+	}
+	
+	private function dir($name) {
+		$path = explode('/', $name);
+		if (count($path)>1) {
+			foreach ($path as $name) {
+				$this->dir($name);
+			}
+			return;
+		}
+		
+		if (!@ftp_chdir($this->connection, $name)) {
+			ftp_mkdir($this->connection, $name);
+			ftp_chdir($this->connection, $name);
+		}
 	}
 	
 }

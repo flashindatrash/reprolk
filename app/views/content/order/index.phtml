@@ -1,7 +1,8 @@
 <div class="panel panel-default">
 	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), count($this->orders)); ?>
 		<div class="pull-right">
-			<?php print View::link('OrderAdd', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, null, 'left'); ?>
+			<?php print View::link('#', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-filter', View::str('filter'), null, array('toggle' => 'modal', 'target' => '#filterModal')); ?>
+			<?php print View::link('OrderAdd', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, 'top'); ?>
 			<?php print View::link('OrderView', '', null, 'view', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled', null, 'top'); ?>
 			<?php print View::link('OrderEdit', '', null, 'edit', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-pencil disabled', null, 'top'); ?>
 			<?php print View::link('OrderDuplicate', '', null, 'duplicate', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-duplicate disabled', null, 'right'); ?>
@@ -12,10 +13,13 @@
 		<thead>
 			<tr>
 				<?php
-				foreach ($this->fields as $th) {
-					print '<th>' . View::str( $th ) . '</th>';
+				$html = '';
+				foreach ($this->fields_view as $th) {
+					$html .= '<th>';
+					$html .= View::linkSort($th, $this->order_by);
+					$html .= '</th>';
 				}
-				print '<th>' . View::str('username') . '</th>';
+				print $html;
 				?>
 			</tr>
 		</thead>
@@ -34,10 +38,9 @@
 				}
 				
 				$orders .= '<tr class="' . join (' ', $classes) . '" id="' . $order->id . '">';
-				foreach ($this->fields as $td) {
+				foreach ($this->fields_view as $td) {
 					$orders .= '<td>' . $order->$td . '</td>';
 				}
-				$orders .= '<td>' . $order->username . '</td>';
 			}
 			print $orders;
 			?>

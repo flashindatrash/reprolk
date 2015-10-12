@@ -60,6 +60,9 @@ return array(
 	'YOU_SURE_COMMENT_DELETE' => 'Are you sure you want to delete comment?',
 	'YOU_SURE_PHOTOPOLYMER_DELETE' => 'Are you sure you want to delete photopolymer <b>%s</b>?',
 	'SUBMIT' => 'Submit',
+	'FILTER' => 'Filter',
+	'CLOSE' => 'Close',
+	'APPLY' => 'Apply',
 	
 	'MENU_INDEX' => 'Index',
 	'MENU_LOGIN' => 'Login',
