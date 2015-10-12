@@ -5,6 +5,7 @@ class Order extends BaseModel {
 	const INCOMING = 'incoming';
 	const CANCELED = 'canceled';
 	
+	
 	public $id;
 	public $uid;
 	public $username; //uid->username
@@ -25,6 +26,10 @@ class Order extends BaseModel {
 	
 	public static function tableName() {
 		return 'orders';
+	}
+	
+	public static function statuses() {
+		return [Order::INCOMING, Order::CANCELED];
 	}
 	
 	public function isCanceled() {
@@ -51,7 +56,7 @@ class Order extends BaseModel {
 		return $success;
 	}
 	
-	public static function getAll($fields, $gid = null) {
+	public static function getAll($fields, $gid = null, $order_by = null) {
 		$fields[] = self::field('uid');
 		$fields[] = self::field('id', null, 'id');
 		$fields[] = self::field('username', User::tableName(), 'username');
@@ -63,7 +68,7 @@ class Order extends BaseModel {
 		if (!is_null($gid)) 
 			$where[] = self::field('gid', User::tableName()) . ' = ' . $gid;
 		
-		return self::selectRows($fields, $where, $join);
+		return self::selectRows($fields, $where, $join, $order_by);
 	}
 	
 	public static function byId($id, $gid = null) {

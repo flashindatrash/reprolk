@@ -96,6 +96,11 @@ a:hover {
 	display: block;
 }
 
+.orderby {
+	margin-left: 5px;
+	font-size: 10px;
+}
+
 
 .left .menu a,
 .left .menu a:visited {
