@@ -8,7 +8,11 @@
 			<form method="get" class="form-horizontal">
 				<div class="modal-body">
 					<?php
-						print View::formNormal('status', 'multiple', Order::statuses());
+						print View::input('sort', 'hidden', $this->order_by->field);
+						print View::input('by', 'hidden', $this->order_by->by);
+						print View::formNormal('status', 'multiple', Order::statuses(), false, false, $this->order_filter->status);
+						print View::formNormal('date_due_start', 'date', $this->order_filter->date_due_start);
+						print View::formNormal('date_due_end', 'date', $this->order_filter->date_due_end);
 					?>
 				</div>
 				<div class="modal-footer">

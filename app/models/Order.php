@@ -56,7 +56,7 @@ class Order extends BaseModel {
 		return $success;
 	}
 	
-	public static function getAll($fields, $gid = null, $order_by = null) {
+	public static function getAll($fields, $filter, $gid = null, $order_by = null) {
 		$fields[] = self::field('uid');
 		$fields[] = self::field('id', null, 'id');
 		$fields[] = self::field('username', User::tableName(), 'username');
@@ -67,6 +67,19 @@ class Order extends BaseModel {
 		$where = array();
 		if (!is_null($gid)) 
 			$where[] = self::field('gid', User::tableName()) . ' = ' . $gid;
+		if (!is_null($filter->status) && count($filter->status)>0) {
+			$statuses = array();
+			foreach ($filter->status as $status) {
+				$statuses[] = self::field('status') . ' = "' . $status . '"';
+			}
+			$where[] = self::where($statuses, 'or');
+		}
+		if (!is_null($filter->date_due_start)) {
+			$where[] = self::field('date_due') . ' >= "' . $filter->date_due_start . '"';
+		}
+		if (!is_null($filter->date_due_end)) {
+			$where[] = self::field('date_due') . ' <= "' . $filter->date_due_end . '"';
+		}
 		
 		return self::selectRows($fields, $where, $join, $order_by);
 	}

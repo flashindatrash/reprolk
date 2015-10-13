@@ -37,6 +37,15 @@ function get($val) {
 	return isset($_GET[$val]) ? $_GET[$val] : '';
 }
 
+function gets() {
+	$a = array();
+	foreach ($_GET as $key => $value) {
+		if ($key!='_url')
+			$a[$key] = $value;
+	}
+	return $a;
+}
+
 function hasPost($val) {
 	return post($val)!='';
 }

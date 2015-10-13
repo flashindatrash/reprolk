@@ -51,6 +51,10 @@ class BaseModel {
 		return static::table($table_name) . '.' . $field . (is_null($as) ? '' : ' as ' . $as);
 	}
 	
+	protected static function where($array, $comparison = 'and') {
+		return ' ( ' . DataBaseManager::where($array, $comparison) . ' ) ';
+	}
+	
 	protected static function inner($joinParam, $joinTable, $destParam, $destTable = NULL) {
 		if (is_null($destTable)) $destTable = static::tableName();
 		return 'inner join ' . static::table($joinTable) . ' on ' . static::table($destTable) . '.' . $destParam . '=' . static::table($joinTable) . '.' . $joinParam;
