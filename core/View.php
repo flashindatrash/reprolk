@@ -27,7 +27,7 @@ class View {
 				if (!is_null($values)) { 
 					foreach ($values as $i => $v) {
 						$c = $useKeys ? $i : $v;
-						$selected = !is_null($value) && $value==$c ? ' selected' : '';
+						$selected = !is_null($value) && (is_array($value) ? in_array($c, $value) : $value==$c) ? ' selected' : '';
 						$str .= '<option value="' . $c . '"' . $selected . '>' . ($localisate ? self::str($v) : $v). '</option>';
 					}
 				}
@@ -41,7 +41,11 @@ class View {
 			case 'date':
 				//name, type, value
 				$value = $nArgs>=3 ? $args[2] : '';
-				$input = '<input class="form-control" size="16" type="text" value="' . ($value!='' ? date("d F Y", strtotime($value)) : '') . '" readonly><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
+				$input = '<input class="form-control" size="16" type="text" value="' . ($value!='' ? date("d F Y", strtotime($value)) : '') . '" readonly>' .
+							'<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>' .
+							'<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
+							
+				
 				$hidden = '<input type="hidden" name="' . $name . '" id="input_' . $name . '" value="' . $value . '" />';
 				$script = '<script type="text/javascript">$("#' . $name . '").datetimepicker({'.
 							'weekStart: 1,' .
@@ -131,14 +135,12 @@ class View {
 	
 	public static function linkSort($field, $order) {
 		$by = $order->by == 'desc' ? 'asc' : 'desc';
-		$name = 'orderBy' . $field;
-		$html = '<a id="' . $name . '" href="?sort=' . $field . '&by=' . $by . '#' . $name . '">' . self::str( $field ) . '</a>';
+		$gets = gets();
+		$gets['sort'] = $field;
+		$gets['by'] = $by;
+		$html = '<a href="?' . self::getValues($gets) . '">' . self::str( $field ) . '</a>';
 		if ($field==$order->field) $html .= self::orderBy($order);
 		return $html;
-	}
-	
-	public static function orderBy($order) {
-		return '<span class="orderby glyphicon glyphicon-chevron-' . ($order->by=='desc' ? 'down' : 'up') . '" aria-hidden="true"></span>';
 	}
 	
 	public static function convertSelect($array, $key, $value) {
@@ -173,6 +175,14 @@ class View {
 			}
 		}
 		return '<a' . $href . $id . $class . $title . $attr . '>' . $text . '</a>';
+	}
+	
+	public static function getValues($arr) {
+		return http_build_query($arr);
+	}
+	
+	private static function orderBy($order) {
+		return '<span class="orderby glyphicon glyphicon-chevron-' . ($order->by=='desc' ? 'down' : 'up') . '" aria-hidden="true"></span>';
 	}
 	
 	private static function call($method, $args) {

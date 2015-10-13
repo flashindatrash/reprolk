@@ -63,6 +63,8 @@ return array(
 	'FILTER' => 'Filter',
 	'CLOSE' => 'Close',
 	'APPLY' => 'Apply',
+	'DATE_DUE_START' => 'Start due date',
+	'DATE_DUE_END' => 'End due date',
 	
 	'MENU_INDEX' => 'Index',
 	'MENU_LOGIN' => 'Login',

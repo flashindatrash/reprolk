@@ -114,6 +114,14 @@ class DataBaseManager {
 		return '(' . join('), (', $arr) . ')';
 	}
 	
+	public static function convertWhere($where, $comparison = 'and') {
+		return ' where ' . (is_null($where) || count($where)==0 ? '1' : self::where($where, $comparison));
+	}
+	
+	public static function where($where, $comparison = 'and') {
+		return join(' '. $comparison. ' ', $where);
+	}
+	
 	public function tableName($name) {
 		return $this->config['prefix'] . $name;
 	}
@@ -124,10 +132,6 @@ class DataBaseManager {
 	
 	private function convertSelect($select) {
 		return 'select ' . (is_null($select) || count ($select)==0 ? '*' : self::array2fields($select));
-	}
-	
-	private function convertWhere($where) {
-		return ' where ' . (is_null($where) || count($where)==0 ? '1' : join(' and ', $where));
 	}
 	
 }
