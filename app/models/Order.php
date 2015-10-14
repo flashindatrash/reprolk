@@ -8,13 +8,11 @@ class Order extends BaseModel {
 	
 	public $id;
 	public $uid;
-	public $username; //uid->username
 	public $title;
 	public $id_1c;
 	public $number_1c;
 	public $status;
 	public $pid;
-	public $photopolymer_name; //pid->name
 	public $form_count;
 	public $area;
 	public $urgent;
@@ -23,6 +21,10 @@ class Order extends BaseModel {
 	public $date_created;
 	public $date_changed;
 	public $date_due;
+	
+	public $username; //uid->username
+	public $gid; //uid->gid
+	public $photopolymer_name; //pid->name
 	
 	public static function tableName() {
 		return 'orders';
@@ -88,6 +90,7 @@ class Order extends BaseModel {
 		$fields = array();
 		$fields[] = self::field('*');
 		$fields[] = self::field('username', User::tableName(), 'username');
+		$fields[] = self::field('gid', User::tableName(), 'gid');
 		$fields[] = self::field('name', Photopolymer::tableName(), 'photopolymer_name');
 		
 		$join = array();

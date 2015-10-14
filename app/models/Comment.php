@@ -28,7 +28,7 @@ class Comment extends BaseModel {
 		$where = array();
 		$where[] = self::field('oid') . ' = ' . $order;
 		
-		return self::selectRows($fields, $where, $join, new SQLOrderBy(self::field('date'));
+		return self::selectRows($fields, $where, $join, new SQLOrderBy(self::field('date')));
 	}
 	
 	public static function byId($id) {

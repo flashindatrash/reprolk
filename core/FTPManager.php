@@ -13,25 +13,14 @@ class FTPManager {
 		$this->connection = ftp_connect($this->config['host'], $this->config['port']);
 		if ($this->connection && @ftp_login($this->connection, $this->config['username'], $this->config['password'])) {
 			ftp_pasv($this->connection, toBool($this->config['passive_mode']));
+			$this->gotoDir($this->config['dir_root']);
 			return true;
 		}
 		return false;
 	}
 	
-	public function putOrder($order, $files) {
-		$this->addXML($order);
-		
-		foreach ($files as $file) {
-			$file_name = $file["name"];
-			$file_tmp = $file["tmp_name"];
-			$file_type = $file["type"];
-			$file_size = $file["size"];
-			$file_error = $file["error"];
-		}
-	}
-	
-	private function addXML($order) {
-		$this->dir($this->config['dir_orders']);
+	public function addXML($order) {
+		$this->gotoDir($this->config['dir_orders']);
 		
 		include_once '../core/objects/XmlConstruct.php';
 		
@@ -42,16 +31,43 @@ class FTPManager {
 		fwrite($file, $xml->getDocument());
 		rewind($file);
 		
-		$name = 'order_' . $order->id . '.xml';
+		$name = $order->id . '_' . $order->gid . '.xml';
 		
 		ftp_fput($this->connection, $name, $file, FTP_ASCII);
+		
+		$this->gotoPrev(1);
 	}
 	
-	private function dir($name) {
+	public function addFiles($files, $gid, $oid) {
+		$this->gotoDir($this->config['dir_files']);
+		$this->gotoDir($gid);
+		$this->gotoDir($oid);
+		
+		$names = array();
+		
+		foreach ($files as $file) {
+			$file_name = $file["name"];
+			$file_tmp = $file["tmp_name"];
+			$file_type = $file["type"];
+			$file_size = $file["size"];
+			$file_error = $file["error"];
+			
+			$file_stream = fopen($file_tmp, 'r');
+			
+			ftp_fput($this->connection, $file_name, $file_stream, FTP_ASCII);
+			
+			$names[] = $file_name;
+		}
+		
+		//возвращает имена файлов для последующего добавления в БД, собственно здесь можно их и переименовать...
+		return $names;
+	}
+	
+	private function gotoDir($name) {
 		$path = explode('/', $name);
 		if (count($path)>1) {
 			foreach ($path as $name) {
-				$this->dir($name);
+				$this->gotoDir($name);
 			}
 			return;
 		}
@@ -59,6 +75,12 @@ class FTPManager {
 		if (!@ftp_chdir($this->connection, $name)) {
 			ftp_mkdir($this->connection, $name);
 			ftp_chdir($this->connection, $name);
+		}
+	}
+	
+	private function gotoPrev($count = 1) {
+		for ($i = 0; $i < $count; $i++) { 
+			ftp_cdup($this->connection);
 		}
 	}
 	
