@@ -4,8 +4,8 @@ include_once '../core/interfaces/IRedirect.php';
 
 class OrderAddController extends BaseController implements IRedirect {
 	
-	public $photopolymers;
 	public $oid;
+	public $photopolymers;
 	public $commented;
 	
 	public function beforeRender() {
@@ -33,7 +33,7 @@ class OrderAddController extends BaseController implements IRedirect {
 	}
 	
 	public function getRedirect() {
-		//return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path, 2000);
+		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path, 2000);
 	}
 	
 	public function add() {
@@ -48,39 +48,16 @@ class OrderAddController extends BaseController implements IRedirect {
 			$fields[] = 'urgent';
 			$values[] = checkbox2bool(post('urgent'));
 			
-			$fields[] = 'date_created';
-			$values[] = date('Y-m-d');
-			
-			$fields[] = 'date_changed';
-			$values[] = date('Y-m-d');
-			
 			$this->oid = Order::add($fields, $values);
 			
 			if (!is_null($this->oid)) {
-				
-				//добавляем на ftp
-				if (Application::$ftp->connect()) {
-					$files = isset($_FILES['files']) ? reArrayFiles($_FILES['files']) : [];
-					$order = Order::byId($this->oid);
-					
-					Application::$ftp->addXML($order);
-					$names = Application::$ftp->addFiles($files, $order->gid, $order->id);
-					
-					if (count($names)>0) {
-						//добавим в БД привязку имен
-						File::add($names, $this->oid);
-					}
-					
-				} else {
-					$this->addAlert(View::str('error_ftp_connect'), 'danger');
-				}
 				
 				//добавляем коммент
 				if (hasPost('comment')) {
 					Comment::add($this->oid, post('comment'));
 				}
 				
-				return true;
+				return BaseOrderController::dump(Order::byId($this->oid), $_FILES['files']);
 			}
 		}
 		

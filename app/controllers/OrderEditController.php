@@ -33,12 +33,9 @@ class OrderEditController extends BaseOrderController {
 			$values = $this->formValues($fields);
 			
 			$fields[] = 'urgent';
-			$fields[] = 'date_changed';
-			
 			$values[] = checkbox2bool(post('urgent'));
-			$values[] = date('Y-m-d');
 			
-			if ($this->order->edit($fields, $values)) return true;
+			return $this->order->edit($fields, $values) && $this->save();
 		}
 		
 		return false;

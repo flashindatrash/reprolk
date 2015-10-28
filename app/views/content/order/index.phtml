@@ -9,7 +9,7 @@
 		</div>
 	</div>
 	
-	<table class="table table-hover">
+	<table class="orders table table-hover">
 		<thead>
 			<tr>
 				<?php
@@ -39,7 +39,7 @@
 				
 				$orders .= '<tr class="' . join (' ', $classes) . '" id="' . $order->id . '">';
 				foreach ($this->fields_view as $td) {
-					$orders .= '<td>' . $order->$td . '</td>';
+					$orders .= '<td class="td_' . $td . '">' . $order->$td . '</td>';
 				}
 			}
 			print $orders;

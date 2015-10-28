@@ -23,7 +23,7 @@ class UserAddController extends BaseController {
 	}
 	
 	public function getContent() {
-		$this->pick('user/add');
+		$this->pick('admin/user-add');
 	}
 	
 }

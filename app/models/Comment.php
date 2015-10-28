@@ -2,6 +2,9 @@
 
 class Comment extends BaseModel {
 	
+	const FORMAT_DATE = 'Y-m-d H:i:s';
+	const EDIT_DELAY = 5*60;
+	
 	public $id;
 	public $oid;
 	public $uid;
@@ -11,6 +14,18 @@ class Comment extends BaseModel {
 	
 	public static function tableName() {
 		return 'comments';
+	}
+	
+	public function dateEditExpired() {
+		return date(Comment::FORMAT_DATE, strtotime($this->date) + Comment::EDIT_DELAY);
+	}
+	
+	public function isOwner() {
+		return $this->uid == Account::getId();
+	}
+	
+	public function isEditExpired() {
+		return date(Comment::FORMAT_DATE)>=$this->dateEditExpired();
 	}
 	
 	public function remove() {
@@ -39,7 +54,7 @@ class Comment extends BaseModel {
 	}
 	
 	public static function add($order, $message) {
-		return self::insertRow(['oid', 'uid', 'message', 'date'], [$order, Account::getId(), $message, date("Y-m-d H:i:s")]);
+		return self::insertRow(['oid', 'uid', 'message', 'date'], [$order, Account::getId(), $message, date(Comment::FORMAT_DATE)]);
 	}
 	
 }

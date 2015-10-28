@@ -3,6 +3,7 @@
 class Route {
 	
 	const INDEX = 'Index';
+	const FILE = 'File';
 	const LOGIN = 'Login';
 	const LOGOUT = 'Logout';
 	const NOT_FOUND = 'NotFound';
@@ -11,6 +12,7 @@ class Route {
 	const ORDER_VIEW = 'OrderView';
 	const ORDER_EDIT = 'OrderEdit';
 	const ORDER_CANCEL = 'OrderCancel';
+	const ORDER_DELETE = 'OrderDelete';
 	const ORDER_DUPLICATE = 'OrderDuplicate';
 	const ORDER_ALL = 'OrderAll';
 	const GROUP_POLYMERS = 'GroupPhotopolymers';
@@ -25,17 +27,21 @@ class Route {
 	const VIEW_AS_CANCEL = 'ViewAsCancel';
 	const COMMENT_DELETE = 'CommentDelete';
 	
+	const TYPE_NORMAL = 0;
+	const TYPE_SUB = 1;
+	const TYPE_HIDDEN = 2;
+	
 	public $name;
 	public $path;
 	public $permission;
-	public $hidden;
+	public $type;
 	public $routes;
 	
-	public function __construct($name, $path = '/', $permission = null, $hidden = false, $routes = null) {
+	public function __construct($name, $path = '/', $permission = null, $type = 0, $routes = null) {
 		$this->name = $name;
 		$this->path = $path;
 		$this->permission = $permission;
-		$this->hidden = $hidden;
+		$this->type = $type;
 		$this->routes = is_null($routes) ? [] : $routes;
 	}
 	
@@ -52,7 +58,7 @@ class Route {
 	}
 	
 	public function isVisible() {
-		return !$this->hidden && $this->isAvailable();
+		return $this->type!=Route::TYPE_HIDDEN && $this->isAvailable();
 	}
 	
 }

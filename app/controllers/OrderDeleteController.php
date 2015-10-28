@@ -4,7 +4,7 @@ include_once '../app/controllers/BaseOrderController.php';
 include_once '../core/interfaces/IRedirect.php';
 include_once '../core/interfaces/IConfirm.php';
 
-class OrderCancelController extends BaseOrderController implements IRedirect, IConfirm {
+class OrderDeleteController extends BaseOrderController implements IRedirect, IConfirm {
 	
 	private $view;
 	
@@ -13,15 +13,14 @@ class OrderCancelController extends BaseOrderController implements IRedirect, IC
 		
 		if (is_null($this->order)) return;
 		
-		if (!$this->order->canCancel()) {
-			$this->addAlert(View::str('warning_order_cancel'), 'warning');
+		if (!$this->order->canDelete()) {
+			$this->addAlert(View::str('warning_order_delete'), 'warning');
 			return;
 		} if ($this->formValidate([])) {
-			if ($this->order->cancel()) {
+			if ($this->order->remove()) {
 				$this->view = 'system/redirect';
-				$this->save();
 			} else {
-				$this->addAlert(View::str('error_order_cancel'), 'danger');
+				$this->addAlert(View::str('error_order_delete'), 'danger');
 			}
 		} else {
 			$this->view = 'system/confirm';
@@ -33,11 +32,11 @@ class OrderCancelController extends BaseOrderController implements IRedirect, IC
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('order_cancel_successfuly'), Application::$routes->byName(Route::ORDER_VIEW)->path . '?id=' . $this->order->id); 
+		return new Redirect(View::str('order_delete_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path); 
 	}
 	
 	public function getConfirm() {
-		return sprintf(View::str('you_sure_order_cancel'), $this->order->title);
+		return sprintf(View::str('you_sure_order_delete'), $this->order->title);
 	}
 	
 }
