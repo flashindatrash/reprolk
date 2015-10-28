@@ -31,7 +31,7 @@ class TransmitRightsController extends BaseController implements IRedirect {
 	
 	public function getContent() {
 		if ($this->transmited) $this->pick('system/redirect');
-		else if (count($this->users)>0) $this->pick('user/transmit');
+		else if (count($this->users)>0) $this->pick('admin/transmit-rights');
 	}
 	
 	public function getRedirect() {

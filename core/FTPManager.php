@@ -19,6 +19,10 @@ class FTPManager {
 		return false;
 	}
 	
+	public function close() {
+		if ($this->connection) ftp_close($this->connection);
+	}
+	
 	public function addXML($order) {
 		$this->gotoDir($this->config['dir_orders']);
 		
@@ -27,15 +31,30 @@ class FTPManager {
 		$xml = new XmlConstruct('order');
 		$xml->fromArray($order->toArray());
 		
-		$file = tmpfile();
-		fwrite($file, $xml->getDocument());
-		rewind($file);
+		$tmp = tmpfile();
+		fwrite($tmp, $xml->getDocument());
+		rewind($tmp);
 		
 		$name = $order->id . '_' . $order->gid . '.xml';
 		
-		ftp_fput($this->connection, $name, $file, FTP_ASCII);
+		ftp_fput($this->connection, $name, $tmp, FTP_ASCII);
 		
 		$this->gotoPrev(1);
+	}
+	
+	public function getFile($file) {
+		$this->gotoDir($this->config['dir_files']);
+		$this->gotoDir($file->gid);
+		$this->gotoDir($file->oid);
+		if ($file->isComment()) $this->gotoDir($file->cid);
+		
+		$tmp = tmpfile();
+		
+		if (@ftp_fget($this->connection, $tmp, $file->name, FTP_ASCII, 0)) {
+			return $tmp;
+		}
+		
+		return null;
 	}
 	
 	public function addFiles($files, $gid, $oid) {
@@ -43,24 +62,31 @@ class FTPManager {
 		$this->gotoDir($gid);
 		$this->gotoDir($oid);
 		
-		$names = array();
+		$a = array();
 		
-		foreach ($files as $file) {
-			$file_name = $file["name"];
-			$file_tmp = $file["tmp_name"];
-			$file_type = $file["type"];
-			$file_size = $file["size"];
-			$file_error = $file["error"];
+		foreach ($files as $f) {
+			$file = new File();
+			$file->name = $f["name"];
+			$file->size = $f["size"];
+			$file->type = $f["type"];
 			
-			$file_stream = fopen($file_tmp, 'r');
+			$error = $f["error"];
 			
-			ftp_fput($this->connection, $file_name, $file_stream, FTP_ASCII);
+			if ($error!=0) continue;
 			
-			$names[] = $file_name;
+			$stream = fopen($f["tmp_name"], 'r');
+			
+			ftp_fput($this->connection, translit($file->name), $stream, FTP_ASCII);
+			
+			fseek($stream, 0);
+			$content = fread($stream, $file->size);
+			$file->content = addslashes($content);
+			
+			$a[] = $file;
 		}
 		
 		//возвращает имена файлов для последующего добавления в БД, собственно здесь можно их и переименовать...
-		return $names;
+		return $a;
 	}
 	
 	private function gotoDir($name) {

@@ -12,6 +12,10 @@ class CommentDeleteController extends BaseController implements IRedirect, IConf
 		$this->comment = hasGet('id') ? Comment::byId(get('id')) : null;
 		
 		if (is_null($this->comment)) return;
+		else if ($this->comment->isEditExpired()) {
+			$this->addAlert(View::str('error_comment_expired'), 'danger');
+			return;
+		}
 		
 		if ($this->formValidate([])) {
 			if ($this->comment->remove()) {

@@ -20,19 +20,17 @@ class XmlConstruct extends XMLWriter {
         $this->endElement(); 
     } 
 	
-    public function fromArray($prm_array){ 
-      if(is_array($prm_array)){ 
-        foreach ($prm_array as $index => $element){ 
-          if(is_array($element)){ 
-            $this->startElement($index); 
-            $this->fromArray($element); 
-            $this->endElement(); 
-          } 
-          else 
-            $this->setElement($index, $element);
-        } 
-      } 
-    } 
+	public function fromArray($prm_array){ 
+		if (is_array($prm_array)) {
+			foreach ($prm_array as $index => $element) {
+				if (is_array($element)) { 
+					$this->startElement(is_int($index) ? 'array' : $index); 
+					$this->fromArray($element); 
+					$this->endElement(); 
+				} else $this->setElement($index, $element);
+			}
+		}
+	} 
 
     public function getDocument(){ 
         $this->endElement(); 

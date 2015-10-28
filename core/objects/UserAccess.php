@@ -9,7 +9,8 @@ class UserAccess extends BaseModel {
 	const ADMIN = 'admin';
 	const ORDER_VIEW = 'orderView';
 	const ORDER_ADD = 'orderAdd';
-	const ORDER_EDIT = 'orderEdit';
+	const ORDER_EDIT = 'orderEdit'; //кто может вносить правки в заказ
+	const ORDER_DELETE = 'orderDelete'; //кто может удалять заказ
 	const USER_ADD = 'userAdd'; //кто может добавлять новых пользователей
 	const USER_ADD_ADMIN = 'auth'; //кого может добавлять админ
 	const USER_ADD_MANAGER = 'userAddManager'; //кого может добавлять манагер
@@ -24,6 +25,7 @@ class UserAccess extends BaseModel {
 		'orderAdd' => [/*debug*/User::ADMIN, User::MANAGER, User::CLIENT],
 		'orderEdit' => [/*debug*/User::ADMIN, User::MANAGER, User::CLIENT],
 		'orderView' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
+		'orderDelete' => [User::ADMIN],
 		'commentAdd' => [User::ADMIN, User::MANAGER, User::CLIENT, User::VIEWER],
 		'commentEdit' => [User::ADMIN, User::MANAGER, User::CLIENT],
 		'userAdd' => [User::ADMIN, User::MANAGER],

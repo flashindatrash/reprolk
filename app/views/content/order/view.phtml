@@ -3,6 +3,7 @@
 		<div class="text-right col-sm-12">
 			<?php print View::link(Route::ORDER_EDIT, null, 'id=' . $this->order->id, null, 'btn btn-primary'); ?>&nbsp;
 			<?php if ($this->order->canCancel()) print View::link(Route::ORDER_CANCEL, null, 'id=' . $this->order->id, null, 'btn btn-warning'); ?>
+			<?php if ($this->order->canDelete()) print View::link(Route::ORDER_DELETE, null, 'id=' . $this->order->id, null, 'btn btn-danger'); ?>
 		</div>
 	</div>
 	<?php
@@ -26,13 +27,24 @@
 <hr>
 
 <?php
+	if (count($this->main_attachments)>0) {
+		print '<div id="attachments">' . View::attachments($this->main_attachments) . '</div><hr>';
+	}
+?>
+
+<?php
 	$html = '<div id="comments">';
 	foreach ($this->comments as $comment) {
 		$html .= '<div class="panel panel-primary">';
 		$html .= '<div class="panel-heading">' . $comment->username . ' - ' . $comment->date;
-		$html .= '<div class="pull-right">' . View::link(Route::COMMENT_DELETE, '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>', 'id=' . $comment->id) . '</div>';
+		if ($comment->isOwner() && !$comment->isEditExpired()) {
+			$html .= '<div class="pull-right">' . View::link(Route::COMMENT_DELETE, '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>', 'id=' . $comment->id) . '</div>';
+		}
 		$html .= '</div>';
 		$html .= '<div class="panel-body">' . $comment->message . '</div>';
+		if (isset($this->comment_attachments[$comment->id])) {
+			$html .= '<div class="panel-footer">' . View::attachments($this->comment_attachments[$comment->id]) . '</div>';
+		}
 		$html .= '</div>';
 	}
 	$html .= '</div>';
@@ -41,10 +53,12 @@
 
 
 <?php
-if ($this->commented) {
-	print '<form method="post" action="#comments" class="form-horizontal">';
+if ($this->canComment) {
+	print '<form method="post" action="#comments" class="form-horizontal" enctype="multipart/form-data">';
 	print View::formValidate();
 	print View::input('comment', 'textarea');
+	print '<br>';
+	print View::input('files', 'files');
 	print '<br>';
 	print View::input('submit', 'submit');
 	print '</form>';

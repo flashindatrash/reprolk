@@ -13,6 +13,14 @@ class BaseController {
 		$this->menu = MenuItem::parse(Application::$routes->all);
 	}
 	
+	public function setTemplate($template) {
+		$this->template = $template;
+	}
+	
+	public function setTitle($title) {
+		$this->title = $title;
+	}
+	
 	public function addCSSfile($css) {
 		$this->files['css'][] = $css;
 	}
@@ -45,7 +53,9 @@ class BaseController {
 	
 	public function getJSfiles() {
 		foreach ($this->files['js'] as $js) {
-			print '<script src="' . Application::$config['public']['js'] . $js . '.js"></script>';
+			$filename = Application::$config['public']['js'] . $js . '.js';
+			if (filter_var($js, FILTER_VALIDATE_URL)) $filename = $js;
+			print '<script src="' . $filename . '"></script>';
 		}
 	}
 	
@@ -70,7 +80,11 @@ class BaseController {
 	}
 	
 	public function getMenu() {
-		print $this->renderMenu($this->menu);
+		print $this->renderMenu($this->menu, Route::TYPE_NORMAL);
+	}
+	
+	public function getSubMenu() {
+		print $this->renderMenu($this->menu, Route::TYPE_SUB);
 	}
 	
 	public function getContent() {
@@ -105,14 +119,14 @@ class BaseController {
 		$this->include_file(Application::$config['app']['layouts'] . $this->template . '.phtml');
 	}
 	
-	private function renderMenu($items) {
+	private function renderMenu($items, $type) {
 		$ul = '<ul class="menu">';
 		foreach ($items as $item) {
-			if (!$item->visible) continue;
+			if ($item->type!=$type) continue;
 			$ul .= '<li class="' . $item->liClass() . '">';
 			$ul .= View::link($item->routeName, null, null, null, $item->isActive() ? 'active' : null);
 			if ($item->isExpanded()) {
-				$ul .= $this->renderMenu($item->items);
+				$ul .= $this->renderMenu($item->items, $type);
 			}
 			$ul .= '</li>';
 		}

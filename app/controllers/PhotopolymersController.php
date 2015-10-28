@@ -15,7 +15,7 @@ class PhotopolymersController extends BaseController {
 	}
 	
 	public function add() {
-		if ($this->formValidate(['photopolymer']) && Photopolymer::add(post('photopolymer'))) {
+		if ($this->formValidate(['photopolymer', 'id_1c']) && Photopolymer::add(post('photopolymer'), post('id_1c'))) {
 			$this->addAlert(View::str('success_save'), 'success');
 			return true;
 		}

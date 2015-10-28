@@ -18,12 +18,13 @@ class View {
 				//name, type
 				return '<button type="submit" class="btn btn-primary">' . self::str($name) . '</button>';
 			case 'select': case 'multiple':
-				//name, type (text), values ([]), useKeys (false), localisate (true), value (null)
+				//name, type (text), values ([]), useKeys (false), localisate (true), value (null), size (5)
 				$values = $nArgs>=3 ? $args[2] : [];
 				$useKeys = $nArgs>=4 ? $args[3] : false;
 				$localisate = $nArgs>=5 ? $args[4] : true;
 				$value = $nArgs>=6 ? $args[5] : null;
-				$str = '<select' . ($type=='multiple' ? ' multiple' : ' ') . ' class="form-control" id ="input_' . $name . '" name="' . $name . ($type=='multiple' ? '[]' : '') . '">';
+				$size = $nArgs>=7 ? $args[6] : 5;
+				$str = '<select' . ($type=='multiple' ? ' multiple' : ' ') . ' class="form-control" id ="input_' . $name . '" name="' . $name . ($type=='multiple' ? '[]' : '') . '"' . ($type=='multiple' ? ' size="' . $size . '"' : '') . '>';
 				if (!is_null($values)) { 
 					foreach ($values as $i => $v) {
 						$c = $useKeys ? $i : $v;
@@ -35,12 +36,13 @@ class View {
 				return $str;
 			case 'checkbox':
 				//name, type, value
-				$value = $nArgs>=3 ? $args[2]==="1" || $args[2]===true : false;
+				$value = $nArgs>=3 ? ($args[2]==1 || $args[2]===true) : false;
 				$checked = $value ? ' checked' : '';
 				return '<div class="checkbox"><label><input type="checkbox" name="' . $name . '" id ="input_' . $name . '" aria-label="..."' . $checked . '> ' . self::str($name) . '</label></div>';
 			case 'date':
-				//name, type, value
-				$value = $nArgs>=3 ? $args[2] : '';
+				//name, type, value, useBackDate (true)
+				$value = $nArgs>=3 && !is_null($args[2]) ? $args[2] : '';
+				$useBackDate = $nArgs>=4 ? $args[3] : true;
 				$input = '<input class="form-control" size="16" type="text" value="' . ($value!='' ? date("d F Y", strtotime($value)) : '') . '" readonly>' .
 							'<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>' .
 							'<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
@@ -55,7 +57,7 @@ class View {
 							'startView: 2,' .
 							'minView: 2,' .
 							'pickerPosition: "bottom-left",' .
-							'startDate: new Date(),' .
+							($useBackDate ? 'startDate: new Date(),' : '') .
 							'language: "en",' .
 							($value!='' ? 'initialDate: new Date("' . $value . '"),' : '') .
 							'forceParse: 0' .
@@ -88,11 +90,36 @@ class View {
 		$args = func_get_args();
 		
 		$name = $args[0];
-		$type = $nArgs>=2 ? $args[1] : 'text';
 		
 		return	'<div class="form-group">' .
 					'<label for="input_' . $name . '" class="col-sm-3 control-label">' . self::str($name) . '</label>' .
 						'<div class="col-sm-9">' . self::call('input', $args) . '</div>' .
+				'</div>';
+	}
+	
+	public static function formSmall() {
+		$nArgs = func_num_args();
+		$args = func_get_args();
+		
+		$name = $args[0];
+		
+		return	'<div class="form-group">' .
+					'<label for="input_' . $name . '" class="col-sm-2 control-label">' . self::str($name) . '</label>' .
+						'<div class="col-sm-10">' . self::call('input', $args) . '</div>' .
+				'</div>';
+	}
+	
+	public static function formAny() {
+		$nArgs = func_num_args();
+		$args = func_get_args();
+		
+		$name = $args[0];
+		$value = $nArgs>=2 ? $args[1] : '';
+		$cols = $nArgs>=3 ? $args[2] : 3;
+		
+		return	'<div class="form-group">' .
+					'<label for="input_' . $name . '" class="col-sm-' . $cols . ' control-label">' . self::str($name) . '</label>' .
+						$value .
 				'</div>';
 	}
 	
@@ -102,7 +129,6 @@ class View {
 		
 		$name = $args[0];
 		$value = $nArgs>=2 ? $args[1] : '';
-		
 		
 		return	'<div class="form-group">' .
 					'<label for="input_' . $name . '" class="col-sm-3 control-label">' . self::str($name) . ':</label>' .
@@ -151,7 +177,22 @@ class View {
 		return $a;
 	}
 	
-	public static function link($r, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null, $data = null) {
+	public static function attachments($files) {
+		$html = '<ul>';
+		foreach ($files as $file) {
+			$html .= '<li>' . self::attachment($file) . '</li>';
+		}
+		$html .= '</ul>';
+		return $html;
+	}
+	
+	public static function attachment($file) {
+		$size = self::formatSizeUnits($file->size);
+		$text = $file->name;
+		return self::link(Route::FILE, $text, 'id=' . $file->id, null, null, null, null, null, '_blank') . ' [' . $size . ']';
+	}
+	
+	public static function link($r, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null, $data = null, $target = '_self') {
 		if ($r=='#') $r = new Route(null, '#');
 		$route = (!$r instanceof Route) ? Application::$routes->byName($r) : $r;
 		if (is_null($route) || !$route->isAvailable()) return '';
@@ -160,6 +201,7 @@ class View {
 		$href = ' href="' . $route->path . $get . '"';
 		$id = is_null($id) ? '' : ' id="' . $id . '"';
 		$class = is_null($class) ? '' : ' class="' . $class . '"';
+		$target = ' target="' . $target . '"';
 		$title = ' title="' . (is_null($title) ? $route->linkTitle() : $title) . '"';
 		$attr = '';
 		if (is_null($data)) {
@@ -174,7 +216,24 @@ class View {
 				$attr .= ' data-' . $key . '="' . $data_value . '"';
 			}
 		}
-		return '<a' . $href . $id . $class . $title . $attr . '>' . $text . '</a>';
+		return '<a' . $href . $id . $class . $title . $attr . $target . '>' . $text . '</a>';
+	}
+	
+    public static function formatSizeUnits($bytes) {
+		if ($bytes >= 1073741824) {
+			$bytes = number_format($bytes / 1073741824, 2) . ' GB';
+		} else if ($bytes >= 1048576) {
+			$bytes = number_format($bytes / 1048576, 2) . ' MB';
+		} else if ($bytes >= 1024) {
+			$bytes = number_format($bytes / 1024, 2) . ' KB';
+		} else if ($bytes > 1) {
+			$bytes = $bytes . ' bytes';
+		} else if ($bytes == 1) {
+			$bytes = $bytes . ' byte';
+		} else {
+			$bytes = '0 bytes';
+		}
+		return $bytes;
 	}
 	
 	public static function getValues($arr) {

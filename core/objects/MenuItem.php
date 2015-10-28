@@ -4,12 +4,12 @@ class MenuItem extends BaseModel {
 	
 	public $items = array();
 	public $routeName;
-	public $visible;
+	public $type;
 	
 	public function __construct($route) {
 		$this->items = self::parse($route->routes);
 		$this->routeName = $route->name;
-		$this->visible = $route->isVisible();
+		$this->type = $route->type;
 	}
 	
 	public function linkText() {
