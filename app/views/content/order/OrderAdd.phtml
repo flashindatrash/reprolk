@@ -1,6 +1,9 @@
 <form method="post" class="form-horizontal" enctype="multipart/form-data">
 <?php 
 	print View::formValidate();
+	print $this->render();
+	
+	/*print View::formValidate();
 	print View::formNormal('title', 'text', post('title'));
 	print View::formNormal('date_due', 'date', post('date_due'));
 	print View::formNormal('pid', 'select', $this->photopolymers, true, false, post('pid'));
@@ -10,10 +13,12 @@
 	if ($this->commented) {
 		print View::formOffset('comment', 'textarea');
 	}
+	*/
 	
 	print View::formOffset('buttons', 'any', 
 		View::input('add', 'submit') . '&nbsp;' .
 		View::link('OrderAll', View::str('cancel'), null, null, 'btn btn-warning')
 	);
+	
 ?>
 </form>

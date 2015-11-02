@@ -11,7 +11,12 @@ class FileController extends BaseController {
 		
 		$this->file = File::byId(get('id'));
 		
-		if (is_null($this->file) || strlen($this->file->content)==0) return;
+		if (is_null($this->file) || !$this->file->isValid()) {
+			$this->setTemplate('base');
+			$filename = is_null($this->file) ? '' : $this->file->name;
+			$this->addAlert(sprintf(View::str('error_file_deleted'), $filename), 'danger');
+			return;
+		}
 		
 		$this->setTitle($this->file->name);
 		
@@ -26,10 +31,22 @@ class FileController extends BaseController {
 				$this->view = 'file/text';
 			break;
 			default:
-				$this->setTemplate('base');
-				
+				$this->setTemplate('download');
+				$this->view = 'file/binary';
 			break;
 		}
+	}
+	
+	public function getSize() {
+		return $this->file->size;
+	}
+	
+	public function getName() {
+		return $this->file->name;
+	}
+	
+	public function getType() {
+		return $this->file->type;
 	}
 	
 	public function getContent() {

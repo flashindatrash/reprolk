@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<?php print $this->page->linkText(); ?>
+	</div>
+	<table class="table">
+		<thead><tr>
+			<th><?php print View::str('name'); ?></th>
+			<th><?php print View::str('type'); ?></th>
+			<th><?php print View::str('mandatory'); ?></th>
+			<th><?php print View::str('weight'); ?></th>
+		</tr></thead>
+		<tbody>
+			<?php
+			$html = '';
+			foreach ($this->fields as $field) {
+				$class = '';
+				if ($field->isSystem()) $class = ' class="success"';
+				else if ($field->isCommon()) $class = ' class="active"';
+				
+				$html .= '<tr' . $class . '>';
+				$html .= '<td>' . $field->name . '</td>';
+				$html .= '<td>' . $field->type . '</td>';
+				$html .= '<td>' . View::bool2icon($field->mandatory) . '</td>';
+				$html .= '<td>' . $field->weight . '</td>';
+				$html .= '</tr>';
+				//$html .= View::link(Route::POLYMER_DELETE, '<div class="pull-right"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>', 'id=' . $field->id);
+			}
+			print $html;
+			?>
+		</tbody>
+	</table>
+</div>

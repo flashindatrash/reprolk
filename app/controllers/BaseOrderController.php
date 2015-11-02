@@ -4,8 +4,8 @@ class BaseOrderController extends BaseController {
 	
 	public $order;
 	
-	protected function loadOrder() {
-		if (!hasGet('id')) {
+	protected function loadOrder($oid = null) {
+		if (!hasGet('id') && is_null($oid)) {
 			$this->addAlert(View::str('error_order_not_found'), 'danger');
 			return false;
 		}
@@ -15,7 +15,8 @@ class BaseOrderController extends BaseController {
 			$gid = Account::getGid();
 		}
 		
-		$id = get('id');
+		$id = is_null($oid) ? get('id') : $oid;
+		
 		$this->order = Order::byId($id, $gid);
 		
 		if (!$this->order) {

@@ -158,6 +158,9 @@ class Order extends BaseModel {
 	}
 	
 	public static function add($fields, $values) {
+		$fields[] = 'uid';
+		$values[] = Account::getId();
+			
 		$fields[] = 'date_created';
 		$values[] = date('Y-m-d H:i:s');
 		
