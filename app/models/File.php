@@ -20,6 +20,10 @@ class File extends BaseModel {
 		return $this->cid>0;
 	}
 	
+	public function isValid() {
+		return $this->size>0 && strlen($this->content)>0;
+	}
+	
 	public static function byId($id) {
 		$fields = array();
 		$fields[] = self::field('*');

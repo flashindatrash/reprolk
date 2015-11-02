@@ -7,7 +7,7 @@ class OrderViewController extends BaseOrderController {
 	public $comments = [];
 	public $main_attachments = [];
 	public $comment_attachments = [];
-	public $canComment;
+	public $canComment = false;
 	
 	public function beforeRender() {
 		$this->loadOrder();
@@ -27,9 +27,9 @@ class OrderViewController extends BaseOrderController {
 					$this->comment_attachments[$file->cid][] = $file;
 				} else $this->main_attachments[] = $file;
 			}
+			
+			$this->canComment = $this->order->canComment() && UserAccess::check(UserAccess::COMMENT_ADD);
 		}
-		
-		$this->canComment = $this->order->canComment() && UserAccess::check(UserAccess::COMMENT_ADD);
 	}
 	
 	public function getContent() {

@@ -72,7 +72,7 @@ class FTPManager {
 			
 			$error = $f["error"];
 			
-			if ($error!=0) continue;
+			if ($error!=0 || $file->size==0) continue;
 			
 			$stream = fopen($f["tmp_name"], 'r');
 			

@@ -1,19 +1,21 @@
 <?php
 
 include_once '../core/interfaces/IRedirect.php';
+include_once '../app/controllers/BaseOrderController.php';
 
-class OrderAddController extends BaseController implements IRedirect {
+class OrderAddController extends BaseOrderController implements IRedirect {
 	
+	public $page;
 	public $oid;
-	public $photopolymers;
-	public $commented;
 	
 	public function beforeRender() {
+		$this->page = $this->createPage('order/OrderAdd');
+		
 		if ($this->add()) return;
 		
-		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
+		$this->page->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
 		
-		if (count($this->photopolymers)==0)  {
+		if (count($this->page->photopolymers)==0)  {
 			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
 			return;
 		}
@@ -21,32 +23,25 @@ class OrderAddController extends BaseController implements IRedirect {
 		$this->addJSfile('datetimepicker.min');
 		$this->addCSSfile('datetimepicker');
 		
-		$this->commented = UserAccess::check(UserAccess::COMMENT_ADD);
+		$this->page->commented = UserAccess::check(UserAccess::COMMENT_ADD);
 	}
 	
 	public function getContent() {
 		if (!is_null($this->oid)) {
 			$this->pick('system/redirect');
-		} else if (count($this->photopolymers)>0) {
-			$this->pick('order/add');
+		} else if (count($this->page->photopolymers)>0) {
+			$this->page->getContent();
 		}
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path, 2000);
+		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path);
 	}
 	
 	public function add() {
-		$fields = array('title', 'date_due', 'pid');
-		
-		if ($this->formValidate($fields)) {
+		if ($this->formValidate($this->page->fieldsMandatory())) {
+			$fields = $this->page->fieldsAll();
 			$values = $this->formValues($fields);
-			
-			$fields[] = 'uid';
-			$values[] = Account::getId();
-			
-			$fields[] = 'urgent';
-			$values[] = checkbox2bool(post('urgent'));
 			
 			$this->oid = Order::add($fields, $values);
 			
@@ -57,7 +52,7 @@ class OrderAddController extends BaseController implements IRedirect {
 					Comment::add($this->oid, post('comment'));
 				}
 				
-				return BaseOrderController::dump(Order::byId($this->oid), $_FILES['files']);
+				return $this->loadOrder($this->oid) && $this->save($_FILES['files']);
 			}
 		}
 		

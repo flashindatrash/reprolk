@@ -17,7 +17,8 @@ class View {
 			case 'submit':
 				//name, type
 				return '<button type="submit" class="btn btn-primary">' . self::str($name) . '</button>';
-			case 'select': case 'multiple':
+			case 'select':
+			case 'multiple':
 				//name, type (text), values ([]), useKeys (false), localisate (true), value (null), size (5)
 				$values = $nArgs>=3 ? $args[2] : [];
 				$useKeys = $nArgs>=4 ? $args[3] : false;
@@ -25,7 +26,7 @@ class View {
 				$value = $nArgs>=6 ? $args[5] : null;
 				$size = $nArgs>=7 ? $args[6] : 5;
 				$str = '<select' . ($type=='multiple' ? ' multiple' : ' ') . ' class="form-control" id ="input_' . $name . '" name="' . $name . ($type=='multiple' ? '[]' : '') . '"' . ($type=='multiple' ? ' size="' . $size . '"' : '') . '>';
-				if (!is_null($values)) { 
+				if (!is_null($values) && is_array($values)) { 
 					foreach ($values as $i => $v) {
 						$c = $useKeys ? $i : $v;
 						$selected = !is_null($value) && (is_array($value) ? in_array($c, $value) : $value==$c) ? ' selected' : '';
@@ -234,6 +235,14 @@ class View {
 			$bytes = '0 bytes';
 		}
 		return $bytes;
+	}
+	
+	public static function bool2icon($value) {
+		return self::icon($value===true || $value==1 ? 'ok' : 'minus');
+	}
+	
+	public static function icon($value) {
+		return '<span class="glyphicon glyphicon-' . $value . '" aria-hidden="true"></span>';
 	}
 	
 	public static function getValues($arr) {

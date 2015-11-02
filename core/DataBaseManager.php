@@ -99,6 +99,12 @@ class DataBaseManager {
 		return false;
 	}
 	
+	public function column($from, $field) {
+		$str = 'show columns from ' . $this->tableName($from)  . ' like "' . $field . '"';
+		$result = $this->query($str);
+		return !is_null($result) && mysql_num_rows($result)>0 ? mysql_fetch_object($result, 'Column') : null;
+	}
+	
 	public static function array2fields($arr) {
 		foreach ($arr as $i => $v) {
 			$arr[$i] = strpos($v, '.')===false ? '`' . $v .  '`' : $v;

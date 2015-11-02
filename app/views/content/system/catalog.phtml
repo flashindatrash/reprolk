@@ -1,6 +1,6 @@
 <?php
 	if (!$this instanceof ICatalog) {
-		print '<div class="alert alert-danger" role="alert">' . sprintf($this->str('error_is_not_implemented'), Application::$routes->current->name, 'ICatalog') . '</div>';
+		print '<div class="alert alert-danger" role="alert">' . sprintf(Application::str('error_is_not_implemented'), Application::$routes->current->name, 'ICatalog') . '</div>';
 		die;
 	}
 	

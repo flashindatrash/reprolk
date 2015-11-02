@@ -21,6 +21,25 @@ class BaseController {
 		$this->title = $title;
 	}
 	
+	public function createPage($path) {
+		$name = array_pop(explode('/', $path));
+		
+		$php = Application::$config['app']['content'] . $path . '.php';
+		$phtml = Application::$config['app']['content'] . $path . '.phtml';
+		
+		$this->include_file($php);
+		
+		$className = $name . 'Page';
+		if (class_exists($className)) {
+			$page = new $className();
+			$page->setTemplate($phtml);
+		} else {
+			$page = null;
+		}
+		
+		return $page;
+	}
+	
 	public function addCSSfile($css) {
 		$this->files['css'][] = $css;
 	}
@@ -111,8 +130,9 @@ class BaseController {
 		return $values;
 	}
 	
-	public function pick($name) {
-		$this->include_file(Application::$config['app']['content'] . $name . '.phtml');
+	public function pick($path) {
+		$phtml = Application::$config['app']['content'] . $path . '.phtml';
+		$this->include_file($phtml);
 	}
 	
 	public function render() {
@@ -153,7 +173,7 @@ class BaseController {
 	}
 	
 	private function include_file($file) {
-		if (file_exists($file)) include $file;
+		if (file_exists($file)) include_once $file;
 	}
 
 }

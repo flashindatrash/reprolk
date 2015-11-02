@@ -13,6 +13,8 @@ include_once '../core/objects/MenuItem.php';
 include_once '../core/objects/Redirect.php';
 include_once '../core/objects/UserAccess.php';
 include_once '../core/objects/Account.php';
+include_once '../core/objects/Page.php';
+
 		
 function p($x=''){
    print ps($x);
@@ -144,5 +146,5 @@ function require_class($fileName, $className) {
 
 function __autoload($class_name) {
 	$file = '../app/models/' . $class_name . '.php';
-    if (file_exists($file)) include $file;
+    if (file_exists($file)) include_once $file;
 }

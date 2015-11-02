@@ -1,6 +1,6 @@
 <?php
 
-include '../app/controllers/BaseOrderController.php';
+include_once '../app/controllers/BaseOrderController.php';
 
 class OrderEditController extends BaseOrderController {
 	

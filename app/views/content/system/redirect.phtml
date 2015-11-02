@@ -10,8 +10,11 @@
 	if (is_null($route)) die;
 	
 	$route->path = $redirect->url;
+	
+	header("location:" . $route->path);
+	
+	//<div class="alert alert-success" role="alert"> echo  $redirect->message; </div>
+	//<p> echo sprintf(View::str('redirect'), $redirect->sTimeout(), View::link($route->name, View::str('here'))); </p>
+	//echo '<script type="text/javascript">redirect("' . $route->path . '", ' . $redirect->timeout . ');</script>';
 ?>
 
-<div class="alert alert-success" role="alert"><?php echo  $redirect->message; ?></div>
-<p><?php echo sprintf(View::str('redirect'), $redirect->sTimeout(), View::link($route->name, View::str('here'))); ?></p>
-<?php echo '<script type="text/javascript">redirect("' . $route->path . '", ' . $redirect->timeout . ');</script>'; ?>

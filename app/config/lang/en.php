@@ -65,6 +65,11 @@ return array(
 	'FILTER' => 'Filter',
 	'CLOSE' => 'Close',
 	'APPLY' => 'Apply',
+	'NAME' => 'Name',
+	'TYPE' => 'Type',
+	'MANDATORY' => 'Mandatory',
+	'WEIGHT' => 'Weight',
+	
 	
 	'MENU_INDEX' => 'Index',
 	'MENU_LOGIN' => 'Login',
@@ -88,6 +93,8 @@ return array(
 	'MENU_ORDERDELETE' => 'Delete Order',
 	'MENU_COMMENTDELETE' => 'Delete Comment',
 	'MENU_FILE' => 'File',
+	'MENU_FIELDSPAGES' => 'Fields',
+	'MENU_FIELDSEDIT' => 'Edit',
 	
 	'MENU_TITLE_USER' => 'This section is intended to work with users, such as viewing, editing and adding new members', 
 	'MENU_TITLE_USERADD' => 'Add a new user to a group', 
@@ -105,6 +112,7 @@ return array(
 	'MENU_TITLE_USERALL' => 'Table of all users of the site',
 	'MENU_TITLE_TRANSMITRIGHTS' => 'Transfer of rights to another user',
 	'MENU_TITLE_FILE' => 'Open file in new window',
+	'MENU_TITLE_FIELDSPAGES' => 'Add new field input for pages',
 	
 	'WARNING_VIEW_AS' => 'You are viewing this page as <b>%s</b> [%s]',
 	'WARNING_ORDER_CANCEL' => 'This order can not cancel. Click <a href="javascript:history.back()">here</a> to return to the order.',
@@ -124,6 +132,8 @@ return array(
 	'ERROR_USER_NOT_FOUND' => 'User not found',
 	'ERROR_NOT_HAVE_PHOTOPOLYMER' => 'You do not have any photopolymer, please contact your administrator',
 	'ERROR_FTP_CONNECT' => 'Unable to connect FTP, please contact your administrator',
+	'ERROR_FILE_DELETED' => 'File <b>%s</b> has been deleted',
+	'ERROR_PAGE_FIELDSET_NOT_FOUND' => 'Page for fieldset not found',
 );
 
 ?>
