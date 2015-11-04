@@ -1,6 +1,6 @@
 <?php
 
-class FieldsPagesController extends BaseController {
+class FieldPagesController extends BaseController {
 	
 	public $routes;
 	

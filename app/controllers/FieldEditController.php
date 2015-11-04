@@ -1,6 +1,6 @@
 <?php
 
-class FieldsEditController extends BaseController {
+class FieldEditController extends BaseController {
 	
 	public $page;
 	public $fields;

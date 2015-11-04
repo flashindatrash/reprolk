@@ -5,44 +5,49 @@ include_once '../app/controllers/BaseOrderController.php';
 
 class OrderAddController extends BaseOrderController implements IRedirect {
 	
-	public $page;
+	public $form;
 	public $oid;
+	public $photopolymers;
+	public $commented;
 	
 	public function beforeRender() {
-		$this->page = $this->createPage('order/OrderAdd');
+		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
+		$this->commented = UserAccess::check(UserAccess::COMMENT_ADD);
+		
+		$this->form = $this->createForm('Order');
+		$this->form->loadFields(Route::ORDER_ADD);
+		$this->form->setValue(array('pid' => $this->photopolymers));
 		
 		if ($this->add()) return;
 		
-		$this->page->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
-		
-		if (count($this->page->photopolymers)==0)  {
+		if (count($this->photopolymers)==0)  {
 			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
 			return;
 		}
 		
 		$this->addJSfile('datetimepicker.min');
 		$this->addCSSfile('datetimepicker');
-		
-		$this->page->commented = UserAccess::check(UserAccess::COMMENT_ADD);
 	}
 	
 	public function getContent() {
 		if (!is_null($this->oid)) {
 			$this->pick('system/redirect');
-		} else if (count($this->page->photopolymers)>0) {
-			$this->page->getContent();
+		} else if (count($this->photopolymers)>0) {
+			$this->pick('order/add');
 		}
 	}
 	
+	//IRedirect
 	public function getRedirect() {
 		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path);
 	}
 	
 	public function add() {
-		if ($this->formValidate($this->page->fieldsMandatory())) {
-			$fields = $this->page->fieldsAll();
+		if ($this->formValidate($this->form->fieldsMandatory())) {
+			$fields = $this->form->fieldsAll();
 			$values = $this->formValues($fields);
 			
+			return false;
 			$this->oid = Order::add($fields, $values);
 			
 			if (!is_null($this->oid)) {

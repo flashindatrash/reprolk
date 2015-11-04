@@ -2,11 +2,12 @@
 
 class Field extends BaseModel {
 	
+	public $id;
 	public $route;
 	public $name;
 	public $type;
 	public $value;
-	public $state;
+	public $system;
 	public $mandatory;
 	public $weight;
 	
@@ -16,17 +17,37 @@ class Field extends BaseModel {
 		return 'fields';
 	}
 	
+	/*
+		is...
+	*/
+	
 	public function isMandatory() {
 		return $this->mandatory==1;
 	}
 	
 	public function isSystem() {
-		return $this->state==2;
+		return $this->system==1;
 	}
 	
-	public function isCommon() {
-		return $this->state==1;
+	/*
+		can...
+	*/
+	
+	public function canDelete() {
+		return !$this->isSystem();
 	}
+	
+	/*
+		actions
+	*/
+	
+	public function remove() {
+		return $this->canDelete() && !is_null($this->id) && self::delete([self::field('id') . ' = ' . $this->id]);
+	}
+	
+	/*
+		enums
+	*/
 	
 	public static function getTypes() {
 		$column = self::column('type');
@@ -36,6 +57,16 @@ class Field extends BaseModel {
 	public static function getRoutes() {
 		$column = self::column('route');
 		return !is_null($column) ? $column->enum() : array();
+	}
+	
+	/*
+		selects
+	*/
+	
+	public static function byId($id) {
+		$where = array();
+		$where[] = self::field('id') . ' = ' . $id;
+		return self::selectRow(null, $where);
 	}
 	
 	public static function getAll($route) {

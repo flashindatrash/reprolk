@@ -12,6 +12,7 @@ return array(
 	'ORDER_DELETE_SUCCESSFULY' => 'Your order has been deleted.',
 	'COMMENT_DELETE_SUCCESSFULY' => 'Your comment has been deleted.',
 	'PHOTOPOLYMER_DELETE_SUCCESSFULY' => 'Photopolymer has been deleted.',
+	'FIELD_DELETE_SUCCESSFULY' => 'Field has been deleted.',
 	'REDIRECT' => '<b>%d</b> seconds later you will be redirected. If it does not, click %s',
 	'HERE' => 'here',
 	'GROUP' => 'Group',
@@ -61,6 +62,7 @@ return array(
 	'YOU_SURE_ORDER_DELETE' => 'Are you sure you want to delete order <b>%s</b>?',
 	'YOU_SURE_COMMENT_DELETE' => 'Are you sure you want to delete comment?',
 	'YOU_SURE_PHOTOPOLYMER_DELETE' => 'Are you sure you want to delete photopolymer <b>%s</b>?',
+	'YOU_SURE_FIELD_DELETE' => 'Are you sure you want to delete field <b>%s</b>?',
 	'SUBMIT' => 'Submit',
 	'FILTER' => 'Filter',
 	'CLOSE' => 'Close',
@@ -93,8 +95,9 @@ return array(
 	'MENU_ORDERDELETE' => 'Delete Order',
 	'MENU_COMMENTDELETE' => 'Delete Comment',
 	'MENU_FILE' => 'File',
-	'MENU_FIELDSPAGES' => 'Fields',
-	'MENU_FIELDSEDIT' => 'Edit',
+	'MENU_FIELDPAGES' => 'Fields',
+	'MENU_FIELDEDIT' => 'Edit',
+	'MENU_FIELDDELETE' => 'Delete Field',
 	
 	'MENU_TITLE_USER' => 'This section is intended to work with users, such as viewing, editing and adding new members', 
 	'MENU_TITLE_USERADD' => 'Add a new user to a group', 
@@ -112,11 +115,13 @@ return array(
 	'MENU_TITLE_USERALL' => 'Table of all users of the site',
 	'MENU_TITLE_TRANSMITRIGHTS' => 'Transfer of rights to another user',
 	'MENU_TITLE_FILE' => 'Open file in new window',
-	'MENU_TITLE_FIELDSPAGES' => 'Add new field input for pages',
+	'MENU_TITLE_FIELDPAGES' => 'Add new field input for pages',
+	'MENU_TITLE_FIELDDELETE' => 'Delete field from page',
 	
 	'WARNING_VIEW_AS' => 'You are viewing this page as <b>%s</b> [%s]',
 	'WARNING_ORDER_CANCEL' => 'This order can not cancel. Click <a href="javascript:history.back()">here</a> to return to the order.',
 	'WARNING_ORDER_DELETE' => 'This order can not delete. Click <a href="javascript:history.back()">here</a> to return to the order.',
+	'WARNING_FIELD_DELETE' => 'This field can not be removed because it is a system. Click <a href="javascript:history.back()">here</a> to return to the fields.',
 	
 	'ERROR_COMMENT_EXPIRED' => 'Time edit comments is expired',
 	'ERROR_SIGN_IN' => 'incorrect email/password',
@@ -134,6 +139,7 @@ return array(
 	'ERROR_FTP_CONNECT' => 'Unable to connect FTP, please contact your administrator',
 	'ERROR_FILE_DELETED' => 'File <b>%s</b> has been deleted',
 	'ERROR_PAGE_FIELDSET_NOT_FOUND' => 'Page for fieldset not found',
+	'ERROR_FIELD_DELETE' => 'Unable to delete field <b>%s</b>, please contact your administrator',
 );
 
 ?>
