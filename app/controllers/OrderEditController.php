@@ -4,16 +4,25 @@ include_once '../app/controllers/BaseOrderController.php';
 
 class OrderEditController extends BaseOrderController {
 	
+	public $form;
 	public $photopolymers;
 	
 	public function beforeRender() {
 		$this->loadOrder();
+		if (is_null($this->order)) return;
 		
-		if (!is_null($this->order) && $this->edit()) {
+		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
+		
+		$this->form = $this->createForm('Order');
+		$this->form->loadFields(Route::ORDER_ADD);
+		$this->form->setValue(array('pid' => $this->photopolymers));
+		
+		if ($this->edit()) {
 			$this->addAlert(View::str('success_save'), 'success');
 		}
 		
-		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
+		$this->form->setSession(objectToArray($this->order));
+		
 		if (count($this->photopolymers)==0)  {
 			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
 		}
@@ -27,13 +36,9 @@ class OrderEditController extends BaseOrderController {
 	}
 	
 	private function edit() {
-		$fields = array('title', 'date_due', 'pid');
-		
-		if ($this->formValidate($fields)) {
+		if ($this->formValidate($this->form->fieldsMandatory())) {
+			$fields = $this->form->fieldsAll();
 			$values = $this->formValues($fields);
-			
-			$fields[] = 'urgent';
-			$values[] = checkbox2bool(post('urgent'));
 			
 			return $this->order->edit($fields, $values) && $this->save();
 		}

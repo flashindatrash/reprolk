@@ -26,8 +26,9 @@ class Route {
 	const VIEW_AS = 'ViewAs';
 	const VIEW_AS_CANCEL = 'ViewAsCancel';
 	const COMMENT_DELETE = 'CommentDelete';
-	const FIELDS_PAGES = 'FieldsPages';
-	const FIELDS_EDIT = 'FieldsEdit';
+	const FIELD_PAGES = 'FieldPages';
+	const FIELD_EDIT = 'FieldEdit';
+	const FIELD_DELETE = 'FieldDelete';
 	
 	const TYPE_NORMAL = 0;
 	const TYPE_SUB = 1;

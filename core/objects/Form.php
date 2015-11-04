@@ -1,23 +1,17 @@
 <?php
 
-class Page {
+class Form {
 	
 	protected $fields = [];
-	protected $template;
 	
-	public function __construct() {
-		$this->loadFields();
-		$this->parseFields();
-	}
-	
-	public function getContent() {
-		include_once $this->template;
+	public function loadFields($route) {
+		$this->fields = Field::getAll($route);
+		$this->parsePost();
 	}
 	
 	public function fieldsMandatory() {
 		$mandatory = array();
 		foreach($this->fields as $field) {
-			if ($field->isSystem()) continue;
 			if ($field->isMandatory()) {
 				$mandatory[] = $field->name;
 			}
@@ -28,18 +22,13 @@ class Page {
 	public function fieldsAll() {
 		$all = array();
 		foreach($this->fields as $field) {
-			if ($field->isSystem()) continue;
 			$all[] = $field->name;
 		}
 		return $all;
 	}
 	
-	public function setTemplate($template) {
-		$this->template = $template;
-	}
-	
 	public function render() {
-		$html = '';
+		$html = View::formValidate();
 		foreach($this->fields as $field) {
 			$method = 'field_' . $field->name;
 			if (method_exists($this, $method)) {
@@ -67,8 +56,24 @@ class Page {
 		}
 	}
 	
-	private function parseFields() {
-		foreach($this->fields as $field) {
+	public function setValue($array) {
+		foreach ($this->fields as $field) {
+			if (array_key_exists($field->name, $array)) {
+				$field->value = $array[$field->name];
+			}
+		}
+	}
+	
+	public function setSession($array) {
+		foreach ($this->fields as $field) {
+			if (array_key_exists($field->name, $array)) {
+				$field->session = $array[$field->name];
+			}
+		}
+	}
+	
+	private function parsePost() {
+		foreach ($this->fields as $field) {
 			if (!hasPost($field->name)) continue;
 			switch ($field->type) {
 				case 'checkbox':
@@ -77,10 +82,6 @@ class Page {
 			}
 			$field->session = post($field->name);
 		}
-	}
-	
-	private function loadFields() {
-		if (!is_null(Application::$routes->current)) $this->fields = Field::getAll(Application::$routes->current->name);
 	}
 	
 }

@@ -21,23 +21,14 @@ class BaseController {
 		$this->title = $title;
 	}
 	
-	public function createPage($path) {
-		$name = array_pop(explode('/', $path));
-		
-		$php = Application::$config['app']['content'] . $path . '.php';
-		$phtml = Application::$config['app']['content'] . $path . '.phtml';
-		
+	public function createForm($name) {
+		$php = Application::$config['app']['forms'] . $name . '.php';
 		$this->include_file($php);
-		
-		$className = $name . 'Page';
+		$className = $name . 'Form';
 		if (class_exists($className)) {
-			$page = new $className();
-			$page->setTemplate($phtml);
-		} else {
-			$page = null;
+			return new $className();
 		}
-		
-		return $page;
+		return null;
 	}
 	
 	public function addCSSfile($css) {

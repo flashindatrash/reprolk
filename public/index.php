@@ -27,8 +27,9 @@ try {
 		]),
 		
 		new Route(Route::ADMIN, '/admin', UserAccess::ADMIN, Route::TYPE_NORMAL, [
-			new Route(Route::FIELDS_PAGES, '/admin/fields', UserAccess::ADMIN, Route::TYPE_NORMAL, [
-				new Route(Route::FIELDS_EDIT, '/admin/fields/edit', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+			new Route(Route::FIELD_PAGES, '/admin/fields', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+				new Route(Route::FIELD_EDIT, '/admin/fields/edit', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+				new Route(Route::FIELD_DELETE, '/admin/fields/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 			]),
 			new Route(Route::USER_ALL, '/admin/users', UserAccess::ADMIN),
 			new Route(Route::USER_ADD, '/admin/user-add', UserAccess::USER_ADD),

@@ -5,7 +5,7 @@
 		$route = Application::$routes->byName($page);
 		if (is_null($route)) continue;
 		$text = '<h4 class="list-group-item-heading">' . $route->linkText() . '</h4><p class="list-group-item-text">' . $route->linkTitle() . '</p>';
-		print View::link(Route::FIELDS_EDIT, $text, 'page=' . $page, null, 'list-group-item');
+		print View::link(Route::FIELD_EDIT, $text, 'page=' . $page, null, 'list-group-item');
 	}
 ?>
 

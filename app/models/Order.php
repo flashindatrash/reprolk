@@ -9,10 +9,6 @@ class Order extends BaseModel {
 	const DEPLOY = 'deploy'; //принято в производство
 	const FINISHED = 'finished';
 	
-	public static function statuses() {
-		return [Order::INCOMING, Order::CANCELED, Order::ACCEPTED, Order::PREPRESS, Order::DEPLOY, Order::FINISHED];
-	}
-	
 	public $id;
 	public $uid;
 	public $title;
@@ -20,11 +16,6 @@ class Order extends BaseModel {
 	public $number_1c;
 	public $status;
 	public $pid;
-	public $form_count;
-	public $area;
-	public $urgent;
-	public $angels;
-	public $colorproof;
 	public $date_created;
 	public $date_changed;
 	public $date_due;
@@ -105,6 +96,15 @@ class Order extends BaseModel {
 			}
 		}
 		return $success;
+	}
+	
+	/*
+		enums
+	*/
+	
+	public static function getStatuses() {
+		$column = self::column('status');
+		return !is_null($column) ? $column->enum() : array();
 	}
 	
 	/*

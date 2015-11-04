@@ -13,9 +13,7 @@ include_once '../core/objects/MenuItem.php';
 include_once '../core/objects/Redirect.php';
 include_once '../core/objects/UserAccess.php';
 include_once '../core/objects/Account.php';
-include_once '../core/objects/Page.php';
 
-		
 function p($x=''){
    print ps($x);
 }
