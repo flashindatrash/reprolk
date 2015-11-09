@@ -9,6 +9,8 @@ class BaseController {
 	private $alerts = array('danger' => [], 'warning' => [], 'info' => [], 'success' => []);
 	private $menu = array();
 	
+	protected $view;
+	
 	public function __construct() {
 		$this->menu = MenuItem::parse(Application::$routes->all);
 	}
@@ -98,7 +100,8 @@ class BaseController {
 	}
 	
 	public function getContent() {
-		print '';
+		if (is_null($this->view)) return;
+		$this->pick($this->view);
 	}
 	
 	public function formValidate($fields) {

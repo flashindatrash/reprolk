@@ -9,7 +9,7 @@ class FieldPagesController extends BaseController {
 	}
 	
 	public function getContent() {
-		$this->pick('admin/fields-pages');
+		$this->pick('admin/field/index');
 	}
 	
 }

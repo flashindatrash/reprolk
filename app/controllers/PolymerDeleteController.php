@@ -3,7 +3,7 @@
 include_once '../core/interfaces/IRedirect.php';
 include_once '../core/interfaces/IConfirm.php';
 
-class PhotopolymerDeleteController extends BaseController implements IRedirect, IConfirm {
+class PolymerDeleteController extends BaseController implements IRedirect, IConfirm {
 	
 	private $photopolymer;
 	private $view;
@@ -29,7 +29,7 @@ class PhotopolymerDeleteController extends BaseController implements IRedirect, 
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('photopolymer_delete_successfuly'), Application::$routes->byName(Route::POLYMERS)->path); 
+		return new Redirect(View::str('photopolymer_delete_successfuly'), Application::$routes->byName(Route::POLYMER_ALL)->path); 
 	}
 	
 	public function getConfirm() {

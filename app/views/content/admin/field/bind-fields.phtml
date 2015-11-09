@@ -1,0 +1,9 @@
+<form method="post" class="form-horizontal">
+<?php 
+	print View::formValidate();
+	print View::input('page', 'hidden', get('page'));
+	print View::input('gid', 'hidden', get('gid'));
+	print View::formNormal('fields', 'multiple', $this->fields, true, false, $this->current_fields);
+	print View::formOffset('select', 'submit');
+?>
+</form>

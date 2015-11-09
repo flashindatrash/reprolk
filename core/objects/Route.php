@@ -15,9 +15,9 @@ class Route {
 	const ORDER_DELETE = 'OrderDelete';
 	const ORDER_DUPLICATE = 'OrderDuplicate';
 	const ORDER_ALL = 'OrderAll';
-	const GROUP_POLYMERS = 'GroupPhotopolymers';
-	const POLYMERS = 'Photopolymers';
-	const POLYMER_DELETE = 'PhotopolymerDelete';
+	const POLYMER_ALL = 'PolymerAll';
+	const POLYMER_BIND = 'PolymerBind';
+	const POLYMER_DELETE = 'PolymerDelete';
 	const PROFILE = 'User';
 	const USER_ADD = 'UserAdd';
 	const USER_ALL = 'UserAll';
@@ -27,8 +27,10 @@ class Route {
 	const VIEW_AS_CANCEL = 'ViewAsCancel';
 	const COMMENT_DELETE = 'CommentDelete';
 	const FIELD_PAGES = 'FieldPages';
-	const FIELD_EDIT = 'FieldEdit';
+	const FIELD_PAGE = 'FieldPage';
 	const FIELD_DELETE = 'FieldDelete';
+	const FIELD_ADD = 'FieldAdd';
+	const FIELD_BIND = 'FieldBind';
 	
 	const TYPE_NORMAL = 0;
 	const TYPE_SUB = 1;

@@ -1,6 +1,6 @@
 <?php
 
-class FieldEditController extends BaseController {
+class FieldPageController extends BaseController {
 	
 	public $page;
 	public $fields;
@@ -21,7 +21,7 @@ class FieldEditController extends BaseController {
 	}
 	
 	public function getContent() {
-		if (!is_null($this->page)) $this->pick('admin/fields-edit');
+		if (!is_null($this->page)) $this->pick('admin/field/page');
 	}
 	
 	private function notfound() {

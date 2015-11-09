@@ -6,7 +6,6 @@ include_once '../app/controllers/BaseOrderController.php';
 class OrderAddController extends BaseOrderController implements IRedirect {
 	
 	public $form;
-	public $oid;
 	public $photopolymers;
 	public $commented;
 	
@@ -18,7 +17,10 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		$this->form->loadFields(Route::ORDER_ADD);
 		$this->form->setValue(array('pid' => $this->photopolymers));
 		
-		if ($this->add()) return;
+		if ($this->add()) {
+			$this->view = 'system/redirect';
+			return;
+		}
 		
 		if (count($this->photopolymers)==0)  {
 			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
@@ -27,14 +29,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		
 		$this->addJSfile('datetimepicker.min');
 		$this->addCSSfile('datetimepicker');
-	}
-	
-	public function getContent() {
-		if (!is_null($this->oid)) {
-			$this->pick('system/redirect');
-		} else if (count($this->photopolymers)>0) {
-			$this->pick('order/add');
-		}
+		$this->view = 'order/add';
 	}
 	
 	//IRedirect
@@ -47,17 +42,16 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 			$fields = $this->form->fieldsAll();
 			$values = $this->formValues($fields);
 			
-			return false;
-			$this->oid = Order::add($fields, $values);
+			$oid = Order::add($fields, $values);
 			
-			if (!is_null($this->oid)) {
+			if (!is_null($oid)) {
 				
 				//добавляем коммент
 				if (hasPost('comment')) {
-					Comment::add($this->oid, post('comment'));
+					Comment::add($oid, post('comment'));
 				}
 				
-				return $this->loadOrder($this->oid) && $this->save($_FILES['files']);
+				return $this->loadOrder($oid) && $this->save($_FILES['files']);
 			}
 		}
 		

@@ -70,6 +70,10 @@ function checkbox2bool($value) {
 	return $value=='on' ? 1 : 0;
 }
 
+function int($s) {
+	return(int)preg_replace('/[^\-\d]*(\-?\d*).*/','$1',$s);
+}
+
 function reArrayFiles(&$file_post) {
 	$file_ary = array();
     $file_count = count($file_post['name']);

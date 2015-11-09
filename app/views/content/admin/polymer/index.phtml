@@ -1,6 +1,10 @@
 <div class="panel panel-default">
-	<div class="panel-heading"><?php print View::str('photopolymers_all_list_header'); ?></div>
-	<div class="panel-body"><?php print sprintf(View::str('photopolymers_all_list_body'), View::link(Route::GROUP_POLYMERS, View::str('here'))); ?></div>
+	<div class="panel-heading">
+		<?php print View::str('photopolymers_all_list_header'); ?>
+		<div class="pull-right">
+			<?php print View::link(Route::POLYMER_BIND, '', null, null, 'btn btn-xs btn-primary glyphicon glyphicon-user', null, 'left'); ?>
+		</div>
+	</div>
 	<ul class="list-group">
 	<?php
 	foreach ($this->photopolymers as $photopolymer) {

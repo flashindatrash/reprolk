@@ -28,8 +28,10 @@ try {
 		
 		new Route(Route::ADMIN, '/admin', UserAccess::ADMIN, Route::TYPE_NORMAL, [
 			new Route(Route::FIELD_PAGES, '/admin/fields', UserAccess::ADMIN, Route::TYPE_NORMAL, [
-				new Route(Route::FIELD_EDIT, '/admin/fields/edit', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+				new Route(Route::FIELD_PAGE, '/admin/fields/page', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 				new Route(Route::FIELD_DELETE, '/admin/fields/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+				new Route(Route::FIELD_ADD, '/admin/fields/add', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+				new Route(Route::FIELD_BIND, '/admin/fields/bind', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 			]),
 			new Route(Route::USER_ALL, '/admin/users', UserAccess::ADMIN),
 			new Route(Route::USER_ADD, '/admin/user-add', UserAccess::USER_ADD),
@@ -37,9 +39,9 @@ try {
 			new Route(Route::VIEW_AS, '/admin/view-as', UserAccess::ADMIN, Route::TYPE_NORMAL, [
 				new Route(Route::VIEW_AS_CANCEL, '/admin/view-as/cancel', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 			]),
-			new Route(Route::POLYMERS, '/admin/photopolymers', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+			new Route(Route::POLYMER_ALL, '/admin/photopolymers', UserAccess::ADMIN, Route::TYPE_NORMAL, [
 				new Route(Route::POLYMER_DELETE, '/admin/photopolymers/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				new Route(Route::GROUP_POLYMERS, '/admin/photopolymers/group', UserAccess::ADMIN),
+				new Route(Route::POLYMER_BIND, '/admin/photopolymers/group', UserAccess::ADMIN),
 			]),
 		]),
 		

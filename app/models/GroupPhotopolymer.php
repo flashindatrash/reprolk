@@ -26,13 +26,13 @@ class GroupPhotopolymer extends BaseModel {
 		return self::selectRows($fields, $where, $join);
 	}
 	
-	public static function set($group, $photopolymers) {
+	public static function set($gid, $photopolymers) {
 		$values = array();
 		foreach ($photopolymers as $photopolymer) {
-			$values[] = array($group, $photopolymer);
+			$values[] = array($gid, $photopolymer);
 		}
 		
-		$delete = self::delete([self::field('gid') . ' = ' . $group]);
+		$delete = self::delete([self::field('gid') . ' = ' . $gid]);
 		$insert = self::insertRows(self::$fields, $values);
 		return $delete && !is_null($insert);
 	}

@@ -6,8 +6,6 @@ include_once '../core/interfaces/IConfirm.php';
 
 class OrderCancelController extends BaseOrderController implements IRedirect, IConfirm {
 	
-	private $view;
-	
 	public function beforeRender() {
 		$this->loadOrder();
 		
@@ -26,10 +24,6 @@ class OrderCancelController extends BaseOrderController implements IRedirect, IC
 		} else {
 			$this->view = 'system/confirm';
 		}
-	}
-	
-	public function getContent() {
-		if (!is_null($this->view)) $this->pick($this->view);
 	}
 	
 	public function getRedirect() {
