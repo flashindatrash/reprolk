@@ -2,10 +2,10 @@
 	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), count($this->orders)); ?>
 		<div class="pull-right">
 			<?php print View::link('#', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-filter', View::str('filter'), null, array('toggle' => 'modal', 'target' => '#filterModal')); ?>
-			<?php print View::link('OrderAdd', '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, 'top'); ?>
-			<?php print View::link('OrderView', '', null, 'view', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled', null, 'top'); ?>
-			<?php print View::link('OrderEdit', '', null, 'edit', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-pencil disabled', null, 'top'); ?>
-			<?php print View::link('OrderDuplicate', '', null, 'duplicate', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-duplicate disabled', null, 'right'); ?>
+			<?php print View::link(Route::ORDER_ADD, '', null, 'add', 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, 'top'); ?>
+			<?php print View::link(Route::ORDER_VIEW, '', null, 'view', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-eye-open disabled', null, 'top'); ?>
+			<?php print View::link(Route::ORDER_EDIT, '', null, 'edit', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-pencil disabled', null, 'top'); ?>
+			<?php print View::link(Route::ORDER_DUPLICATE, '', null, 'duplicate', 'btn-action btn btn-xs btn-primary glyphicon glyphicon-duplicate disabled', null, 'right'); ?>
 		</div>
 	</div>
 	

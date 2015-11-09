@@ -34,7 +34,7 @@ class FieldDeleteController extends BaseController implements IRedirect, IConfir
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('field_delete_successfuly'), Application::$routes->byName(Route::FIELD_EDIT)->path . '?page=' . $this->field->route); 
+		return new Redirect(View::str('field_delete_successfuly'), Application::$routes->byName(Route::FIELD_PAGE)->path . '?page=' . $this->field->route); 
 	}
 	
 	public function getConfirm() {

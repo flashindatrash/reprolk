@@ -65,6 +65,10 @@ class User extends BaseModel {
 		return self::update($fields, $values, $where);
 	}
 	
+	public static function getAllGroups() {
+		return self::selectRows(['gid', 'username'], null, null, new SQLOrderBy('`group`', 'desc', 'gid'));
+	}
+	
 	public static function getAll($fields, $group = null, $gid = null) {
 		$where = array();
 		if (!is_null($group)) 

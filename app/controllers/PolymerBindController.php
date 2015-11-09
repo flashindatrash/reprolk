@@ -1,6 +1,6 @@
 <?php
 
-class GroupPhotopolymersController extends BaseController {
+class PolymerBindController extends BaseController {
 
 	public $photopolymers;
 	
@@ -15,7 +15,7 @@ class GroupPhotopolymersController extends BaseController {
 	}
 	
 	public function getContent() {
-		$this->pick('admin/group-photopolymers');
+		$this->pick('admin/polymer/bind');
 	}
 	
 

@@ -99,7 +99,7 @@ class Order extends BaseModel {
 	}
 	
 	/*
-		enums
+		scheme
 	*/
 	
 	public static function getStatuses() {

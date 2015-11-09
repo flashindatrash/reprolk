@@ -78,10 +78,8 @@ class DataBaseManager {
 	}
 	
 	public function delete($from, $where = NULL) {
-		if ($this->query('delete from ' . $this->tableName($from) . self::convertWhere($where))) {
-			return true;
-		}
-		return false;
+		$str = 'delete from ' . $this->tableName($from) . self::convertWhere($where);
+		return $this->query($str) ? true : false;
 	}
 	
 	public function update($from, $fields, $values, $where = NULL) {
@@ -93,16 +91,36 @@ class DataBaseManager {
 		}
 		
 		$str = 'update ' . $this->tableName($from)  . ' set ' . join(', ', $sets) . self::convertWhere($where);
-		if ($this->query($str)) {
-			return true;
-		}
-		return false;
+		return $this->query($str) ? true : false;
 	}
 	
 	public function column($from, $field) {
 		$str = 'show columns from ' . $this->tableName($from)  . ' like "' . $field . '"';
 		$result = $this->query($str);
 		return !is_null($result) && mysql_num_rows($result)>0 ? mysql_fetch_object($result, 'Column') : null;
+	}
+	
+	public function columns($from) {
+		$str = 'show columns from ' . $this->tableName($from);
+		$result = $this->query($str);
+		
+		if (is_null($result)) return array();
+		
+		$rows = array();
+		while ($row = mysql_fetch_object($result, 'Column')) {
+			$rows[] = $row;
+		}
+		return $rows;
+	}
+	
+	public function addColumn($table, $column, $type, $mandatory = true) {
+		$str = 'alter table ' . $this->tableName($table)  . ' add `' . $column . '` ' . $type . ' ' . ($mandatory ? 'not ' : '') . 'null;';
+		return $this->query($str) ? true : false;
+	}
+	
+	public function dropColumn($table, $column) {
+		$str = 'alter table ' . $this->tableName($table)  . ' drop `'. $column . '`;';
+		return $this->query($str) ? true : false;
 	}
 	
 	public static function array2fields($arr) {

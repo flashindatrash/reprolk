@@ -1,0 +1,10 @@
+<form method="post" class="form-horizontal">
+<?php 
+	print View::formValidate();
+	print View::formNormal('name', 'text');
+	print View::formNormal('type', 'select', $this->types, false, false);
+	print View::formNormal('weight', 'numeric', 0);
+	print View::formOffset('mandatory', 'checkbox');
+	print View::formOffset('add', 'submit');
+?>
+</form>

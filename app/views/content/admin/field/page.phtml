@@ -1,6 +1,10 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<?php print $this->page->linkText(); ?>
+		<div class="pull-right">
+			<?php print View::link(Route::FIELD_ADD, '', 'page=' . $this->page->name, null, 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, 'left'); ?>
+			<?php print View::link(Route::FIELD_BIND, '', 'page=' . $this->page->name, null, 'btn btn-xs btn-primary glyphicon glyphicon-user', null, 'top'); ?>
+		</div>
 	</div>
 	<table class="table">
 		<thead><tr>
