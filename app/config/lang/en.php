@@ -41,6 +41,7 @@ return array(
 	'GID' => 'Group ID',
 	'VIEW' => 'View',
 	'CANCEL' => 'Cancel',
+	'PID' => 'Photopolymer',
 	'PHOTOPOLYMER' => 'Photopolymer',
 	'URGENT' => 'Urgent',
 	'PHOTOPOLYMERS' => 'Photopolymers',
@@ -73,6 +74,7 @@ return array(
 	'WEIGHT' => 'Weight',
 	'SELECT' => 'Select',
 	'FIELDS' => 'Fields',
+	'VALUE' => 'Value',
 	
 	
 	'MENU_INDEX' => 'Index',

@@ -5,7 +5,7 @@ class Form {
 	protected $fields = [];
 	
 	public function loadFields($route) {
-		$this->fields = Field::getAll($route);
+		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, Account::getGid()));
 		$this->parsePost();
 	}
 	
@@ -22,6 +22,7 @@ class Form {
 	public function fieldsAll() {
 		$all = array();
 		foreach($this->fields as $field) {
+			if (!$field->canUse()) continue;
 			$all[] = $field->name;
 		}
 		return $all;
@@ -43,14 +44,14 @@ class Form {
 	public function view($field) {
 		switch ($field->type) {
 			case 'hidden':
-				return View::input($field->name, $field->type, $field->value);
+				return View::input($field->name, $field->type, $field->getValue());
 			case 'select':
 			case 'multiple':
-				return View::formNormal($field->name, $field->type, $field->value, false, true, $field->session);
+				return View::formNormal($field->name, $field->type, $field->getValue(), false, true, $field->session);
 			case 'file':
 			case 'files':
 			case 'submit':
-				return View::formOffset($field->name, $field->type, $field->value);
+				return View::formOffset($field->name, $field->type, $field->getValue());
 			default:
 				return View::formNormal($field->name, $field->type, $field->session);
 		}

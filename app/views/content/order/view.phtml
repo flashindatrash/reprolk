@@ -6,22 +6,7 @@
 			<?php if ($this->order->canDelete()) print View::link(Route::ORDER_DELETE, null, 'id=' . $this->order->id, null, 'btn btn-danger'); ?>
 		</div>
 	</div>
-	<?php
-	print View::formStatic('title', $this->order->title);
-	print View::formStatic('username', View::link(Route::PROFILE, $this->order->username, 'id=' . $this->order->uid));
-	print View::formStatic('id_1c', $this->order->id_1c);
-	print View::formStatic('number_1c', $this->order->number_1c);
-	print View::formStatic('status', $this->order->status);
-	print View::formStatic('photopolymer', $this->order->photopolymer_name);
-	print View::formStatic('form_count', $this->order->form_count);
-	print View::formStatic('area', $this->order->area);
-	print View::formStatic('urgent', View::bool($this->order->urgent));
-	print View::formStatic('angels', View::bool($this->order->angels));
-	print View::formStatic('colorproof', View::bool($this->order->colorproof));
-	print View::formStatic('date_created', $this->order->date_created);
-	print View::formStatic('date_changed', $this->order->date_changed);
-	print View::formStatic('date_due', $this->order->date_due);
-	?>
+	<?php print $this->form->render(); ?>
 </form>
 
 <hr>

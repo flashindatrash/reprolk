@@ -74,6 +74,10 @@ function int($s) {
 	return(int)preg_replace('/[^\-\d]*(\-?\d*).*/','$1',$s);
 }
 
+function stripQuotes($text) {
+	return preg_replace('/^(\'(.*)\'|"(.*)")$/', '$2$3', $text);
+} 
+
 function reArrayFiles(&$file_post) {
 	$file_ary = array();
     $file_count = count($file_post['name']);

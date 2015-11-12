@@ -24,9 +24,9 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 		return new Redirect(View::str('field_successfuly'), Application::$routes->byName(Route::FIELD_PAGE)->path . '?page=' . get('page'));
 	}
 	
-	public function add() {
+	private function add() {
 		if ($this->formValidate(['name', 'type', 'weight'])) {
-			if (Field::add(get('page'), post('name'), post('type'), checkbox2bool(post('mandatory')), int(post('weight')))) {
+			if (Field::add(get('page'), post('type'), post('name'), post('value'), checkbox2bool(post('mandatory')), int(post('weight')))) {
 				return true;
 			} else {
 				$this->addAlert(sprintf(View::str('error_field_add'), post('name')), 'danger');

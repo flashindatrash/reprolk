@@ -6,7 +6,6 @@ class Field extends BaseModel {
 	public $route;
 	public $name;
 	public $type;
-	public $value;
 	public $system;
 	public $mandatory;
 	public $weight;
@@ -17,6 +16,8 @@ class Field extends BaseModel {
 		return 'fields';
 	}
 	
+	public static $fields = array('id', 'route', 'name', 'type', 'system', 'mandatory', 'weight');
+	
 	public static function tableNameByRoute($route) {
 		switch ($route) {
 			case Route::ORDER_ADD: return Order::tableName();
@@ -24,12 +25,16 @@ class Field extends BaseModel {
 		return null;
 	}
 	
-	public static function dbType($type, $length = 255) {
+	public static function dbType($type, $value, $length = 255) {
 		switch($type) {
 			case 'checkbox':
 				return 'tinyint(1)';
 			case 'date':
 				return 'datetime';
+			case 'select':
+				$items = explode(',', stripQuotes($value));
+				if (count($items)==0) return 'varchar(' . $length . ')';
+				return 'ENUM(\'' . join('\',\'', $items) . '\')';
 			default:
 				return 'varchar(' . $length . ')';
 		}
@@ -59,9 +64,26 @@ class Field extends BaseModel {
 		return !$this->isSystem();
 	}
 	
+	public function canUse() {
+		return $this->type!='hidden';
+	}
+	
 	/*
 		actions
 	*/
+	
+	public function getValue() {
+		switch($this->type) {
+			case 'select':
+			case 'multiple':
+				$table = self::tableNameByRoute($this->route);
+				if (is_null($table)) return [];
+				$column = self::column($this->name, $table);
+				return !is_null($column) ? $column->enum() : [];
+			default:
+				return '';
+		}
+	}
 	
 	public function remove() {
 		$table = self::tableNameByRoute($this->route);
@@ -80,12 +102,12 @@ class Field extends BaseModel {
 	
 	public static function getTypes() {
 		$column = self::column('type');
-		return !is_null($column) ? $column->enum() : array();
+		return !is_null($column) ? $column->enum() : [];
 	}
 	
 	public static function getRoutes() {
 		$column = self::column('route');
-		return !is_null($column) ? $column->enum() : array();
+		return !is_null($column) ? $column->enum() : [];
 	}
 	
 	/*
@@ -98,15 +120,15 @@ class Field extends BaseModel {
 		return self::selectRow(null, $where);
 	}
 	
-	public static function getAll($route, $ignoreSystem = false, $gid = null) {
+	public static function getAll($route, $showCommon = true, $showSystem = true) {
 		$where = array();
 		$where[] = self::field('route') . ' = "' . $route . '"';
-		if ($ignoreSystem) $where[] = self::field('system') . ' = 0';
-		
+		if (!$showCommon) $where[] = self::field('system') . ' = 1';
+		else if (!$showSystem) $where[] = self::field('system') . ' = 0';
 		return self::selectRows(null, $where, null, new SQLOrderBy('weight', 'asc'));
 	}
 	
-	public static function add($route, $name, $type, $mandatory, $weight) {
+	public static function add($route, $type, $name, $value, $mandatory, $weight) {
 		$table = self::tableNameByRoute($route);
 		if (is_null($table)) return null;
 		
@@ -116,7 +138,7 @@ class Field extends BaseModel {
 			if ($column->Field==$name) return null;
 		}
 		
-		if (!self::addColumn($name, self::dbType($type), $mandatory, $table)) {
+		if (!self::addColumn($name, self::dbType($type, $value), $mandatory, $table)) {
 			return null;
 		}
 		

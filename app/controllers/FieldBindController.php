@@ -19,8 +19,8 @@ class FieldBindController extends BaseFieldController {
 				$this->addAlert(View::str('success_save'), 'success');
 			}
 			
-			$this->fields = View::convertSelect(Field::getAll(get('page'), true), 'id', 'name');
-			$this->current_fields = View::convertSelect(GroupField::getAll(Account::getGid()), 'fid', 'fid');
+			$this->fields = View::convertSelect(Field::getAll(get('page'), true, false), 'id', 'name');
+			$this->current_fields = View::convertSelect(GroupField::getFids(Account::getGid()), 'fid', 'fid');
 			$this->view = 'admin/field/bind-fields';
 		}
 	}

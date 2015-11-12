@@ -11,7 +11,7 @@ class GroupField extends Field {
 		return 'group_fields';
 	}
 	
-	public static function getAll($gid) {
+	public static function getFids($gid) {
 		$fields = array();
 		$fields[] = self::field('fid');
 		
@@ -19,6 +19,22 @@ class GroupField extends Field {
 		$where[] = self::field('gid') . ' = ' . $gid;
 		
 		return self::selectRows($fields, $where);
+	}
+	
+	public static function getAll($route, $gid) {
+		$fields = array();
+		foreach (Field::$fields as $field)
+			$fields[] = self::field($field, Field::tableName(), $field);
+		
+		$where = array();
+		$where[] = self::field('route', Field::tableName()) . ' = "' . $route . '"';
+		$where[] = self::field('system', Field::tableName()) . ' = 0';
+		$where[] = self::field('gid') . ' = ' . $gid;
+		
+		$join = array();
+		$join[] = self::inner('id', Field::tableName(), 'fid');
+		
+		return self::selectRows($fields, $where, $join);
 	}
 	
 	public static function set($gid, $fields) {
