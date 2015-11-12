@@ -29,10 +29,8 @@ class OrderEditController extends BaseOrderController {
 		
 		$this->addJSfile('datetimepicker.min');
 		$this->addCSSfile('datetimepicker');
-	}
-	
-	public function getContent() {
-		if ($this->order) $this->pick('order/edit');
+		
+		$this->view = 'order/edit';
 	}
 	
 	private function edit() {

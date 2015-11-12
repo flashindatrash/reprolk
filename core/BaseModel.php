@@ -42,8 +42,9 @@ class BaseModel {
 		return Application::$db->update(static::tableName(), $fields, $values, $where);
 	}
 	
-	protected static function column($field) {
-		return Application::$db->column(static::tableName(), $field);
+	protected static function column($field, $table_name = null) {
+		if (is_null($table_name)) $table_name = static::tableName();
+		return Application::$db->column($table_name, $field);
 	}
 	
 	protected static function columns($table_name = null) {

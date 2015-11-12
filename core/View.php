@@ -156,10 +156,6 @@ class View {
 		return Application::str($name);
 	}
 	
-	public static function bool($value) {
-		return self::str($value=='1' ? 'yes' : 'no');
-	}
-	
 	public static function linkSort($field, $order) {
 		$by = $order->by == 'desc' ? 'asc' : 'desc';
 		$gets = gets();
