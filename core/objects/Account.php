@@ -34,6 +34,10 @@ class Account {
 		return self::getRawGroup() == User::ADMIN;
 	}
 	
+	public static function getName() {
+		return self::isLogined() ? Application::$user->username : 'anonymous';
+	}
+	
 }
 
 ?>

@@ -9,12 +9,16 @@ class Route {
 	const NOT_FOUND = 'NotFound';
 	const ACCESS_DENIED = 'AccessDenied';
 	const ORDER_ADD = 'OrderAdd';
+	const ORDER_ADD_TEMPLATE = 'OrderAddTemplate';
 	const ORDER_VIEW = 'OrderView';
 	const ORDER_EDIT = 'OrderEdit';
 	const ORDER_CANCEL = 'OrderCancel';
 	const ORDER_DELETE = 'OrderDelete';
 	const ORDER_DUPLICATE = 'OrderDuplicate';
 	const ORDER_ALL = 'OrderAll';
+	const ORDER_APPROVAL = 'OrderApproval';
+	const ORDER_APPROVED = 'OrderApproved';
+	const ORDER_DISAPPROVED = 'OrderDisapproved';
 	const POLYMER_ALL = 'PolymerAll';
 	const POLYMER_BIND = 'PolymerBind';
 	const POLYMER_DELETE = 'PolymerDelete';
@@ -31,6 +35,9 @@ class Route {
 	const FIELD_DELETE = 'FieldDelete';
 	const FIELD_ADD = 'FieldAdd';
 	const FIELD_BIND = 'FieldBind';
+	const TEMPLATE_VIEW = 'TemplateView';
+	const TEMPLATE_EDIT = 'TemplateEdit';
+	const TEMPLATE_DELETE = 'TemplateDelete';
 	
 	const TYPE_NORMAL = 0;
 	const TYPE_SUB = 1;

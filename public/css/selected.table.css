@@ -1,0 +1,8 @@
+table.table-selected td.td_title {
+	max-width: 10em;
+	overflow: hidden;
+}
+
+table.table-middle tbody td{
+	vertical-align: middle;
+}

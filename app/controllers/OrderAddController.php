@@ -7,15 +7,11 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 	
 	public $form;
 	public $photopolymers;
-	public $commented;
 	
 	public function beforeRender() {
-		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
-		$this->commented = UserAccess::check(UserAccess::COMMENT_ADD);
+		$this->photopolymers = reArray(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
 		
-		$this->form = $this->createForm('Order');
-		$this->form->loadFields(Route::ORDER_ADD);
-		$this->form->setValue(array('pid' => $this->photopolymers));
+		$this->createOrderForm();
 		
 		if ($this->add()) {
 			$this->view = 'system/redirect';
@@ -32,6 +28,12 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		$this->view = 'order/add';
 	}
 	
+	public function createOrderForm() {
+		$this->form = $this->createForm('Order');
+		$this->form->loadFields(Route::ORDER_ADD);
+		$this->form->setValue(array('pid' => $this->photopolymers));
+	}
+	
 	//IRedirect
 	public function getRedirect() {
 		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path);
@@ -46,12 +48,19 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 			
 			if (!is_null($oid)) {
 				
+				$loaded_order = $this->loadOrder($oid);
+				if (!$loaded_order) return false;
+				
 				//добавляем коммент
 				if (hasPost('comment')) {
-					Comment::add($oid, post('comment'));
+					Comment::add($oid, post('comment'), $this->order->status);
 				}
 				
-				return $this->loadOrder($oid) && $this->save($_FILES['files']);
+				if ($this->save($_FILES['files'])) {
+					return true;
+				} else {
+					$this->order->remove(true);
+				}
 			}
 		}
 		

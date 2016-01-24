@@ -3,7 +3,7 @@
 	print $this->form->render();
 	
 	print View::formOffset('files', 'files');
-	if ($this->commented) {
+	if (UserAccess::check(UserAccess::COMMENT_ADD)) {
 		print View::formOffset('comment', 'textarea');
 	}
 	

@@ -8,10 +8,7 @@ class PolymerAllController extends BaseController {
 		$this->add();
 		
 		$this->photopolymers = Photopolymer::getAll();
-	}
-	
-	public function getContent() {
-		$this->pick('admin/polymer/index');
+		$this->view = 'admin/polymer/index';
 	}
 	
 	public function add() {

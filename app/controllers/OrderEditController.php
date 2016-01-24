@@ -11,7 +11,7 @@ class OrderEditController extends BaseOrderController {
 		$this->loadOrder();
 		if (is_null($this->order)) return;
 		
-		$this->photopolymers = View::convertSelect(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
+		$this->photopolymers = reArray(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
 		
 		$this->form = $this->createForm('Order');
 		$this->form->loadFields(Route::ORDER_ADD);

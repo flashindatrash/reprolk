@@ -109,9 +109,8 @@ a:hover {
 	font-size: 10px;
 }
 
-table.orders td.td_title {
-	max-width: 10em;
-	overflow: hidden;
+#input_weight {
+	width: 60px;
 }
 
 .left .menu li {
@@ -127,7 +126,7 @@ table.orders td.td_title {
 	font-weight: bold;
 	text-transform: uppercase;
 	color: #0190c8;
-	padding-left: 33px!important;
+	padding-left: 25px!important;
 	border-bottom: 1px solid #ccc;
 }
 
@@ -144,7 +143,7 @@ table.orders td.td_title {
 .left .menu li.expanded a {
 	background-image: url('img/expanded.png');
 	background-repeat: no-repeat;
-	padding-left: 33px!important;
+	padding-left: 25px!important;
 	background-position: 175px 50%;
 	padding-right: 10px;
 }
@@ -154,8 +153,7 @@ table.orders td.td_title {
 	background-repeat: no-repeat;
 	background-position: 175px 50%;
 	padding-right: 30px;
-	
-	padding-left: 33px!important;
+	padding-left: 25px!important;
 }
 
 /* Level 2 */

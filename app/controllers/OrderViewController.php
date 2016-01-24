@@ -42,8 +42,8 @@ class OrderViewController extends BaseOrderController {
 	
 	private function addComment() {
 		if ($this->formValidate(['comment'])) {
-			$comment_id = Comment::add($this->order->id, post('comment'));
-			$this->save($_FILES['files'], $comment_id);
+			$cid = Comment::add($this->order->id, post('comment'), $this->order->status);
+			$this->save($_FILES['files'], $cid);
 		}
 	}
 	

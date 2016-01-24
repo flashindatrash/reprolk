@@ -1,0 +1,8 @@
+#preview_container {
+	text-align: center;
+	margin-top: 30px;
+}
+
+#preview {
+	max-width: 100%;
+}

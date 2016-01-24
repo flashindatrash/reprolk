@@ -8,6 +8,7 @@ class Field extends BaseModel {
 	public $type;
 	public $system;
 	public $mandatory;
+	public $templated;
 	public $weight;
 	
 	public $session; //то, что хранится в сессии (в POST например)
@@ -16,7 +17,7 @@ class Field extends BaseModel {
 		return 'fields';
 	}
 	
-	public static $fields = array('id', 'route', 'name', 'type', 'system', 'mandatory', 'weight');
+	public static $fields = array('id', 'route', 'name', 'type', 'system', 'mandatory', 'templated', 'weight');
 	
 	public static function tableNameByRoute($route) {
 		switch ($route) {
@@ -50,6 +51,10 @@ class Field extends BaseModel {
 	
 	public function isSystem() {
 		return $this->system==1;
+	}
+	
+	public function isTemplated() {
+		return $this->templated==1;
 	}
 	
 	/*
@@ -145,6 +150,16 @@ class Field extends BaseModel {
 		$fields = ['route', 'name', 'type', 'mandatory', 'weight'];
 		$values = [$route, $name, $type, $mandatory, $weight];
 		return self::insertRow($fields, $values);
+	}
+	
+	public static function updateWeight($id, $weight) {
+		return self::editById($id, ['weight'], [$weight]);
+	}
+	
+	public static function editById($id, $fields, $values) {
+		$where = array();
+		$where[] = self::field('id') . ' = ' . $id;
+		return self::update($fields, $values, $where);
 	}
 	
 }

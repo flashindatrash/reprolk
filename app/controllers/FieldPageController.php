@@ -1,31 +1,31 @@
 <?php
 
-class FieldPageController extends BaseController {
+include_once '../app/controllers/BaseFieldController.php';
+
+class FieldPageController extends BaseFieldController {
 	
 	public $page;
 	public $fields;
 	
 	public function beforeRender() {
-		if (!hasGet('page')) {
-			$this->notfound();
-			return;
-		}
+		if (!$this->hasPage()) return;
 		
-		$this->page = Application::$routes->byName(get('page'));
-		if (is_null($this->page)) {
-			$this->notfound();
-			return;
+		$this->page = $this->getRoute();
+		
+		if ($this->editWeight()) {
+			$this->addAlert(View::str('success_save'), 'success');
 		}
 		
 		$this->fields = Field::getAll($this->page->name);
+		$this->view = 'admin/field/page';
 	}
 	
-	public function getContent() {
-		if (!is_null($this->page)) $this->pick('admin/field/page');
-	}
-	
-	private function notfound() {
-		$this->addAlert(View::str('error_page_fieldset_not_found'), 'danger');
+	private function editWeight() {
+		if (hasGet('id') && hasGet('weight')) {
+			return Field::updateWeight(get('id'), int(get('weight')));
+		}
+		
+		return false;
 	}
 	
 }

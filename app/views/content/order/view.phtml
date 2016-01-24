@@ -1,7 +1,8 @@
 <form class="form-horizontal">
 	<div class="form-group">
 		<div class="text-right col-sm-12">
-			<?php print View::link(Route::ORDER_EDIT, null, 'id=' . $this->order->id, null, 'btn btn-primary'); ?>&nbsp;
+			<?php if ($this->order->canEdit()) print View::link(Route::ORDER_EDIT, null, 'id=' . $this->order->id, null, 'btn btn-primary'); ?>&nbsp;
+			<?php if ($this->order->canApprove()) print View::link(Route::ORDER_APPROVAL, null, 'id=' . $this->order->id, null, 'btn btn-success'); ?>
 			<?php if ($this->order->canCancel()) print View::link(Route::ORDER_CANCEL, null, 'id=' . $this->order->id, null, 'btn btn-warning'); ?>
 			<?php if ($this->order->canDelete()) print View::link(Route::ORDER_DELETE, null, 'id=' . $this->order->id, null, 'btn btn-danger'); ?>
 		</div>
@@ -20,10 +21,19 @@
 <?php
 	$html = '<div id="comments">';
 	foreach ($this->comments as $comment) {
-		$html .= '<div class="panel panel-primary">';
+		$skin = '';
+		switch ($comment->status) {
+			case Order::DISAPPROVED:
+				$skin = 'danger';
+			break;
+			default:
+				$skin = 'primary';
+		}
+		
+		$html .= '<div class="panel panel-' . $skin . '">';
 		$html .= '<div class="panel-heading">' . $comment->username . ' - ' . $comment->date;
 		if ($comment->isOwner() && !$comment->isEditExpired()) {
-			$html .= '<div class="pull-right">' . View::link(Route::COMMENT_DELETE, '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>', 'id=' . $comment->id) . '</div>';
+			$html .= '<div class="pull-right">' . View::link(Route::COMMENT_DELETE, '<span class="glyphicon glyphicon-remove text-warning" aria-hidden="true"></span>', 'id=' . $comment->id) . '</div>';
 		}
 		$html .= '</div>';
 		$html .= '<div class="panel-body">' . $comment->message . '</div>';

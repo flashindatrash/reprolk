@@ -6,7 +6,6 @@ include_once '../core/interfaces/IConfirm.php';
 class PolymerDeleteController extends BaseController implements IRedirect, IConfirm {
 	
 	private $photopolymer;
-	private $view;
 	
 	public function beforeRender() {
 		$this->photopolymer = hasGet('id') ? Photopolymer::byId(get('id')) : null;
@@ -22,10 +21,6 @@ class PolymerDeleteController extends BaseController implements IRedirect, IConf
 		} else {
 			$this->view = 'system/confirm';
 		}
-	}
-	
-	public function getContent() {
-		if (!is_null($this->view)) $this->pick($this->view);
 	}
 	
 	public function getRedirect() {

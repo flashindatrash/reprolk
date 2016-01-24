@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><?php print sprintf(View::str('all_templates_result'), count($this->templates)); ?>
+		<div class="pull-right">
+			<?php print View::link(Route::TEMPLATE_EDIT, '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> ' . View::str('edit'), null, 'view', 'btn-action btn btn-xs btn-primary disabled', null, 'left'); ?>
+			<?php print View::link(Route::TEMPLATE_DELETE, '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ' . View::str('delete'), null, 'delete', 'btn-action btn btn-xs btn-primary disabled', null, 'top'); ?>
+		</div>
+	</div>
+	
+	<table class="table table-selected table-hover">
+		<tbody>
+			<?php
+			$rows = '';
+			foreach ($this->templates as $n => $template) {
+				$classes = array();
+				
+				$classes[] = 'table_row';
+				$classes[] = 'noselect';
+				$classes[] = 'cursor_pointer';
+				
+				$rows .= '<tr class="' . join (' ', $classes) . '" id="' . $template->id . '">';
+				$rows .= '<td>' . $template->name . '</td>';
+				$rows .= '</tr>';
+			}
+			print $rows;
+			?>
+		</tbody>
+	</table>
+</div>
