@@ -3,7 +3,6 @@
 		print '<div class="alert alert-danger" role="alert">' . sprintf(View::str('error_is_not_implemented'), Application::$routes->current->name, 'IConfirm') . '</div>';
 		die;
 	}
-	
 ?>
 
 <div class="alert alert-success" role="alert"><?php echo $this->getConfirm(); ?></div>

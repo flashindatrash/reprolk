@@ -13,10 +13,7 @@ class UserAllController extends BaseController {
 		$this->currentGroup = in_array(get('group'), $this->groups) ? get('group') : null;
 		$this->groups[] = 'all';
 		$this->users = User::getAll($this->fields, $this->currentGroup);
-	}
-	
-	public function getContent() {
-		$this->pick('admin/users');
+		$this->view = 'admin/user/all';
 	}
 	
 }

@@ -3,20 +3,25 @@
 class PolymerBindController extends BaseController {
 
 	public $photopolymers;
-	
-	private $is_success;
+	public $current_photopolymers;
 	
 	public function beforeRender() {
-		$this->photopolymers = View::convertSelect(Photopolymer::getAll(), 'id', 'name');
-		
-		if ($this->formValidate(['photopolymers', 'group']) && GroupPhotopolymer::set(post('group'), post('photopolymers'))) {
+		if (!hasGet('gid')) {
+			$this->view = 'system/group-select';
+		} else {
+			$this->save();
+			
+			$this->photopolymers = reArray(Photopolymer::getAll(), 'id', 'name');
+			$this->current_photopolymers = reArray(GroupPhotopolymer::getAll(get('gid')), 'pid', 'pid');
+			
+			$this->view = 'admin/polymer/bind';
+		}
+	}
+	
+	private function save() {
+		if ($this->formValidate(['photopolymers', 'gid']) && GroupPhotopolymer::set(post('gid'), post('photopolymers'))) {
 			$this->addAlert(View::str('success_save'), 'success');
 		}
 	}
 	
-	public function getContent() {
-		$this->pick('admin/polymer/bind');
-	}
-	
-
 }

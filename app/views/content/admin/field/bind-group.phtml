@@ -1,7 +1,0 @@
-<form method="get" class="form-horizontal">
-<?php 
-	print View::input('page', 'hidden', get('page'));
-	print View::formNormal('gid', 'select', $this->gids, true, false);
-	print View::formOffset('select', 'submit');
-?>
-</form>

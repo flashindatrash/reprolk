@@ -7,6 +7,7 @@ include_once '../core/BaseController.php';
 include_once '../core/BaseModel.php';
 include_once '../core/View.php';
 include_once '../core/objects/Route.php';
+include_once '../core/objects/AccountRoute.php';
 include_once '../core/objects/Routes.php';
 include_once '../core/objects/Session.php';
 include_once '../core/objects/MenuItem.php';
@@ -74,10 +75,22 @@ function int($s) {
 	return(int)preg_replace('/[^\-\d]*(\-?\d*).*/','$1',$s);
 }
 
+function validQuotes($text) {
+	return str_replace('"', '\\"', $text);
+}
+
 function stripQuotes($text) {
 	return preg_replace('/^(\'(.*)\'|"(.*)")$/', '$2$3', $text);
 } 
 
+function reArray($array, $key, $value) {
+	$a = array();
+	foreach ($array as $item) {
+		$a[$item->$key] = $item->$value;
+	}
+	return $a;
+}
+	
 function reArrayFiles(&$file_post) {
 	$file_ary = array();
     $file_count = count($file_post['name']);

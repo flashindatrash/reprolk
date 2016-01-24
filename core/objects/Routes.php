@@ -42,7 +42,7 @@ class Routes {
 	}
 	
 	private function getCurrent() {
-		if (!hasGet('_url')) return $this->byName(Route::INDEX);
+		if (!hasGet('_url')) return $this->byName(Route::ORDER_ALL);
 		return $this->parseUrl(get('_url'));
 	}
 }

@@ -1,0 +1,16 @@
+<?php
+	$groups = reArray(User::getAllGroups(), 'gid', 'gid');
+	
+	if (is_null($groups) || count($groups)==0) {
+		print '<div class="alert alert-warning" role="alert">' . View::str('error_groups_null') . '</div>';
+		die;
+	}
+?>
+
+<form method="get" class="form-horizontal">
+<?php 
+	if (hasGet('page')) print View::input('page', 'hidden', get('page'));
+	print View::formNormal('gid', 'select', $groups, true, false);
+	print View::formOffset('select', 'submit');
+?>
+</form>

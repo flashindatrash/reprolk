@@ -1,15 +1,18 @@
 <?php
 
-include '../app/controllers/BaseOrderController.php';
+include_once '../app/controllers/OrderAddController.php';
 
-class OrderDuplicateController extends BaseOrderController {
+class OrderDuplicateController extends OrderAddController {
 	
 	public function beforeRender() {
 		$this->loadOrder();
+		if (is_null($this->order)) return;
+		parent::beforeRender();
 	}
 	
-	public function getContent() {
-		if ($this->order) print_r($this->order);
+	public function createOrderForm() {
+		parent::createOrderForm();
+		$this->form->setSession(objectToArray($this->order));
 	}
 	
 }

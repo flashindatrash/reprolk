@@ -38,10 +38,11 @@ class OrderAllController extends BaseController {
 		//CSS/JS
 		$this->addJSfile('datetimepicker.min');
 		$this->addCSSfile('datetimepicker');
-		$this->addJSfile('order.table');
-		$this->addJSparam('view_url', Application::$routes->byName('OrderView')->path);
-		$this->addJSparam('edit_url', Application::$routes->byName('OrderEdit')->path);
-		$this->addJSparam('duplicate_url', Application::$routes->byName('OrderDuplicate')->path);
+		$this->addCSSfile('selected.table');
+		$this->addJSfile('selected.table');
+		$this->addJSparam('view_url', Application::$routes->byName(Route::ORDER_VIEW)->path);
+		$this->addJSparam('edit_url', Application::$routes->byName(Route::ORDER_EDIT)->path);
+		$this->addJSparam('duplicate_url', Application::$routes->byName(Route::ORDER_DUPLICATE)->path);
 	}
 	
 	public function getContent() {

@@ -5,6 +5,9 @@ class Order extends BaseModel {
 	const INCOMING = 'incoming'; //поступило с сайта
 	const CANCELED = 'canceled'; //отменено с сайта
 	const ACCEPTED = 'accepted'; //принято в 1с
+	const APPROVAL = 'approval'; //1с отправил для подтверждения
+	const APPROVED = 'approved'; //подтверждено пользователем
+	const DISAPPROVED = 'disapproved'; //не подтверждено пользователем
 	const PREPRESS = 'prepress'; //отправлено в дизайн
 	const DEPLOY = 'deploy'; //принято в производство
 	const FINISHED = 'finished';
@@ -54,12 +57,28 @@ class Order extends BaseModel {
 		return $this->status==Order::FINISHED;
 	}
 	
+	public function isApproval() {
+		return $this->status==Order::APPROVAL;
+	}
+	
+	public function isApproved() {
+		return $this->status==Order::APPROVED;
+	}
+	
+	public function isDisapproved() {
+		return $this->status==Order::DISAPPROVED;
+	}
+	
 	/*
 		can...
 	*/
 	
+	public function canEdit() {
+		return $this->isIncoming();
+	}
+	
 	public function canCancel() {
-		return !$this->isCanceled();
+		return $this->isIncoming();
 	}
 	
 	public function canDelete() {
@@ -70,16 +89,28 @@ class Order extends BaseModel {
 		return $this->isIncoming() || $this->isCanceled() || $this->isAccepted() || $this->isPrepress();
 	}
 	
+	public function canApprove() {
+		return $this->isApproval();
+	}
+	
 	/*
 		actions
 	*/
 	
-	public function remove() {
-		return !is_null($this->id) && $this->canDelete() && self::delete([self::field('id') . ' = ' . $this->id]);
+	public function remove($forced = false) {
+		return !is_null($this->id) && ($forced || (!$forced && $this->canDelete())) && self::delete([self::field('id') . ' = ' . $this->id]);
 	}
 	
 	public function cancel() {
 		return $this->canCancel() && $this->setState(Order::CANCELED);
+	}
+	
+	public function approve() {
+		return $this->canApprove() && $this->setState(Order::APPROVED);
+	}
+	
+	public function disapprove() {
+		return $this->canApprove() && $this->setState(Order::DISAPPROVED);
 	}
 	
 	public function setState($state) {

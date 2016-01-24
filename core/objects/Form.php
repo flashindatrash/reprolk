@@ -2,10 +2,13 @@
 
 class Form {
 	
+	public $renderTemplate = false;
+	
 	protected $fields = [];
 	
-	public function loadFields($route) {
-		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, Account::getGid()));
+	public function loadFields($route, $gid = null) {
+		if (is_null($gid)) $gid = Account::getGid();
+		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, $gid));
 		$this->parsePost();
 	}
 	
@@ -28,9 +31,19 @@ class Form {
 		return $all;
 	}
 	
+	public function fieldsAllID() {
+		$all = array();
+		foreach($this->fields as $field) {
+			if (!$field->canUse()) continue;
+			$all[] = $field->id;
+		}
+		return $all;
+	}
+	
 	public function render() {
 		$html = View::formValidate();
 		foreach($this->fields as $field) {
+			if ($this->renderTemplate && !$field->isTemplated()) continue;
 			$method = 'field_' . $field->name;
 			if (method_exists($this, $method)) {
 				$html .= $this->{$method}($field);
@@ -48,6 +61,8 @@ class Form {
 			case 'select':
 			case 'multiple':
 				return View::formNormal($field->name, $field->type, $field->getValue(), false, true, $field->session);
+			case 'checkbox':
+				return View::formOffset($field->name, $field->type, $field->session);
 			case 'file':
 			case 'files':
 			case 'submit':
@@ -68,6 +83,7 @@ class Form {
 	public function setSession($array) {
 		foreach ($this->fields as $field) {
 			if (array_key_exists($field->name, $array)) {
+				if (!$field->isTemplated()) continue;
 				$field->session = $array[$field->name];
 			}
 		}

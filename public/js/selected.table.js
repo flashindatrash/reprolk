@@ -2,8 +2,8 @@ $(document).ready(function(){
 	
 	var last_selected_row;
 	
-	$('.order_row').click(function () {
-		var order_id = $(this).attr('id');
+	$('.table_row').click(function () {
+		var row_id = $(this).attr('id');
 		
 		//подсветка клика
 		if ($(this).hasClass('success')) {
@@ -26,18 +26,22 @@ $(document).ready(function(){
 		if (last_selected_row) {
 			$( ".btn-action" ).each(function() {
 				var btn_id = $(this).attr('id');
-				$(this).attr('href', getPathById(btn_id, order_id))
+				$(this).attr('href', getPathById(btn_id, row_id))
 			});
 		}
 	});
 	
-	$('.order_row').dblclick(function () {
-		var order_id = $(this).attr('id');
-		window.location.href = getPathById('view', order_id);
+	$('.table_row').dblclick(function () {
+		var row_id = $(this).attr('id');
+		var rehref = getPathById('view', row_id);
+		if (rehref===false) return;
+		window.location.href = rehref;
 	});
 	
 	function getPathById(btn_id, id) {
-		return params[btn_id+'_url'] + '?id=' + id;
+		var url = params[btn_id+'_url'];
+		if (!url) return false;
+		return url + '?id=' + id;
 	}
 	
 });

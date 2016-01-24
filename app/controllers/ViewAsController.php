@@ -3,6 +3,7 @@
 class ViewAsController extends BaseController {
 	
 	public $groups;
+	public $gids;
 	public $gid;
 	
 	public function beforeRender() {
@@ -10,16 +11,13 @@ class ViewAsController extends BaseController {
 		
 		if ($this->formValidate(['group']) && in_array(post('group'), $this->groups)) {
 			$has_changes = Account::getRawGroup() != post('group');
-			
 			Session::setGroup($has_changes ? post('group') : null);
 			Session::setGid($has_changes ? post('gid') : null);
 		}
 		
+		$this->gids = reArray(User::getAllGroups(), 'gid', 'gid');
 		$this->gid = Account::getGid();
-	}
-	
-	public function getContent() {
-		$this->pick('admin/view-as');
+		$this->view = 'admin/user/view-as';
 	}
 	
 }

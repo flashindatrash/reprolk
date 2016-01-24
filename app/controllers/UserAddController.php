@@ -20,12 +20,9 @@ class UserAddController extends BaseController {
 			$this->user_id = User::add($fields, $this->formValues($fields));
 			if (!is_null($this->user_id)) $this->addAlert(View::str('success_save'), 'success');
 		}
+		
+		$this->view = 'admin/user/add';
 	}
-	
-	public function getContent() {
-		$this->pick('admin/user-add');
-	}
-	
 }
 
 ?>

@@ -6,7 +6,6 @@ include_once '../core/interfaces/IConfirm.php';
 class FieldDeleteController extends BaseController implements IRedirect, IConfirm {
 	
 	private $field;
-	private $view;
 	
 	public function beforeRender() {
 		$this->field = hasGet('id') ? Field::byId(get('id')) : null;
@@ -27,10 +26,6 @@ class FieldDeleteController extends BaseController implements IRedirect, IConfir
 		} else {
 			$this->view = 'system/confirm';
 		}
-	}
-	
-	public function getContent() {
-		if (!is_null($this->view)) $this->pick($this->view);
 	}
 	
 	public function getRedirect() {

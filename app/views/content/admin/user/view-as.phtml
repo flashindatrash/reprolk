@@ -2,7 +2,7 @@
 	<?php
 		print View::input('send', 'hidden', '1');
 		print View::formNormal('group', 'select', $this->groups);
-		print View::formNormal('gid', 'text', $this->gid);
+		print View::formNormal('gid', 'select', $this->gids, $this->gid);
 		print View::formOffset('view', 'submit');
 	?>
 </form>

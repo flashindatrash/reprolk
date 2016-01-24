@@ -6,11 +6,12 @@ class Comment extends BaseModel {
 	const EDIT_DELAY = 5*60;
 	
 	public $id;
-	public $oid;
-	public $uid;
+	public $oid; //order id
+	public $uid; //user id
 	public $username; //user->username
 	public $message;
 	public $date;
+	public $status; //order->status
 	
 	public static function tableName() {
 		return 'comments';
@@ -53,8 +54,8 @@ class Comment extends BaseModel {
 		return self::selectRow(null, $where);
 	}
 	
-	public static function add($order, $message) {
-		return self::insertRow(['oid', 'uid', 'message', 'date'], [$order, Account::getId(), $message, date(Comment::FORMAT_DATE)]);
+	public static function add($order, $message, $status = '') {
+		return self::insertRow(['oid', 'uid', 'message', 'date', 'status'], [$order, Account::getId(), $message, date(Comment::FORMAT_DATE), $status]);
 	}
 	
 }

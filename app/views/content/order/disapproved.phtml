@@ -1,0 +1,22 @@
+<div class="modal fade" id="disapprovedModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="<?php print View::str('close'); ?>"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="modalLabel"><?php print $this->route_disapproved->linkText(); ?></h4>
+			</div>
+			<form method="post" action="<?php print $this->route_disapproved->path . '?id=' . $this->order->id; ?>" class="form-horizontal" enctype="multipart/form-data">
+				<div class="modal-body">
+					<?php
+						print View::formValidate();
+						print View::formNormal('comment', 'textarea');
+						print View::formNormal('files', 'files');
+					?>
+				</div>
+				<div class="modal-footer">
+					<?php print View::formOffset('send', 'submit'); ?>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

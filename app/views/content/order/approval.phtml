@@ -1,0 +1,26 @@
+<center>
+	<div class="btn-group" role="group" aria-label="approval">
+		<?php if ($this->route_approved->isAvailable()) print View::link($this->route_approved, null, 'id=' . get('id'), null, 'btn btn-success'); ?>
+		<?php if ($this->route_disapproved->isAvailable()) print View::link("#", $this->route_disapproved->linkText(), null, null, 'btn btn-danger', $this->route_disapproved->linkTitle(), null, array('toggle' => 'modal', 'target' => '#disapprovedModal')); ?>
+	</div>
+	<div id="preview_container">
+		<h4 id="preview_title"></h4>
+		<h5 id="preview_date"></h5>
+		<img id="preview_img" class="img-thumbnail">
+	</div>
+	<nav>
+		<ul class="pagination">
+			<?php
+				if (count($this->revisions)>1) {
+					print '<li><a href="#" aria-label="Previous" id="revision_prev"><span aria-hidden="true">&laquo;</span></a></li>';
+				}
+				foreach ($this->revisions as $revision) { 
+					print '<li><a href="' . $this->revisions_path . $revision->file . '" data-date="' . $revision->date . '" id="revision_' . $revision->rid . '" class="revision">#' . $revision->rid . ' </a></li>';
+				}
+				if (count($this->revisions)>1) {
+					print '<li><a href="#" aria-label="Next" id="revision_next"><span aria-hidden="true">&raquo;</span></a></li>';
+				}
+			?>
+		</ul>
+	</nav>
+</center>

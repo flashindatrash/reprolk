@@ -15,8 +15,9 @@ class View {
 				$value = $nArgs>=3 ? $args[2] : '';
 				return '<input type="hidden" name="' . $name . '" value="' . $value . '">';
 			case 'submit':
-				//name, type
-				return '<button type="submit" class="btn btn-primary">' . self::str($name) . '</button>';
+				//name, type, classes
+				$class = $nArgs>=3 ? $args[2] : 'btn btn-primary';
+				return '<button type="submit" class="'. $class .'">' . self::str($name) . '</button>';
 			case 'select':
 			case 'multiple':
 				//name, type (text), values ([]), useKeys (false), localisate (true), value (null), size (5)
@@ -164,14 +165,6 @@ class View {
 		$html = '<a href="?' . self::getValues($gets) . '">' . self::str( $field ) . '</a>';
 		if ($field==$order->field) $html .= self::orderBy($order);
 		return $html;
-	}
-	
-	public static function convertSelect($array, $key, $value) {
-		$a = array();
-		foreach ($array as $item) {
-			$a[$item->$key] = $item->$value;
-		}
-		return $a;
 	}
 	
 	public static function attachments($files) {
