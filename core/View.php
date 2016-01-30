@@ -225,7 +225,7 @@ class View {
 		}
 		return $bytes;
 	}
-	
+
 	public static function bool2icon($value) {
 		return self::icon($value===true || $value==1 ? 'ok' : 'minus');
 	}

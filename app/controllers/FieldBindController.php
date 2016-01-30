@@ -1,12 +1,8 @@
 <?php
 
-include_once '../core/interfaces/IBind.php';
 include_once '../app/controllers/BaseFieldController.php';
 
-class FieldBindController extends BaseFieldController implements IBind {
-	
-	public $fields;
-	public $current_fields;
+class FieldBindController extends BaseFieldController {
 	
 	public function beforeRender() {
 		if (!$this->hasPage()) return;
@@ -14,19 +10,17 @@ class FieldBindController extends BaseFieldController implements IBind {
 		if (!hasGet('gid')) {
 			$this->view = 'system/group-select';
 		} else {
-			if ($this->formValidate(['gid'])) {
-				$this->save();
-			}
+			$this->save();
 			
-			$this->fields = reArray(Field::getAll(get('page'), true, false), 'id', 'name');
-			$this->current_fields = reArray(GroupField::getFids(get('gid')), 'fid', 'fid');
-			$this->view = 'admin/field/bind-fields';
+			$this->view = 'admin/field/bind';
+			$this->addJSparam('all', reArray(Field::getAll(get('page'), true, false), 'id', 'name'));
+			$this->addJSparam('current', reArray(GroupField::getFids(get('gid')), null, 'fid'));
+			$this->addJSfile('bind.group');
 		}
 	}
 	
-	//IBind
 	public function save() {
-		if (GroupField::set(post('gid'), hasPost('fields') ? post('fields') : [])) {
+		if ($this->formValidate(['gid']) && GroupField::set(post('gid'), hasPost('ids') ? explode(',', post('ids')) : [])) {
 			$this->addAlert(View::str('success_save'), 'success');
 			return true;
 		}

@@ -86,7 +86,8 @@ function stripQuotes($text) {
 function reArray($array, $key, $value) {
 	$a = array();
 	foreach ($array as $item) {
-		$a[$item->$key] = $item->$value;
+		if (is_null($key)) $a[] = $item->$value;
+		else $a[$item->$key] = $item->$value;
 	}
 	return $a;
 }

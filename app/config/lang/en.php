@@ -90,7 +90,7 @@ return array(
 	'MENU_INDEX' => 'Index',
 	'MENU_LOGIN' => 'Login',
 	'MENU_ORDERADD' => 'Add Order',
-	'MENU_ORDERADDTEMPLATE' => 'Add Template Order',
+	'MENU_ORDERADDTEMPLATE' => 'From preset',
 	'MENU_ORDERAPPROVAL' => 'Approve',
 	'MENU_ORDERAPPROVED' => 'Approve',
 	'MENU_ORDERDISAPPROVED' => 'Disapprove',
@@ -177,6 +177,7 @@ return array(
 	'ERROR_FIELD_DELETE' => 'Unable to delete field <b>%s</b>, please contact your administrator',
 	'ERROR_FIELD_ADD' => 'Unable to add field <b>%s</b>, please try again',
 	'ERROR_TEMPLATE_NOT_FOUND' => 'Template not found',
+	'ERROR_CREATE_USER' => 'Failed to add new user, please contact your administrator',
 );
 
 ?>

@@ -29,6 +29,8 @@ class BaseController {
 		$className = $name . 'Form';
 		if (class_exists($className)) {
 			return new $className();
+		} else {
+			$this->addAlert(sprintf('Fail Form: path %s not found class %s', $php, $className), 'danger');
 		}
 		return null;
 	}
@@ -72,12 +74,7 @@ class BaseController {
 	}
 	
 	public function getJSparams() {
-		$js = '<script>var params = {';
-		foreach ($this->js_params as $key => $value) {
-			$js .= $key . ': "' . $value . '",';
-		}
-		$js .= '};</script>';
-		print $js;
+		print '<script>var params = ' . json_encode($this->js_params) . ';</script>';
 	}
 	
 	public function getMessages($type) {

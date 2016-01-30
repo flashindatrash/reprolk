@@ -26,6 +26,10 @@ class Routes {
 		return !is_null($this->current) && $this->current->name == $route->name;
 	}
 	
+	public function currentPath() {
+		return !is_null($this->current) ? $this->current->path : '';
+	}
+	
 	public function parseUrl($url) {
 		$u = strtolower($url);
 		$delim = strpos($u, '?');
