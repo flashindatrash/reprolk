@@ -32,6 +32,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		$this->form = $this->createForm('Order');
 		$this->form->loadFields(Route::ORDER_ADD);
 		$this->form->setValue(array('pid' => $this->photopolymers));
+		$this->form->setSession(array('date_due' => (new DateTime('tomorrow'))->format("Y-m-d")));
 	}
 	
 	//IRedirect

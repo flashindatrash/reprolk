@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+	<table class="table table-selected table-hover">
+		<tbody>
+			<?php
+			$rows = '';
+			foreach ($this->templates as $n => $template) {
+				$classes = array();
+				
+				$classes[] = 'table_row';
+				$classes[] = 'noselect';
+				$classes[] = 'cursor_pointer';
+				
+				$rows .= '<tr class="' . join (' ', $classes) . '" id="' . $template->id . '">';
+				$rows .= '<td>' . $template->name . '</td>';
+				$rows .= '</tr>';
+			}
+			print $rows;
+			?>
+		</tbody>
+	</table>
+</div>

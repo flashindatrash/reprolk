@@ -23,12 +23,11 @@ class TemplateEditController extends BaseController {
 		
 		$gid = $this->template->gid;
 		
-		$this->form = $this->createForm('Order');
+		$this->form = $this->createForm('OrderTemplate');
 		$this->form->loadFields(Route::ORDER_ADD, $gid);
 		
 		$photopolymers = reArray(GroupPhotopolymer::getAll($gid), 'pid', 'name');
 		$this->form->setValue(array('pid' => $photopolymers));
-		$this->form->renderTemplate = true;
 		
 		if ($this->save($tid)) {
 			$this->addAlert(View::str('success_save'), 'success');

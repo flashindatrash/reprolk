@@ -17,7 +17,7 @@ try {
 		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
 		new Route(Route::ORDER_ALL, '/order/all', UserAccess::ORDER_VIEW, Route::TYPE_NORMAL, [
 			new Route(Route::ORDER_ADD, '/order/add', UserAccess::ORDER_ADD),
-			new Route(Route::ORDER_ADD_TEMPLATE, '/order/add/template', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
+			new Route(Route::ORDER_ADD_TEMPLATE, '/order/add/template', UserAccess::ORDER_ADD, Route::TYPE_NORMAL),
 			new Route(Route::COMMENT_DELETE, '/order/comment/delete', UserAccess::COMMENT_EDIT, Route::TYPE_HIDDEN),
 			new Route(Route::ORDER_VIEW, '/order/view', UserAccess::ORDER_VIEW, Route::TYPE_HIDDEN, [
 				new Route(Route::ORDER_EDIT, '/order/edit', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
@@ -52,7 +52,7 @@ try {
 			
 			new Route(Route::POLYMER_ALL, '/admin/photopolymers', UserAccess::ADMIN, Route::TYPE_NORMAL, [
 				new Route(Route::POLYMER_DELETE, '/admin/photopolymers/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				new Route(Route::POLYMER_BIND, '/admin/photopolymers/group', UserAccess::ADMIN),
+				new Route(Route::POLYMER_BIND, '/admin/photopolymers/group', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 			]),
 		]),
 		

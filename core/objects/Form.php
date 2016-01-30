@@ -2,8 +2,6 @@
 
 class Form {
 	
-	public $renderTemplate = false;
-	
 	protected $fields = [];
 	
 	public function loadFields($route, $gid = null) {
@@ -43,7 +41,6 @@ class Form {
 	public function render() {
 		$html = View::formValidate();
 		foreach($this->fields as $field) {
-			if ($this->renderTemplate && !$field->isTemplated()) continue;
 			$method = 'field_' . $field->name;
 			if (method_exists($this, $method)) {
 				$html .= $this->{$method}($field);
@@ -83,7 +80,6 @@ class Form {
 	public function setSession($array) {
 		foreach ($this->fields as $field) {
 			if (array_key_exists($field->name, $array)) {
-				if (!$field->isTemplated()) continue;
 				$field->session = $array[$field->name];
 			}
 		}
