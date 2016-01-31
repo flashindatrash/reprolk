@@ -133,9 +133,12 @@ class Order extends BaseModel {
 		scheme
 	*/
 	
+	private static $statuses = null;
 	public static function getStatuses() {
+		if (!is_null(self::$statuses)) return self::$statuses;
 		$column = self::column('status');
-		return !is_null($column) ? $column->enum() : array();
+		self::$statuses = !is_null($column) ? $column->enum() : array();
+		return self::$statuses;
 	}
 	
 	/*

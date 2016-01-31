@@ -83,6 +83,12 @@ function stripQuotes($text) {
 	return preg_replace('/^(\'(.*)\'|"(.*)")$/', '$2$3', $text);
 } 
 
+function removeArrayItem($value, &$arr) {
+	if(($key = array_search($value, $arr)) !== false) {
+		unset($arr[$key]);
+	}
+}
+
 function reArray($array, $key, $value) {
 	$a = array();
 	foreach ($array as $item) {

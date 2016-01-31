@@ -25,6 +25,7 @@ class OrderAllController extends BaseController {
 		foreach (OrderFilter::fields() as $field) {
 			$this->order_filter->$field = hasGet($field) ? get($field) : null;
 		}
+		$this->applyFillter();
 		
 		//сортировка
 		if (hasGet('sort') && in_array(get('sort'), $this->fields_view)) {
@@ -48,6 +49,12 @@ class OrderAllController extends BaseController {
 	public function getContent() {
 		$this->pick('order/filter');
 		$this->pick('order/index');
+	}
+	
+	public function applyFillter() {
+		if (is_null($this->order_filter->status)) {
+			$this->order_filter->status = $this->order_filter->getDefaultStatuses();
+		}
 	}
 	
 }

@@ -33,7 +33,6 @@ function getIdByName(type, name) {
 
 function update() {
 	list_all.find('li').each(function() {
-		alert($(this).attr('id'));
 		var id = getIdByName(PLUS, $(this).attr('id'));
 		if (hasInActive(id)) {
 			console.log(id);
