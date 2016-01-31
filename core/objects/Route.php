@@ -16,6 +16,7 @@ class Route {
 	const ORDER_DELETE = 'OrderDelete';
 	const ORDER_DUPLICATE = 'OrderDuplicate';
 	const ORDER_ALL = 'OrderAll';
+	const ORDER_ARCHIVE = 'OrderArchive';
 	const ORDER_APPROVAL = 'OrderApproval';
 	const ORDER_APPROVED = 'OrderApproved';
 	const ORDER_DISAPPROVED = 'OrderDisapproved';

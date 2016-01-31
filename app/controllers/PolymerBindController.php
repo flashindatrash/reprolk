@@ -11,7 +11,7 @@ class PolymerBindController extends BaseController {
 			$this->view = 'admin/polymer/bind';
 			$this->addJSparam('all', reArray(Photopolymer::getAll(), 'id', 'name'));
 			$this->addJSparam('current', reArray(GroupPhotopolymer::getAll(get('gid')), null, 'pid'));
-			$this->addJSfile('bind.group');
+			$this->addJSfile('bind');
 		}
 	}
 	

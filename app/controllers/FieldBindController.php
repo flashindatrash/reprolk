@@ -15,7 +15,7 @@ class FieldBindController extends BaseFieldController {
 			$this->view = 'admin/field/bind';
 			$this->addJSparam('all', reArray(Field::getAll(get('page'), true, false), 'id', 'name'));
 			$this->addJSparam('current', reArray(GroupField::getFids(get('gid')), null, 'fid'));
-			$this->addJSfile('bind.group');
+			$this->addJSfile('bind');
 		}
 	}
 	

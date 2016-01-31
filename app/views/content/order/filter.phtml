@@ -10,7 +10,7 @@
 					<?php
 						print View::input('sort', 'hidden', $this->order_by->field);
 						print View::input('by', 'hidden', $this->order_by->by);
-						print View::formSmall('status', 'multiple', Order::getStatuses(), false, false, $this->order_filter->status);
+						print View::formSmall('status', 'multiple', $this->order_filter->getStatuses(), false, false, $this->order_filter->status);
 						
 						$date_due = '<div class="col-sm-5">' . View::input('date_due_start', 'date', $this->order_filter->date_due_start, false) . '</div>' .
 									'<div class="col-sm-5">' . View::input('date_due_end', 'date', $this->order_filter->date_due_end, false) . '</div>';
