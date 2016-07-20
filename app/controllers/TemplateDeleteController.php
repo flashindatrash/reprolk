@@ -10,7 +10,10 @@ class TemplateDeleteController extends BaseController implements IRedirect, ICon
 	public function beforeRender() {
 		$this->template = hasGet('id') ? Template::byId(get('id')) : null;
 		
-		if (is_null($this->template)) return;
+		if (is_null($this->template)) {
+			$this->addAlert(sprintf(View::str('not_found'), View::str('template')), 'danger');
+			return;
+		}
 		
 		if ($this->formValidate([])) {
 			if ($this->template->remove()) {

@@ -30,6 +30,10 @@ class Routes {
 		return !is_null($this->current) ? $this->current->path : '';
 	}
 	
+	public function currentGet() {
+		return get('_url');
+	}
+	
 	public function parseUrl($url) {
 		$u = strtolower($url);
 		$delim = strpos($u, '?');
@@ -47,7 +51,7 @@ class Routes {
 	
 	private function getCurrent() {
 		if (!hasGet('_url')) return $this->byName(Route::ORDER_ALL);
-		return $this->parseUrl(get('_url'));
+		return $this->parseUrl($this->currentGet());
 	}
 }
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class AccountRoute extends Route {
 	
@@ -6,5 +6,10 @@ class AccountRoute extends Route {
 		return Account::getName();
 	}
 	
+	public function breadcrumpText() {
+		return View::str('profile');
+	}
+	
 }
 
+?>

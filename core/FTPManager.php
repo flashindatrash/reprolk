@@ -63,6 +63,7 @@ class FTPManager {
 		$this->gotoDir($oid);
 		
 		$a = array();
+		$b = array();
 		
 		foreach ($files as $f) {
 			$file = new File();
@@ -70,23 +71,28 @@ class FTPManager {
 			$file->size = $f["size"];
 			$file->type = $f["type"];
 			
-			$error = $f["error"];
+			if (!$file->type) { //файлы без типа вообще игноировать, хз откуда они вылазят
+				continue;
+			}
 			
-			if ($error!=0 || $file->size==0) continue;
+			if ($f["error"]!=0 || $file->size==0) {
+				$b[] = $file;
+				continue;
+			}
 			
 			$stream = fopen($f["tmp_name"], 'r');
 			
-			ftp_fput($this->connection, translit($file->name), $stream, FTP_ASCII);
+			ftp_fput($this->connection, translit($file->name), $stream, FTP_BINARY);
 			
 			fseek($stream, 0);
 			$content = fread($stream, $file->size);
-			$file->content = addslashes($content);
-			
+			$file->content = mysql_real_escape_string($content);
+			fclose($stream);
 			$a[] = $file;
 		}
 		
 		//возвращает имена файлов для последующего добавления в БД, собственно здесь можно их и переименовать...
-		return $a;
+		return [$a, $b];
 	}
 	
 	private function gotoDir($name) {
@@ -111,5 +117,3 @@ class FTPManager {
 	}
 	
 }
-
-?>

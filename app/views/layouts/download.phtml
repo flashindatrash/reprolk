@@ -1,6 +1,3 @@
-<?php 
-	header("Content-length: " . $this->getSize());
-	header("Content-type: "  . $this->getType());
-	header("Content-disposition: download; filename=" . $this->getName());
-	$this->getContent();
-?>
+<?php
+download_header($this->getName(), $this->getType(), $this->getSize());
+$this->getContent();

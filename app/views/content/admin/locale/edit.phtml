@@ -1,0 +1,10 @@
+<form method="post" class="form-horizontal">
+<?php 
+	print View::formValidate();
+	print View::formStatic('key', $this->key);
+	foreach ($this->languages as $language) {
+		print View::formNormal($language, 'textarea', $this->locale->$language);
+	}
+	print View::formOffset('edit', 'submit');
+?>
+</form>

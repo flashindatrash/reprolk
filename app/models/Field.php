@@ -26,18 +26,34 @@ class Field extends BaseModel {
 		return null;
 	}
 	
-	public static function dbType($type, $value, $length = 255) {
+	public static function dbType($type, $data, $length = 255) {
 		switch($type) {
 			case 'checkbox':
 				return 'tinyint(1)';
 			case 'date':
 				return 'datetime';
 			case 'select':
-				$items = explode(',', stripQuotes($value));
+				$items = explode(',', stripQuotes($data));
 				if (count($items)==0) return 'varchar(' . $length . ')';
 				return 'ENUM(\'' . join('\',\'', $items) . '\')';
+			case 'number':
+				return 'int(16)';
 			default:
 				return 'varchar(' . $length . ')';
+		}
+	}
+	
+	public static function dbDefault($type, $default) {
+		if (strlen($default)==0) return null;
+		switch ($type) {
+			case 'checkbox':
+				return toBool($default) ? '1' : '0';
+			case 'number':
+				return int($default);
+			case 'text':
+				return $default;
+			default:
+				return null;
 		}
 	}
 	
@@ -77,17 +93,34 @@ class Field extends BaseModel {
 		actions
 	*/
 	
-	public function getValue() {
+	private $column;
+	public function getColumn() {
+		if (is_null($this->column)) {
+			$table = self::tableNameByRoute($this->route);
+			if (is_null($table)) return null;
+			$this->column = self::column($this->name, $table);
+		}
+		return $this->column;
+	}
+	
+	public function getData() {
 		switch($this->type) {
 			case 'select':
 			case 'multiple':
-				$table = self::tableNameByRoute($this->route);
-				if (is_null($table)) return [];
-				$column = self::column($this->name, $table);
+				$column = $this->getColumn();
 				return !is_null($column) ? $column->enum() : [];
 			default:
 				return '';
 		}
+	}
+	
+	public function getDefault() {
+		$column = $this->getColumn();
+		return !is_null($column) ? $column->Default : null;
+	}
+	
+	public function getValue() {
+		return is_null($this->session) ? $this->getDefault() : $this->session;
 	}
 	
 	public function remove() {
@@ -133,7 +166,7 @@ class Field extends BaseModel {
 		return self::selectRows(null, $where, null, new SQLOrderBy('weight', 'asc'));
 	}
 	
-	public static function add($route, $type, $name, $value, $mandatory, $weight) {
+	public static function add($route, $type, $name, $value, $mandatory, $weight, $default) {
 		$table = self::tableNameByRoute($route);
 		if (is_null($table)) return null;
 		
@@ -143,7 +176,7 @@ class Field extends BaseModel {
 			if ($column->Field==$name) return null;
 		}
 		
-		if (!self::addColumn($name, self::dbType($type, $value), $mandatory, $table)) {
+		if (!self::addColumn($name, self::dbType($type, $value), $mandatory, self::dbDefault($type, $default), $table)) {
 			return null;
 		}
 		

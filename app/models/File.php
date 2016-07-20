@@ -24,6 +24,10 @@ class File extends BaseModel {
 		return $this->size>0 && strlen($this->content)>0;
 	}
 	
+	public function extension() {
+		return pathinfo($this->name, PATHINFO_EXTENSION);
+	}
+	
 	public static function byId($id) {
 		$fields = array();
 		$fields[] = self::field('*');
@@ -61,5 +65,24 @@ class File extends BaseModel {
 		return self::update($fields, $values, $where);
 	}
 	
+	public static function uploadMaxFilesize() {
+		return self::returnBytes(ini_get('upload_max_filesize'));
+	}
+	
+	public static function postMaxSize() {
+		return self::returnBytes(ini_get('post_max_size'));
+	}
+	
+	private static function returnBytes($val) {
+		$val = trim($val);
+		$last = strtolower($val[strlen($val)-1]);
+		switch($last) {
+			// Модификатор 'G' доступен, начиная с PHP 5.1.0
+			case 'g': $val *= 1024;
+			case 'm': $val *= 1024;
+			case 'k': $val *= 1024;
+		}
+		return $val;
+	}
+	
 }
-?>

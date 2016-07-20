@@ -1,5 +1,5 @@
 <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog filter-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="<?php print View::str('close'); ?>"><span aria-hidden="true">&times;</span></button>
@@ -10,7 +10,10 @@
 					<?php
 						print View::input('sort', 'hidden', $this->order_by->field);
 						print View::input('by', 'hidden', $this->order_by->by);
-						print View::formSmall('status', 'multiple', $this->order_filter->getStatuses(), false, false, $this->order_filter->status);
+						print View::input('page', 'hidden', $this->currentPage);
+						print View::formSmall('status', 'multiple', $this->order_filter->statuses, false, false, $this->order_filter->status);
+						
+						print View::formSmall('search', 'text', $this->order_filter->search);
 						
 						$date_due = '<div class="col-sm-5">' . View::input('date_due_start', 'date', $this->order_filter->date_due_start, false) . '</div>' .
 									'<div class="col-sm-5">' . View::input('date_due_end', 'date', $this->order_filter->date_due_end, false) . '</div>';
@@ -19,6 +22,9 @@
 						$date_created =	'<div class="col-sm-5">' . View::input('date_created_start', 'date', $this->order_filter->date_created_start, false) . '</div>' .
 										'<div class="col-sm-5">' . View::input('date_created_end', 'date', $this->order_filter->date_created_end, false) . '</div>';
 						print View::formAny('date_created', $date_created, 2);
+						
+						print View::formSmall('username', 'select', $this->order_filter->getUsers(), true, false, $this->order_filter->username);
+						
 					?>
 				</div>
 				<div class="modal-footer">

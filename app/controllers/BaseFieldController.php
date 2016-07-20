@@ -16,7 +16,7 @@ class BaseFieldController extends BaseController {
 	}
 	
 	protected function notfound() {
-		$this->addAlert(View::str('error_page_fieldset_not_found'), 'danger');
+		$this->addAlert(sprintf(View::str('not_found'), View::str('fieldset')), 'danger');
 	}
 	
 }

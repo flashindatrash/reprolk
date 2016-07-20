@@ -14,6 +14,7 @@ class User extends BaseModel {
 	public $password;
 	public $username;
 	public $gid;
+	public $lang;
 	
 	public static $fields_mandatory = array('email', 'password', 'username', 'group', 'gid');
 	
@@ -22,7 +23,11 @@ class User extends BaseModel {
 	}
 	
 	public function editGroup($group) {
-		return $this->edit(['group'], [$group]);
+		return $this->edit([self::field('group')], [$group]);
+	}
+	
+	public function editLang($lang) {
+		return $this->edit(['lang'], [$lang]);
 	}
 	
 	public function edit($fields, $values) {
@@ -56,7 +61,7 @@ class User extends BaseModel {
 	}
 	
 	public static function editGroupById($id, $group) {
-		return self::editById($id, ['group'], [$group]);
+		return self::editById($id, [self::field('group')], [$group]);
 	}
 	
 	public static function editById($id, $fields, $values) {

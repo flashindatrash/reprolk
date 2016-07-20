@@ -16,6 +16,10 @@ class MenuItem extends BaseModel {
 		return Application::$routes->byName($this->routeName)->linkText();
 	}
 	
+	public function breadcrumpText() {
+		return Application::$routes->byName($this->routeName)->breadcrumpText();
+	}
+	
 	public function isActive() {
 		return $this->currentRoute() == $this->routeName;
 	}

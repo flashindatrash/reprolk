@@ -9,7 +9,7 @@ class TemplateEditController extends BaseController {
 	
 	public function beforeRender() {
 		if (!hasGet('id')) {
-			$this->notfound();
+			$this->addAlert(sprintf(View::str('not_found'), View::str('template')), 'danger');
 			return;
 		}
 		
@@ -17,7 +17,7 @@ class TemplateEditController extends BaseController {
 		$this->template = Template::byId(get('id')); 
 		
 		if (is_null($this->template) || !$this->template->canEdit()) {
-			$this->notfound();
+			$this->addAlert(sprintf(View::str('not_found'), View::str('template')), 'danger');
 			return;
 		}
 		
@@ -36,8 +36,8 @@ class TemplateEditController extends BaseController {
 		$template = GroupTemplate::getAll($tid);
 		$this->form->setSession(reArray($template, 'name', 'value'));
 		
-		$this->addJSfile('datetimepicker.min');
-		$this->addCSSfile('datetimepicker');
+		$this->include_datetimepicker();
+		
 		$this->view = 'template/edit';
 	}
 	
@@ -50,10 +50,6 @@ class TemplateEditController extends BaseController {
 		}
 		
 		return false;
-	}
-	
-	private function notfound() {
-		$this->addAlert(View::str('error_template_not_found'), 'danger');
 	}
 	
 }

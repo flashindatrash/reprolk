@@ -4,17 +4,20 @@ include_once '../core/objects/OrderFilter.php';
 
 class OrderAllController extends BaseController {
 	
+	const COUNT_PER_PAGE = 10;
+	
 	public $orders;
 	public $fields_view;
 	public $fields_sql;
 	public $order_filter;
 	public $order_by;
+	public $currentPage;
+	public $totalPages;
 	
 	public function beforeRender() {
 		$this->order_filter = new OrderFilter();
-		$this->order_by = new SQLOrderBy('date_due');
-		$this->fields_sql = $this->fields_view = array('title', 'status', 'date_due');
-		$this->fields_view[] = 'username';
+		$this->fields_sql = array('title', 'Raster_line', 'status', 'date_due', 'urgent');
+		$this->fields_view = array('title', 'photopolymer_name', 'Raster_line', 'status', 'date_due', 'username');
 		
 		$gid = null;
 		if (Account::isAdmin() && Session::hasGid() || !Account::isAdmin()) {
@@ -29,21 +32,22 @@ class OrderAllController extends BaseController {
 		
 		//сортировка
 		if (hasGet('sort') && in_array(get('sort'), $this->fields_view)) {
-			$this->order_by->field = get('sort');
-			$this->order_by->by = get('by');
+			$this->order_by = new SQLOrderBy(get('sort'), get('by'));
+		} else {
+			$this->order_by = new SQLOrderBy('date_due');
 		}
 		
-		//выборка заказов
-		$this->orders = Order::getAll($this->fields_sql, $this->order_filter, Account::getGid(), $this->order_by);
+		//вторичная сортировка по дате изменения
+		$this->order_by->addOrder('date_changed', SQLOrderBy::DESC);
 		
-		//CSS/JS
-		$this->addJSfile('datetimepicker.min');
-		$this->addCSSfile('datetimepicker');
-		$this->addCSSfile('selected.table');
-		$this->addJSfile('selected.table');
-		$this->addJSparam('view_url', Application::$routes->byName(Route::ORDER_VIEW)->path);
-		$this->addJSparam('edit_url', Application::$routes->byName(Route::ORDER_EDIT)->path);
-		$this->addJSparam('duplicate_url', Application::$routes->byName(Route::ORDER_DUPLICATE)->path);
+		//определим кол-во страниц
+		$this->applyPaginator($this->currentPage, $this->totalPages, Order::getCountTotal($this->order_filter, Account::getGid()), self::COUNT_PER_PAGE);
+		
+		//выборка заказов
+		$this->orders = Order::getAll($this->fields_sql, $this->order_filter, Account::getGid(), $this->order_by, self::COUNT_PER_PAGE * $this->currentPage . ', ' . self::COUNT_PER_PAGE);
+		
+		$this->include_datetimepicker();
+		$this->include_other();
 	}
 	
 	public function getContent() {
@@ -51,10 +55,21 @@ class OrderAllController extends BaseController {
 		$this->pick('order/index');
 	}
 	
-	public function applyFillter() {
+	protected function applyFillter() {
+		$this->order_filter->statuses = $this->order_filter->getDefaultStatuses();
 		if (is_null($this->order_filter->status)) {
-			$this->order_filter->status = $this->order_filter->getDefaultStatuses();
+			$this->order_filter->status = $this->order_filter->statuses;
 		}
+	}
+	
+	protected function include_other() {
+		$this->addCSSfile('selected.table');
+		$this->addJSfile('selected.table');
+		$this->addJSparam('view_url', Application::$routes->byName(Route::ORDER_VIEW)->path);
+		$this->addJSparam('edit_url', Application::$routes->byName(Route::ORDER_EDIT)->path);
+		$this->addJSparam('duplicate_url', Application::$routes->byName(Route::ORDER_DUPLICATE)->path);
+		$this->addJSparam('repeat_url', Application::$routes->byName(Route::ORDER_REPEAT)->path);
+		$this->addJSparam('delete_url', Application::$routes->byName(Route::ORDER_DELETE)->path);
 	}
 	
 }

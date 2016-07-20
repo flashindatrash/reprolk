@@ -2,9 +2,8 @@
 <?php 
 	print $this->form->render();
 	
-	print View::formOffset('files', 'files');
-	if (UserAccess::check(UserAccess::COMMENT_ADD)) {
-		print View::formOffset('comment', 'textarea');
+	if ($this->showFiles()) {
+		print View::formOffset('files', 'files', $this->getFileAvailableExtensions(), $this->getFileMaxSize());
 	}
 	
 	print View::formOffset('buttons', 'any', 

@@ -6,3 +6,7 @@ table.table-selected td.td_title {
 table.table-middle tbody td{
 	vertical-align: middle;
 }
+
+.table-controls a {
+	margin-left: 2px;
+}

@@ -2,8 +2,14 @@
 
 class BaseModel {
 	
+	public $properties = array();
+	
 	public function __construct() {
 		
+	}
+	
+	public function addProperty($key, $value) {
+		$this->properties[$key] = $value;
 	}
 	
 	public function toArray() {
@@ -18,6 +24,10 @@ class BaseModel {
 		return get_called_class();
 	}
 	
+	protected static function getCount($where = null, $join = null) {
+		return Application::$db->getCount(static::tableName(), $where, $join);
+	}
+	
 	protected static function selectRow($select = null, $where = null, $join = null) {
 		return Application::$db->selectRow(static::tableName(), static::getClassName(), $select, $where, $join);
 	}
@@ -28,6 +38,10 @@ class BaseModel {
 	
 	protected static function delete($where = null) {
 		return Application::$db->delete(static::tableName(), $where);
+	}
+	
+	protected static function truncate() {
+		return Application::$db->truncate(static::tableName());
 	}
 	
 	protected static function insertRow($fields, $values) {
@@ -52,9 +66,9 @@ class BaseModel {
 		return Application::$db->columns($table_name);
 	}
 	
-	protected static function addColumn($column, $type, $mandatory = true, $table_name = null) {
+	protected static function addColumn($column, $type, $mandatory = true, $default = null, $table_name = null) {
 		if (is_null($table_name)) $table_name = static::tableName();
-		return Application::$db->addColumn($table_name, $column, $type, $mandatory);
+		return Application::$db->addColumn($table_name, $column, $type, $mandatory, $default);
 	}
 	
 	protected static function dropColumn($column, $table_name = null) {
@@ -81,5 +95,3 @@ class BaseModel {
 	}
 	
 }
-
-?>

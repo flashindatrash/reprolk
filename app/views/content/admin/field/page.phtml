@@ -34,6 +34,7 @@
 				
 				$html .= '<td>';
 				//$html .= View::input('', 'submit', 'btn btn-xs btn-success glyphicon glyphicon-ok');
+				$html .= '&nbsp;' . View::link(Route::LOCALE_EDIT, '', 'key=' . $field->name, 'locale', 'btn btn-xs btn-primary glyphicon glyphicon-globe', null, 'left');
 				if ($field->canDelete()) $html .= '&nbsp;' . View::link(Route::FIELD_DELETE, '', 'id=' . $field->id, 'edit', 'btn btn-xs btn-danger glyphicon glyphicon-remove', null, 'top');
 				$html .= '</td>';
 				

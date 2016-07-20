@@ -9,13 +9,13 @@ class Route {
 	const NOT_FOUND = 'NotFound';
 	const ACCESS_DENIED = 'AccessDenied';
 	const ORDER_ADD = 'OrderAdd';
-	const ORDER_ADD_TEMPLATE = 'OrderAddTemplate';
 	const ORDER_VIEW = 'OrderView';
 	const ORDER_EDIT = 'OrderEdit';
 	const ORDER_CANCEL = 'OrderCancel';
 	const ORDER_DELETE = 'OrderDelete';
 	const ORDER_DUPLICATE = 'OrderDuplicate';
 	const ORDER_ALL = 'OrderAll';
+	const ORDER_REPEAT = 'OrderRepeat';
 	const ORDER_ARCHIVE = 'OrderArchive';
 	const ORDER_APPROVAL = 'OrderApproval';
 	const ORDER_APPROVED = 'OrderApproved';
@@ -39,6 +39,12 @@ class Route {
 	const TEMPLATE_VIEW = 'TemplateView';
 	const TEMPLATE_EDIT = 'TemplateEdit';
 	const TEMPLATE_DELETE = 'TemplateDelete';
+	const LOCALE_ALL = 'LocaleAll';
+	const LOCALE_STATS = 'LocaleStats';
+	const LOCALE_EDIT = 'LocaleEdit';
+	const LANGUAGE_SET = 'LanguageSet';
+	const CRON = 'Cron';
+	const SWITCH_PLUGIN = 'SwitchPlugin';
 	
 	const TYPE_NORMAL = 0;
 	const TYPE_SUB = 1;
@@ -62,6 +68,10 @@ class Route {
 		return Application::str('menu_' . $this->name);
 	}
 	
+	public function breadcrumpText() {
+		return $this->linkText();
+	}
+	
 	public function linkTitle() {
 		return Application::str('menu_title_' . $this->name);
 	}
@@ -74,6 +84,12 @@ class Route {
 		return $this->type!=Route::TYPE_HIDDEN && $this->isAvailable();
 	}
 	
+	public function forGet($get) {
+		return $this->path . (!is_null($get) ? '?' . $get : '');
+	}
+	
+	public static function byName($name) {
+		return Application::$routes->byName($name);
+	}
+	
 }
-
-?>

@@ -16,6 +16,8 @@ class TransmitRightsController extends BaseController implements IRedirect {
 			if (Account::setGroup($this->transmit_group) && User::editGroupById(post('user'), $group)) {
 				$this->view = 'system/redirect';
 				return;
+			} else {
+				$this->addAlert(View::str('error_transmit_something'));
 			}
 		}
 		

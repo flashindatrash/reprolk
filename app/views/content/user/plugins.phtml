@@ -1,0 +1,6 @@
+<?php
+foreach ($this->plugins_all as $plugin) {
+	$isEnabled = in_array($plugin, $this->plugins_enabled);
+	print View::plugin($plugin, $isEnabled);
+}
+?>

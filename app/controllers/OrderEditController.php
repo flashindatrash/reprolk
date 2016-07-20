@@ -11,9 +11,14 @@ class OrderEditController extends BaseOrderController {
 		$this->loadOrder();
 		if (is_null($this->order)) return;
 		
+		if (!$this->order->canEdit()) {
+			$this->addAlert(sprintf(View::str('error_order_expired'), $this->order->status), 'danger');
+			return;
+		}
+		
 		$this->photopolymers = reArray(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
 		
-		$this->form = $this->createForm('Order');
+		$this->form = $this->createForm('OrderEdit');
 		$this->form->loadFields(Route::ORDER_ADD);
 		$this->form->setValue(array('pid' => $this->photopolymers));
 		
@@ -27,8 +32,7 @@ class OrderEditController extends BaseOrderController {
 			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
 		}
 		
-		$this->addJSfile('datetimepicker.min');
-		$this->addCSSfile('datetimepicker');
+		$this->include_datetimepicker();
 		
 		$this->view = 'order/edit';
 	}

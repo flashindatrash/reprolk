@@ -12,6 +12,8 @@ class Order extends BaseModel {
 	const DEPLOY = 'deploy'; //принято в производство
 	const FINISHED = 'finished';
 	
+	const FIELD_COMMENT = 'comment'; //поле комментария
+	
 	public $id;
 	public $uid;
 	public $title;
@@ -22,12 +24,12 @@ class Order extends BaseModel {
 	public $date_created;
 	public $date_changed;
 	public $date_due;
+	public $urgent;
 	
 	public $username; //uid->username
 	public $gid; //uid->gid
 	public $photopolymer_name; //pid->name
 	public $photopolymer_id_1c; //pid->id_1c
-	public $comments; //поле только для выгрузки в xml
 	
 	public static function tableName() {
 		return 'orders';
@@ -69,6 +71,10 @@ class Order extends BaseModel {
 		return $this->status==Order::DISAPPROVED;
 	}
 	
+	public function isUrgent() {
+		return $this->urgent==1;
+	}
+	
 	/*
 		can...
 	*/
@@ -91,6 +97,14 @@ class Order extends BaseModel {
 	
 	public function canApprove() {
 		return $this->isApproval();
+	}
+	
+	public function canRepeat() {
+		return $this->isFinished();
+	}
+	
+	public function canDuplicate() {
+		return true;
 	}
 	
 	/*
@@ -124,6 +138,15 @@ class Order extends BaseModel {
 		if ($success) {
 			foreach ($fields as $i => $field) {
 				$this->$field = $values[$i];
+				
+				//хак, при обновлении pid, меняем photopolymer_name и photopolymer_id_1c
+				if ($field=="pid") {
+					$photopolymer = Photopolymer::byId($values[$i]);
+					if (!is_null($photopolymer)) {
+						$this->photopolymer_name = $photopolymer->name;
+						$this->photopolymer_id_1c = $photopolymer->id_1c;
+					}
+				}
 			}
 		}
 		return $success;
@@ -145,14 +168,19 @@ class Order extends BaseModel {
 		static
 	*/
 	
-	public static function getAll($fields, $filter, $gid = null, $order_by = null) {
+	public static function getCountTotal($filter, $gid = null) {
+		return self::getCount(self::createWhere($filter, $gid), self::createJoin());
+	}
+	
+	public static function getAll($fields, $filter, $gid = null, $order_by = null, $range = '0, 10') {
 		$fields[] = self::field('uid');
 		$fields[] = self::field('id', null, 'id');
 		$fields[] = self::field('username', User::tableName(), 'username');
-		
-		$join = array();
-		$join[] = self::inner('id', User::tableName(), 'uid');
-		
+		$fields[] = self::field('name', Photopolymer::tableName(), 'photopolymer_name');
+		return self::selectRows($fields, self::createWhere($filter, $gid), self::createJoin(), $order_by, $range);
+	}
+	
+	private static function createWhere($filter, $gid = null) {
 		$where = array();
 		if (!is_null($gid)) 
 			$where[] = self::field('gid', User::tableName()) . ' = ' . $gid;
@@ -163,12 +191,25 @@ class Order extends BaseModel {
 			}
 			$where[] = self::where($statuses, 'or');
 		}
-		if (!is_null($filter->date_due_start))		$where[] = self::field('date_due') . ' >= "' . $filter->date_due_start . '"';
-		if (!is_null($filter->date_due_end))		$where[] = self::field('date_due') . ' <= "' . $filter->date_due_end . '"';
-		if (!is_null($filter->date_created_start))	$where[] = self::field('date_created') . ' >= "' . $filter->date_created_start . '"';
-		if (!is_null($filter->date_created_end))	$where[] = self::field('date_created') . ' <= "' . $filter->date_created_end . '"';
 		
-		return self::selectRows($fields, $where, $join, $order_by);
+		if (!is_null($filter->search))				$where[] = self::field('title') . ' REGEXP "' . $filter->searchRegexp() . '"';
+		
+		$date_due_equal = is_null($filter->date_due_start) || is_null($filter->date_due_end);
+		$date_created_equal = is_null($filter->date_created_start) || is_null($filter->date_created_end);
+		
+		if (!is_null($filter->date_due_start))		$where[] = self::field('date_due') . ' ' . ($date_due_equal ? '=' : '>=') . ' "' . $filter->date_due_start . '"';
+		if (!is_null($filter->date_due_end))		$where[] = self::field('date_due') . ' ' . ($date_due_equal ? '=' : '<=') . ' "' . $filter->date_due_end . '"';
+		if (!is_null($filter->date_created_start))	$where[] = self::field('date_created') . ' ' . ($date_created_equal ? '=' : '>=') . ' "' . $filter->date_created_start . '"';
+		if (!is_null($filter->date_created_end))	$where[] = self::field('date_created') . ' ' . ($date_created_equal ? '=' : '<=') . ' "' . $filter->date_created_end . '"';
+		if (!is_null($filter->username) && $filter->username!=0) $where[] = self::field('uid') . ' = ' . $filter->username;
+		return $where;
+	}
+	
+	private static function createJoin() {
+		$join = array();
+		$join[] = self::inner('id', User::tableName(), 'uid');
+		$join[] = self::inner('id', Photopolymer::tableName(), 'pid');
+		return $join;
 	}
 	
 	public static function byId($id, $gid = null) {
