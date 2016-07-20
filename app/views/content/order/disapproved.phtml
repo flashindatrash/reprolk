@@ -10,7 +10,7 @@
 					<?php
 						print View::formValidate();
 						print View::formNormal('comment', 'textarea');
-						print View::formNormal('files', 'files');
+						print View::formNormal('files', 'files', $this->getFileAvailableExtensions(), $this->getFileMaxSize(), $this->getFileCount());
 					?>
 				</div>
 				<div class="modal-footer">

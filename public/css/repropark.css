@@ -70,6 +70,21 @@ a:hover {
 	border-left: 2px dotted #92c3d2;
 }
 
+.language-block {
+	text-align: center;
+	margin-top: 20px;
+	color: #aaa;
+	font-size: 10pt;
+}
+
+.language-block a {
+	color: #666;
+}
+
+.paginator-block {
+	text-align: center;
+}
+
 .header .menu {
 	text-align: right;
 	list-style: none;
@@ -220,4 +235,63 @@ a:hover {
 
 .left ul li {
   color: #888;
+}
+
+.file-extensions {
+	font-size: 8pt;
+	color: #aaa;
+}
+
+ul.files {
+	list-style: none;
+	padding: 0;
+}
+
+ul.files li {
+	padding-bottom: 5px;
+}
+
+ul.file {
+	margin: 0;
+	padding: 0 0 0 20px;
+}
+
+ul.file .list-group-item {
+	height: 30px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+ul.file li.name {
+	text-align: left;
+}
+
+ul.file li.extension {
+	text-transform: uppercase;
+}
+
+.list-group-horizontal .list-group-item {
+	display: inline-block;
+}
+.list-group-horizontal .list-group-item {
+	margin-bottom: 0;
+	margin-left:-4px;
+	margin-right: 0;
+}
+.list-group-horizontal .list-group-item:first-child {
+	border-top-right-radius:0;
+	border-bottom-left-radius:4px;
+}
+.list-group-horizontal .list-group-item:last-child {
+	border-top-right-radius:4px;
+	border-bottom-left-radius:0;
+}
+
+.table>tbody>tr.urgent>td, .table>tbody>tr.urgent>th, .table>tbody>tr>td.urgent, .table>tbody>tr>th.urgent, .table>tfoot>tr.urgent>td, .table>tfoot>tr.urgent>th, .table>tfoot>tr>td.urgent, .table>tfoot>tr>th.urgent, .table>thead>tr.urgent>td, .table>thead>tr.urgent>th, .table>thead>tr>td.urgent, .table>thead>tr>th.urgent {
+	background-color: #ff7d89;
+}
+
+.filter-dialog {
+	width: 750px;
 }

@@ -4,11 +4,11 @@ class BaseController {
 	
 	private $template = 'base';
 	private $title = 'Repropark';
-	private $files = array('js' => ['jquery-1.11.3.min', 'bootstrap.min', 'repropark'], 'css' => ['bootstrap.min', 'bootstrap-theme.min', 'repropark']);
+	private $files = array('js' => ['jquery-1.11.3.min', 'bootstrap.min', 'bootstrap-switch.min', 'repropark'], 'css' => ['bootstrap.min', 'bootstrap-theme.min', 'bootstrap-switch.min', 'repropark']);
 	private $js_params = array();
-	private $alerts = array('danger' => [], 'warning' => [], 'info' => [], 'success' => []);
 	private $menu = array();
 	
+	protected $alerts = array('danger' => [], 'warning' => [], 'info' => [], 'success' => []);
 	protected $view;
 	
 	public function __construct() {
@@ -84,7 +84,7 @@ class BaseController {
 	}
 	
 	public function getBreadcrumbs() {
-		$breadcrumb = $this->renderBreadcrump($this->menu);
+		$breadcrumb = $this->generateBreadcrump($this->menu);
 		print !Account::isLogined() || $breadcrumb=='' ? '' : '<ol class="breadcrumb">' . $breadcrumb . '</ol><hr>';
 	}
 	
@@ -94,6 +94,19 @@ class BaseController {
 	
 	public function getSubMenu() {
 		print $this->renderMenu($this->menu, Route::TYPE_SUB);
+	}
+	
+	public function getLanguages() {
+		if (!Account::isLogined()) return;
+		$li = array();
+		foreach (Locale::getLanguages() as $language) {
+			if ($language==Account::getLang()) {
+				$li[] = $language;
+			} else {
+				$li[] = '<li>' . View::link(Route::LANGUAGE_SET, $language, 'l=' . $language) . '</li>';
+			}
+		}
+		print '<ul class="list-inline">' . implode('', $li) . '</ul>';
 	}
 	
 	public function getContent() {
@@ -130,6 +143,30 @@ class BaseController {
 		$this->include_file(Application::$config['app']['layouts'] . $this->template . '.phtml');
 	}
 	
+	protected function applyPaginator(&$currentPage, &$totalPages, $total, $perPage) {
+		$totalPages = ceil($total / $perPage);
+		$currentPage = hasGet('page') ? get('page') : 0;
+		if ($currentPage>$totalPages-1) $currentPage = $totalPages-1;
+		else if ($currentPage<0) $currentPage = 0;
+	}
+	
+	protected function generateBreadcrump($items) {
+		return $this->renderBreadcrump($items);
+	}
+	
+	protected function include_datetimepicker() {
+		$this->addJSfile('datetimepicker/datetimepicker.min');
+		$this->addJSfile('datetimepicker/locales/bootstrap-datetimepicker.' . Account::getLang());
+		$this->addCSSfile('datetimepicker');
+	}
+	
+	protected function include_fileinput() {
+		$this->addJSfile('fileinput/canvas-to-blob.min');
+		$this->addJSfile('fileinput/fileinput.min');
+		$this->addJSfile('fileinput/locales/fileinput_locale_' . Account::getLang());
+		$this->addCSSfile('fileinput');
+	}
+	
 	private function renderMenu($items, $type) {
 		$ul = '<ul class="menu">';
 		foreach ($items as $item) {
@@ -149,7 +186,7 @@ class BaseController {
 		if (!is_null(Application::$routes->current) && Application::$routes->current->isAvailable()) {
 			foreach ($items as $item) {
 				if ($item->isFinded()) {
-					if ($item->isActive()) return '<li class="active">' . $item->linkText() . '</li>';
+					if ($item->isActive()) return '<li class="active">' . $item->breadcrumpText() . '</li>';
 					else {
 						$get = null;
 						if ($item->routeName == Route::ORDER_VIEW && hasGet('id')) {

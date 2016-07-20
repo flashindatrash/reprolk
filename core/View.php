@@ -36,11 +36,17 @@ class View {
 				}
 				$str .= '</select>';
 				return $str;
+			case 'switch':
 			case 'checkbox':
-				//name, type, value
+				//name, type, value, datas (Array)
 				$value = $nArgs>=3 ? ($args[2]==1 || $args[2]===true) : false;
+				$datas = $nArgs>=4 ? $args[3] : [];
 				$checked = $value ? ' checked' : '';
-				return '<div class="checkbox"><label><input type="checkbox" name="' . $name . '" id ="input_' . $name . '" aria-label="..."' . $checked . '> ' . self::str($name) . '</label></div>';
+				$data = $type=='switch' ? ' data-switch="enabled"' : '';
+				if (count($datas)>0) {
+					$data .= ' ' . join(' ', $datas);
+				}
+				return '<div class="checkbox"><label><input type="checkbox" name="' . $name . '" id ="input_' . $name . '" aria-label="..."' . $data . $checked . '> ' . self::str($name) . '</label></div>';
 			case 'date':
 				//name, type, value, useBackDate (true)
 				$value = $nArgs>=3 && !is_null($args[2]) ? $args[2] : '';
@@ -60,7 +66,7 @@ class View {
 							'minView: 2,' .
 							'pickerPosition: "bottom-left",' .
 							($useBackDate ? 'startDate: new Date(),' : '') .
-							'language: "en",' .
+							'language: "' . Account::getLang() . '",' .
 							($value!='' ? 'initialDate: new Date("' . $value . '"),' : '') .
 							'forceParse: 0' .
 							'});</script>';
@@ -69,20 +75,37 @@ class View {
 				//name, type, value
 				$value = $nArgs>=3 ? $args[2] : '';
 				return '<textarea class="form-control" name="' . $name . '" id="input_' . $name . '" placeholder="' . self::str($name) . '">' . $value . '</textarea>';
-			case 'file':
-				//name, type
-				return '<input type="file" name="' . $name . '">';
-			case 'files':
-				//name, type
-				return '<input type="file" name="' . $name . '[]" multiple>';
+			case 'file': case 'files': 
+				//name, type, extensions, maxFileSize, maxFileCount
+				$extensions = $nArgs>=3 ? $args[2] : [];
+				$maxFileSize = $nArgs>=4 ? $args[3] : 0;
+				$maxFileCount = $nArgs>=5 ? $args[4] : $type=='file' ? 1 : 0;
+				
+				$n = $type=='file' ? 'name="' . $name . '"' : 'name="' . $name . '[]" multiple';
+				$s = ' data-max-file-size="' . $maxFileSize . '"';
+				$c = ' data-max-file-count="' . $maxFileCount . '"';
+				$e = count($extensions)>0 ? ' data-allowed-file-extensions=\'["' . implode('", "', $extensions) . '"]\'' : '';
+				$input = '<input ' . $n . $e . $s . $c . ' 
+					type="file" 
+					class="file" 
+					data-upload-async="false" 
+					data-show-preview="false" 
+					data-show-upload="false" 
+					data-show-caption="true" 
+					data-language="' . Account::getLang() . '">';
+				if (count($extensions)>0) {
+					$sup = '<p class="pull-right file-extensions">' . implode(', ', $extensions) . '</p>';
+				}
+				return $input . $sup;
 			case 'any':
 				//name, type, any text
 				return $nArgs>=3 ? $args[2] : '';
 			default:
-				//name, type, value, classes
+				//name, type, value, classes, placeholder (name)
 				$value = $nArgs>=3 ? $args[2] : '';
-				$classes = $nArgs>=4 ? $args[3] : [];
-				return '<input type="' . $type . '" value="' . $value . '" class="form-control' . (count($classes) ? ' ' . implode(' ', $classes) : '') . '" name="' . $name . '" id="input_' . $name . '" placeholder="' . self::str($name) . '">';
+				$classes = $nArgs>=4 && $args[3] ? $args[3] : [];
+				$placeholder = $nArgs>=5 ? $args[4] : self::str($name);
+				return '<input type="' . $type . '" value="' . $value . '" class="form-control' . (count($classes) ? ' ' . implode(' ', $classes) : '') . '" name="' . $name . '" id="input_' . $name . '" placeholder="' . $placeholder . '">';
 		}
 	}
 	
@@ -95,7 +118,7 @@ class View {
 		
 		return	'<div class="form-group">' .
 					'<label for="input_' . $name . '" class="col-sm-3 control-label">' . self::str($name) . '</label>' .
-						'<div class="col-sm-9">' . self::call('input', $args) . '</div>' .
+					'<div class="col-sm-9">' . self::call('input', $args) . '</div>' .
 				'</div>';
 	}
 	
@@ -157,8 +180,51 @@ class View {
 		return Application::str($name);
 	}
 	
+	public static function rightBreadcrumpDropdown($select, $li) {
+		$html = '<div class="dropdown pull-right">';
+		$html .= '<a class="dropdown-toggle" id="templates" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' . $select . '&nbsp;<span class="caret"></span></a>';
+		$html .= '<ul class="dropdown-menu" aria-labelledby="templates">' . implode('', $li) . '</ul>';
+		$html .= '</div>';
+		return $html;
+	}
+	
+	public static function rightBreadcrumpLink($link, $isActive = false) {
+		if (is_null($link)) {
+			return '<li role="separator" class="divider"></li>';
+		} else if ($link=='') return ''; //если права не позволяет, не оббертываем в li
+		return '<li' . ($isActive ? ' class="active"' : '') . '>' . $link . '</li>';
+	}
+	
+	public static function paginator($count, $current, $buttons = 9) {
+		if ($count<=1) return '';
+		$html = '<nav>';
+		$html .= '<ul class="pagination">';
+		$html .= '<li><a href="?' . self::paginatorPage(0) . '" aria-label="' . self::str('previous') . '"><span aria-hidden="true">&laquo;</span></a></li>';
+		
+		$offset = floor(($buttons-1)/2);
+		$min = max($current-$offset, 0);
+		$max = min($current + 1 +$offset, $count);
+		
+		for ($i = $min; $i<$max; $i++) {
+			$html .= '<li' . ($i==$current ? ' class="active"' : '') . '><a href="?' . self::paginatorPage($i) . '">' . ($i + 1) . '</li>';
+		}
+		$html .= '<li><a href="?' . self::paginatorPage($count - 1) . '" aria-label="' . self::str('next') . '"><span aria-hidden="true">&raquo;</span></a></li>';
+		$html .= '</ul>';
+		$html .= '</nav>';
+		return $html;
+	}
+	
+	public static function paginatorPage($page) {
+		$gets = gets();
+		$gets['page'] = $page;
+		return self::getValues($gets);
+	}
+	
 	public static function linkSort($field, $order) {
-		$by = $order->by == 'desc' ? 'asc' : 'desc';
+		$by = 'desc';
+		if ($order->field == $field) {
+			$by = $order->by == 'desc' ? 'asc' : 'desc';
+		}
 		$gets = gets();
 		$gets['sort'] = $field;
 		$gets['by'] = $by;
@@ -167,8 +233,12 @@ class View {
 		return $html;
 	}
 	
+	public static function plugin($name, $isEnabled) {
+		return self::input($name, 'switch', $isEnabled, ['data-type="plugin"', 'data-path="' . Route::byName(Route::SWITCH_PLUGIN)->path . '"', 'data-name="' . $name . '"']);
+	}
+	
 	public static function attachments($files) {
-		$html = '<ul>';
+		$html = '<ul class="files">';
 		foreach ($files as $file) {
 			$html .= '<li>' . self::attachment($file) . '</li>';
 		}
@@ -177,18 +247,19 @@ class View {
 	}
 	
 	public static function attachment($file) {
-		$size = self::formatSizeUnits($file->size);
-		$text = $file->name;
-		return self::link(Route::FILE, $text, 'id=' . $file->id, null, null, null, null, null, '_blank') . ' [' . $size . ']';
+		$extension = '<li class="list-group-item list-group-item-success col-sm-1 extension">' . $file->extension() . '</li>';
+		$name = '<li class="list-group-item col-sm-7 name">' . $file->name . '</li>';
+		$size = '<li class="list-group-item col-sm-2 list-group-item-warning">' . self::formatSizeUnits($file->size) . '</li>';
+		$link = self::link(Route::FILE, self::str('download'), 'id=' . $file->id, null, 'list-group-item col-sm-2 active', null, null, null, '_blank') ;
+		return '<ul class="file list-group-horizontal row">' . $extension . $name . $size . $link . '</ul>';
 	}
 	
 	public static function link($r, $text = null, $get = null, $id = null, $class = null, $title = null, $tooltip = null, $data = null, $target = '_self') {
 		if ($r=='#') $r = new Route(null, '#');
-		$route = (!$r instanceof Route) ? Application::$routes->byName($r) : $r;
+		$route = (!$r instanceof Route) ? Route::byName($r) : $r;
 		if (is_null($route) || !$route->isAvailable()) return '';
 		$text = is_null($text) ? $route->linkText() : $text;
-		$get = is_null($get) ? '' : '?' . $get;
-		$href = ' href="' . $route->path . $get . '"';
+		$href = ' href="' . $route->forGet($get) . '"';
 		$id = is_null($id) ? '' : ' id="' . $id . '"';
 		$class = is_null($class) ? '' : ' class="' . $class . '"';
 		$target = ' target="' . $target . '"';
@@ -230,6 +301,10 @@ class View {
 		return self::icon($value===true || $value==1 ? 'ok' : 'minus');
 	}
 	
+	public static function bool2str($value) {
+		return self::str($value===true || $value==1 ? 'yes' : 'no');
+	}
+	
 	public static function icon($value) {
 		return '<span class="glyphicon glyphicon-' . $value . '" aria-hidden="true"></span>';
 	}
@@ -247,5 +322,3 @@ class View {
 	}
 	
 }
-
-?>

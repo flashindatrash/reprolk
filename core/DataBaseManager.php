@@ -38,6 +38,15 @@ class DataBaseManager {
 		return $query ? $query : null;
 	}
 	
+	public function getCount($from, $where = NULL, $join = null) {
+		$select = 'select COUNT(*) as count';
+		$from = ' from ' . $this->tableName($from);
+		$join = is_null($join) ? '' : ' ' . join(' ', $join);
+		$query = $this->query($select . $from . $join . self::convertWhere($where));
+		$result = !is_null($query) && mysql_num_rows($query)>0 ? mysql_fetch_object($query) : null;
+		return !is_null($result) ? $result->count : 0;
+	}
+	
 	public function selectRow($from, $className = NULL, $select = NULL, $where = NULL, $join = NULL) {
 		$result = $this->select($from, $select, $where, $join);
 		return !is_null($result) && mysql_num_rows($result)>0 ? mysql_fetch_object($result, $className) : null;
@@ -47,8 +56,10 @@ class DataBaseManager {
 		if (is_null($range)) $range = '0, 300';
 		$result = $this->select($from, $select, $where, $join, $order, $range);
 		$rows = array();
-		while ($row = mysql_fetch_object($result, $className)) {
-			$rows[] = $row;
+		if (!is_null($result)) {
+			while ($row = mysql_fetch_object($result, $className)) {
+				$rows[] = $row;
+			}
 		}
 		return $rows;
 	}
@@ -113,13 +124,18 @@ class DataBaseManager {
 		return $rows;
 	}
 	
-	public function addColumn($table, $column, $type, $mandatory = true) {
-		$str = 'alter table ' . $this->tableName($table)  . ' add `' . $column . '` ' . $type . ' ' . ($mandatory ? 'not ' : '') . 'null;';
+	public function addColumn($table, $column, $type, $mandatory, $default) {
+		$str = 'alter table ' . $this->tableName($table)  . ' add `' . $column . '` ' . $type . ' ' . ($mandatory ? 'not ' : '') . 'null' . (is_null($default) ? '' : ' default ' . $default) . ';';
 		return $this->query($str) ? true : false;
 	}
 	
 	public function dropColumn($table, $column) {
 		$str = 'alter table ' . $this->tableName($table)  . ' drop `'. $column . '`;';
+		return $this->query($str) ? true : false;
+	}
+	
+	public function truncate($table) {
+		$str = 'truncate ' . $this->tableName($table)  . ';';
 		return $this->query($str) ? true : false;
 	}
 	
@@ -131,7 +147,15 @@ class DataBaseManager {
 	}
 	
 	public static function array2values($arr) {
-		return '"' . join('", "', $arr) . '"';
+		$return = array();
+		foreach ($arr as $i => $value) {
+			if (is_null($value)) {
+				$return[] = 'NULL';
+			} else {
+				$return[] = '"' . $value . '"';
+			}
+		}
+		return join(', ', $return);
 	}
 	
 	public static function array2insert($arr) {

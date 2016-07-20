@@ -1,0 +1,17 @@
+<?php
+foreach ($this->locales as $locale) {
+	$html = '';
+	$html .= '<div class="form-group">';
+	$html .= '<div class="input-group">';
+	$html .= '<div class="input-group-addon">'. $locale->str .'</div>';
+	$html .= '<input type="text" class="form-control" placeholder="' . View::str('empty') . '" value="' . $locale->value() . '">';
+	$html .= View::link(Route::LOCALE_EDIT, View::str('edit'), 'key=' . $locale->str, 'locale', 'button input-group-addon', null, 'left');
+	$html .= '</div>';
+	$html .= '</div>';
+	print $html;
+}
+?>
+
+<div class="paginator-block">
+	<?php print View::paginator($this->totalPages, $this->currentPage); ?>
+</div>

@@ -36,10 +36,7 @@ class Template extends BaseModel {
 	}
 	
 	public static function byId($id) {
-		$where = array();
-		$where[] = self::field('id') . ' = ' . $id;
-		
-		return self::selectRow(null, $where);
+		return self::selectRow(null, [self::field('id') . ' = ' . $id]);
 	}
 	
 	public static function add($gid, $name) {

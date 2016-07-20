@@ -6,10 +6,7 @@ class FieldPagesController extends BaseController {
 	
 	public function beforeRender() {
 		$this->routes = Field::getRoutes();
-	}
-	
-	public function getContent() {
-		$this->pick('admin/field/index');
+		$this->view = 'admin/field/index';
 	}
 	
 }

@@ -15,19 +15,23 @@ $(document).ready(function(){
 			last_selected_row = $(this);
 		}
 		
-		//вкл/отк клавиши действий
-		if (last_selected_row) {
-			$('.btn-action').removeClass('disabled');
-		} else {
-			$('.btn-action').addClass('disabled');
-		}
 		
-		//выставим url
 		if (last_selected_row) {
 			$( ".btn-action" ).each(function() {
 				var btn_id = $(this).attr('id');
-				$(this).attr('href', getPathById(btn_id, row_id))
+				$(this).attr('href', getPathById(btn_id, row_id));
+				
+				var data_can = last_selected_row.data('can-'+btn_id);
+				var show = data_can === undefined || data_can=='1';
+				
+				if (show) {
+					$(this).removeClass('disabled');
+				} else {
+					$(this).addClass('disabled');
+				}
 			});
+		} else {
+			$('.btn-action').addClass('disabled');
 		}
 	});
 	

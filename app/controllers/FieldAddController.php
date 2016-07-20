@@ -17,6 +17,7 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 		
 		$this->types = Field::getTypes();
 		$this->view = 'admin/field/add';
+		$this->addJSfile('controller/FieldAddController');
 	}
 	
 	//IRedirect
@@ -25,8 +26,10 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 	}
 	
 	private function add() {
+		if (hasPost('name')) $_POST['name'] = validSymbols(post('name'));
+		
 		if ($this->formValidate(['name', 'type', 'weight'])) {
-			if (Field::add(get('page'), post('type'), post('name'), post('value'), checkbox2bool(post('mandatory')), int(post('weight')))) {
+			if (Field::add(get('page'), post('type'), post('name'), post('value'), checkbox2bool(post('mandatory')), int(post('weight')), post('default'))) {
 				return true;
 			} else {
 				$this->addAlert(sprintf(View::str('error_field_add'), post('name')), 'danger');

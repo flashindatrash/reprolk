@@ -28,13 +28,8 @@ class TemplateViewController extends BaseController {
 			$this->addAlert(View::str('info_templates_null'), 'info');
 		}
 		
-		//CSS/JS
-		$this->addJSfile('datetimepicker.min');
-		$this->addCSSfile('datetimepicker');
-		$this->addCSSfile('selected.table');
-		$this->addJSfile('selected.table');
-		if ($this->route_delete->isAvailable()) $this->addJSparam('delete_url', $this->route_delete->path);
-		if ($this->route_edit->isAvailable()) $this->addJSparam('view_url', $this->route_edit->path);
+		$this->include_datetimepicker();
+		$this->include_other();
 	}
 	
 	public function getContent() {
@@ -49,6 +44,13 @@ class TemplateViewController extends BaseController {
 				$this->pick('template/add');
 			}
 		}
+	}
+	
+	protected function include_other() {
+		$this->addCSSfile('selected.table');
+		$this->addJSfile('selected.table');
+		if ($this->route_delete->isAvailable()) $this->addJSparam('delete_url', $this->route_delete->path);
+		if ($this->route_edit->isAvailable()) $this->addJSparam('view_url', $this->route_edit->path);
 	}
 	
 	private function save() {

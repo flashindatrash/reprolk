@@ -38,6 +38,14 @@ class Account {
 		return self::isLogined() ? Application::$user->username : 'anonymous';
 	}
 	
+	public static function getLang() {
+		return self::isLogined() ? Application::$user->lang : Locale::DEFAULT_LANGUAGE;
+	}
+	
+	public static function setLang($value) {
+		return self::isLogined() ? Application::$user->editLang($value) : false;
+	}
+	
 }
 
 ?>

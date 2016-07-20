@@ -1,11 +1,13 @@
 <?php
 
+include_once '../core/Config.php';
 include_once '../core/Application.php';
 include_once '../core/DataBaseManager.php';
 include_once '../core/FTPManager.php';
 include_once '../core/BaseController.php';
 include_once '../core/BaseModel.php';
 include_once '../core/View.php';
+include_once '../core/objects/Hook.php';
 include_once '../core/objects/Route.php';
 include_once '../core/objects/AccountRoute.php';
 include_once '../core/objects/Routes.php';
@@ -31,7 +33,7 @@ function pr($x=null){
 }
 
 function post($val) {
-	return isset($_POST[$val]) ? $_POST[$val] : '';
+	return isset($_POST[$val]) ? validQuotes($_POST[$val]) : '';
 }
 
 function get($val) {
@@ -64,7 +66,7 @@ function hasSession($val) {
 }
 
 function toBool($b) {
-	return $b=="1";
+	return $b=="1" || $b=="true";
 }
 
 function checkbox2bool($value) {
@@ -81,12 +83,18 @@ function validQuotes($text) {
 
 function stripQuotes($text) {
 	return preg_replace('/^(\'(.*)\'|"(.*)")$/', '$2$3', $text);
-} 
+}
+
+function validSymbols($text) {
+	return preg_replace("/[^a-zA-Z0-9_]/","",$text);
+}
 
 function removeArrayItem($value, &$arr) {
 	if(($key = array_search($value, $arr)) !== false) {
 		unset($arr[$key]);
 	}
+	
+	$arr = array_values($arr);
 }
 
 function reArray($array, $key, $value) {
@@ -98,8 +106,9 @@ function reArray($array, $key, $value) {
 	return $a;
 }
 	
-function reArrayFiles(&$file_post) {
+function reArrayFiles($file_post) {
 	$file_ary = array();
+	
     $file_count = count($file_post['name']);
     $file_keys = array_keys($file_post);
 
@@ -164,10 +173,57 @@ function translit($string) {
 	return $str=iconv("UTF-8","UTF-8//IGNORE",strtr($string,$replace));
 }
 
+function toUTF($text) {
+	return iconv('Windows-1251', "UTF-8//IGNORE", $text);
+}
+
 function require_class($fileName, $className) {
 	if (file_exists($fileName)) require_once ($fileName);
 	if (class_exists($className)) return new $className;
 	return null;
+}
+
+function server_getenv($var_name) {
+    if (isset($_SERVER[$var_name])) {
+        return $_SERVER[$var_name];
+    }
+
+    if (isset($_ENV[$var_name])) {
+        return $_ENV[$var_name];
+    }
+
+    if (getenv($var_name)) {
+        return getenv($var_name);
+    }
+
+    if (function_exists('apache_getenv')
+        && apache_getenv($var_name, true)
+    ) {
+        return apache_getenv($var_name, true);
+    }
+
+    return '';
+}
+
+function download_header($filename, $mimetype, $length = 0) {
+	/* Replace all possibly dangerous chars in filename */
+	$filename = str_replace(array(';', '"', "\n", "\r"), '-', $filename);
+	if (!empty($filename)) {
+		header('Content-Description: File Transfer');
+		header('Content-Disposition: attachment; filename="' . $filename . '"');
+	}
+	header('Content-Type: ' . $mimetype);
+	// inform the server that compression has been done,
+	// to avoid a double compression (for example with Apache + mod_deflate)
+	$notChromeOrLessThan43 = USR_BROWSER_AGENT != 'CHROME' // see bug #4942
+		|| (USR_BROWSER_AGENT == 'CHROME' && USR_BROWSER_VER < 43);
+	if (strpos($mimetype, 'gzip') !== false && $notChromeOrLessThan43) {
+		header('Content-Encoding: gzip');
+	}
+	header('Content-Transfer-Encoding: binary');
+	if ($length > 0) {
+		header('Content-Length: ' . $length);
+	}
 }
 
 function __autoload($class_name) {

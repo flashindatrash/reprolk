@@ -2,11 +2,16 @@
 
 class Form {
 	
-	protected $fields = [];
+	public $fields = [];
 	
 	public function loadFields($route, $gid = null) {
 		if (is_null($gid)) $gid = Account::getGid();
 		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, $gid));
+		
+		//отсортируем смерженые поля по весу
+		uasort($this->fields, array($this, 'sortWeight'));
+		
+		//заполним постом
 		$this->parsePost();
 	}
 	
@@ -29,6 +34,7 @@ class Form {
 		return $all;
 	}
 	
+	//возвращает ид-шники для заполнения в базу, при изменении темплейта
 	public function fieldsAllID() {
 		$all = array();
 		foreach($this->fields as $field) {
@@ -45,7 +51,7 @@ class Form {
 			if (method_exists($this, $method)) {
 				$html .= $this->{$method}($field);
 			} else {
-				$html .= $this->view($field);
+				$html .= hook(HOOK_FORM_RENDER, $this->view($field), $field);
 			}
 		}
 		return $html;
@@ -54,18 +60,18 @@ class Form {
 	public function view($field) {
 		switch ($field->type) {
 			case 'hidden':
-				return View::input($field->name, $field->type, $field->getValue());
+				return View::input($field->name, $field->type);
 			case 'select':
 			case 'multiple':
-				return View::formNormal($field->name, $field->type, $field->getValue(), false, true, $field->session);
+				return View::formNormal($field->name, $field->type, $field->getData(), false, true, $field->getValue());
 			case 'checkbox':
-				return View::formOffset($field->name, $field->type, $field->session);
+				return View::formOffset($field->name, $field->type, $field->getValue());
 			case 'file':
 			case 'files':
 			case 'submit':
-				return View::formOffset($field->name, $field->type, $field->getValue());
+				return View::formOffset($field->name, $field->type);
 			default:
-				return View::formNormal($field->name, $field->type, $field->session);
+				return View::formNormal($field->name, $field->type, $field->getValue());
 		}
 	}
 	
@@ -87,14 +93,22 @@ class Form {
 	
 	private function parsePost() {
 		foreach ($this->fields as $field) {
-			if (!hasPost($field->name)) continue;
-			switch ($field->type) {
-				case 'checkbox':
-					$_POST[$field->name] = checkbox2bool(post($field->name));
-				break;
+			if ($field->type=='checkbox') {
+				$_POST[$field->name] = checkbox2bool(post($field->name));
 			}
-			$field->session = post($field->name);
+			
+			$hook = hook(HOOK_FORM_PARSEPOST, null, $field->name);
+			
+			if ($hook!==null) {
+				$field->session = $hook;
+			} else if (hasPost($field->name)) {
+				$field->session = post($field->name);
+			}
 		}
+	}
+	
+	private function sortWeight($a, $b) {
+		return ($a->weight == $b->weight) ? 0 : ($a->weight < $b->weight) ? -1 : 1;
 	}
 	
 }

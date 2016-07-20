@@ -1,10 +1,12 @@
-<?php if (is_null($this->user)) die; ?>
-<dl class="dl-horizontal">
-<?php
-	foreach ($this->fields as $field) {
-		print '<dt>' . View::str($field) .'</dt>';
-		print '<dd>' . $this->user->$field . '</dd>';
-	}
-	
-?>
-</dl>
+<div class="container-fluid well">
+	<div class="row-fluid">
+        <div class="span8">
+            <h3><?php print $this->user->username; ?></h3>
+			<?php
+				foreach ($this->fields as $field) {
+					print '<h6>' . View::str($field) . ': ' . $this->user->$field . '</h6>';
+				}
+			?>
+        </div>
+	</div>
+</div>

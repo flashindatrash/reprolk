@@ -1,4 +1,5 @@
 <?php
+
 ini_set("display_errors", 1);
 
 try {
@@ -11,13 +12,13 @@ try {
 	
 	$app = new Application($config);
 	
-	$app->addLang('../app/config/lang/en.php');
+	$app->connect();
+	
+	$app->setLang(Account::getLang());
 	
 	$app->setRoutes([
-		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
 		new Route(Route::ORDER_ALL, '/order/all', UserAccess::ORDER_VIEW, Route::TYPE_NORMAL, [
 			new Route(Route::ORDER_ADD, '/order/add', UserAccess::ORDER_ADD),
-			new Route(Route::ORDER_ADD_TEMPLATE, '/order/add/template', UserAccess::ORDER_ADD),
 			new Route(Route::ORDER_ARCHIVE, '/order/archive', UserAccess::ORDER_VIEW),
 			new Route(Route::COMMENT_DELETE, '/order/comment/delete', UserAccess::COMMENT_EDIT, Route::TYPE_HIDDEN),
 			new Route(Route::ORDER_VIEW, '/order/view', UserAccess::ORDER_VIEW, Route::TYPE_HIDDEN, [
@@ -25,6 +26,7 @@ try {
 				new Route(Route::ORDER_DUPLICATE, '/order/duplicate', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
 				new Route(Route::ORDER_CANCEL, '/order/cancel', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
 				new Route(Route::ORDER_DELETE, '/order/delete', UserAccess::ORDER_DELETE, Route::TYPE_HIDDEN),
+				new Route(Route::ORDER_REPEAT, '/order/repeat', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
 				new Route(Route::ORDER_APPROVAL, '/order/approval', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
 				new Route(Route::ORDER_APPROVED, '/order/approve/success', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
 				new Route(Route::ORDER_DISAPPROVED, '/order/approve/cancel', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
@@ -55,18 +57,30 @@ try {
 				new Route(Route::POLYMER_DELETE, '/admin/photopolymers/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 				new Route(Route::POLYMER_BIND, '/admin/photopolymers/group', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 			]),
+			
+			new Route(Route::LOCALE_STATS, '/admin/locale', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+				new Route(Route::LOCALE_ALL, '/admin/locale/all', UserAccess::ADMIN, Route::TYPE_NORMAL),
+				new Route(Route::LOCALE_EDIT, '/admin/locale/edit', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+			]),
 		]),
 		
-		new Route(Route::LOGIN, '/login', UserAccess::ALL, Route::TYPE_HIDDEN),
+		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
 		new Route(Route::LOGOUT, '/logout', UserAccess::AUTH, Route::TYPE_SUB),
+		new Route(Route::LOGIN, '/login', UserAccess::ALL, Route::TYPE_HIDDEN),
 		
 		new Route(Route::INDEX, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
+		new Route(Route::LANGUAGE_SET, '/lang', UserAccess::ALL, Route::TYPE_HIDDEN),
 		new Route(Route::FILE, '/file', UserAccess::AUTH, Route::TYPE_HIDDEN),
+		new Route(Route::CRON, '/cron', UserAccess::ALL, Route::TYPE_HIDDEN),
 		new Route(Route::NOT_FOUND, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
 		new Route(Route::ACCESS_DENIED, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
+		
+		//Ajax
+		new Route(Route::SWITCH_PLUGIN, '/ajax/plugin/switch', UserAccess::AUTH, Route::TYPE_HIDDEN),
+		
+		new Route('Test', '/test', UserAccess::AUTH, Route::TYPE_HIDDEN),
 	]);
 	
-	$app->connect();
 	
 	$app->getContent();
 
@@ -75,5 +89,3 @@ try {
 	echo $e->getMessage();
 	
 }
-
-?>
