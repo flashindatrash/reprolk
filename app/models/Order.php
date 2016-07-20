@@ -12,7 +12,10 @@ class Order extends BaseModel {
 	const DEPLOY = 'deploy'; //принято в производство
 	const FINISHED = 'finished';
 	
+	const FIELD_STATUS = 'status'; //поле статуса
+	const FIELD_URGENT = 'urgent'; //поле срочности
 	const FIELD_COMMENT = 'comment'; //поле комментария
+	const FIELD_DATE_DUE = 'date_due'; //поле сроков
 	
 	public $id;
 	public $uid;

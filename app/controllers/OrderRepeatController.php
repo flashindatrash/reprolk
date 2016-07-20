@@ -5,7 +5,7 @@ include_once '../app/controllers/OrderDuplicateController.php';
 class OrderRepeatController extends OrderDuplicateController {
 	
 	const MANDATORY = array('date_due');
-	const EDITABLE = array('date_due', 'urgent');
+	const EDITABLE = array('date_due', 'urgent', 'comment');
 	
 	private $root;
 	
@@ -79,15 +79,10 @@ class OrderRepeatController extends OrderDuplicateController {
 		return $values;
 	}
 	
-	protected function showFiles() {
-		return false;
-	}
-	
 	protected function getFormName() {
 		return 'OrderRepeat';
 	}
 	
-
 }
 
 ?>

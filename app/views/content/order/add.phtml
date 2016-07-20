@@ -2,9 +2,7 @@
 <?php 
 	print $this->form->render();
 	
-	if ($this->showFiles()) {
-		print View::formOffset('files', 'files', $this->getFileAvailableExtensions(), $this->getFileMaxSize());
-	}
+	print View::formOffset('files', 'files', $this->getFileAvailableExtensions(), $this->getFileMaxSize());
 	
 	print View::formOffset('buttons', 'any', 
 		View::input('add', 'submit') . '&nbsp;' .

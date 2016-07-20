@@ -6,11 +6,12 @@ class OrderRepeatForm extends OrderViewForm {
 
 	public function view($field) {
 		switch ($field->name) {
-			case 'status':
+			case Order::FIELD_STATUS:
 				return '';
-			case 'urgent':
+			case Order::FIELD_URGENT:
 				return View::formOffset($field->name, $field->type, $field->getValue());
-			case 'date_due':
+			case Order::FIELD_DATE_DUE:
+			case Order::FIELD_COMMENT:
 				return View::formNormal($field->name, $field->type, $field->session);
 			default:
 				return parent::view($field);
