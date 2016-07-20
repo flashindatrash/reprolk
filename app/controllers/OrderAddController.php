@@ -77,10 +77,6 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		return false;
 	}
 	
-	protected function showFiles() {
-		return true;
-	}
-	
 	protected function getFormName() {
 		return 'OrderAdd';
 	}
