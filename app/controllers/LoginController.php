@@ -15,11 +15,10 @@ class LoginController extends BaseController implements IRedirect {
 		
 		if ($formValidate) {
 			if (!isset($_POST['g-recaptcha-response']) || $captchaValidate) {
-				if (!LoginController::login()) {
+				if (!$this->login()) {
 					$this->addAlert(View::str('error_sign_in'));
 					$this->useCaptcha = true;
 				} else {
-					Session::setAuthKey(Application::$user->auth_key);
 					$this->view = 'system/redirect';
 				}
 			} else {
@@ -31,12 +30,12 @@ class LoginController extends BaseController implements IRedirect {
 		$this->addJSfile('https://www.google.com/recaptcha/api.js');
 	}
 	
-	public static function login() {
+	public function login() {
 		Application::$user = User::login(post('email'), post('password'));
 		$isLogined = Account::isLogined();
 		if ($isLogined) {
 			//сгенерируем новый authKey
-			Application::$user->auth_key = md5(Application::$user->email . '_' . Application::$user->password . '_' . time());
+			Application::$user->auth_key = md5(Application::$user->email . '_' . Application::$user->password);
 			Auth::update(Application::$user->id, Application::$user->auth_key);
 		}
 		return $isLogined;
@@ -44,9 +43,9 @@ class LoginController extends BaseController implements IRedirect {
 	
 	//IRedirect
 	public function getRedirect() {
-		$url = post('_url'); 
-		if ($url=='') $url = Application::$routes->byName(Route::ORDER_ALL)->path;
-		return new Redirect(View::str('sign_successfuly'), $url, 1500);
+		$url = post('_url');
+		if ($url=='') $url = Application::$routes->byName(Route::ORDER_ALL)->forGet(Auth::POST_KEY . '=' . Application::$user->auth_key);
+		return new Redirect(View::str('sign_successfuly'), $url);
 	}
 	
 }

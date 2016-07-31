@@ -105,10 +105,6 @@ class Field extends BaseModel {
 	
 	//варианты для заполнения
 	public function getOption() {
-		if ($this->route==Route::ORDER_ADD && $this->name==Order::FIELD_PID) {
-			return reArray(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
-		}
-		
 		switch($this->type) {
 			case 'select':
 			case 'multiple':

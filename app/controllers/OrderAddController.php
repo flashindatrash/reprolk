@@ -71,7 +71,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 	}
 	
 	protected function getFormName() {
-		return 'Order';
+		return 'OrderAdd';
 	}
 	
 	protected function generateTemplate() {
