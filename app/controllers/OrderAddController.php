@@ -42,7 +42,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		if ($this->template_id!=0) {
 			$this->form->setSession(reArray($this->template_fields, 'name', 'value'));
 		}
-		$this->form->setValue(array('pid' => $this->photopolymers));
+		$this->form->setOption(array('pid' => $this->photopolymers));
 		$this->form->setSession(array('date_due' => (new DateTime('tomorrow'))->format("Y-m-d")));
 	}
 	
@@ -78,7 +78,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 	}
 	
 	protected function getFormName() {
-		return 'OrderAdd';
+		return 'Order';
 	}
 	
 	protected function generateTemplate() {

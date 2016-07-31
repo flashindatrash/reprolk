@@ -103,7 +103,13 @@ class Field extends BaseModel {
 		return $this->column;
 	}
 	
-	public function getData() {
+	//варианты для заполнения
+	public $option; //для указании кастомных вариантов
+	public function getOption() {
+		if (!is_null($this->option)) {
+			return $this->option;
+		}
+		
 		switch($this->type) {
 			case 'select':
 			case 'multiple':
@@ -114,6 +120,7 @@ class Field extends BaseModel {
 		}
 	}
 	
+	//дефолтное значение
 	public function getDefault() {
 		$column = $this->getColumn();
 		return !is_null($column) ? $column->Default : null;
