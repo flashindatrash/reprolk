@@ -68,11 +68,7 @@ function hasSession($val) {
 }
 
 function toBool($b) {
-	return $b=="1" || $b=="true";
-}
-
-function checkbox2bool($value) {
-	return $value=='on' ? 1 : 0;
+	return $b=="1" || $b=="true" || $b=="on";
 }
 
 function int($s) {
