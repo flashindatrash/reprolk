@@ -11,6 +11,8 @@ class Column extends BaseModel {
 	
 	public function enum() {
 		preg_match('/enum\((.*)\)$/', $this->Type, $matches);
+		if (!isset($matches[1])) return [];
+		
 		$vals = explode(',', $matches[1]);
 		$trimmedvals = array();
 		foreach($vals as $key => $value) {
