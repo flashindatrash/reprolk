@@ -78,6 +78,13 @@ try {
 		//Ajax
 		new Route(Route::SWITCH_PLUGIN, '/ajax/plugin/switch', UserAccess::AUTH, Route::TYPE_HIDDEN),
 		
+		//Api
+		new ApiRoute(Route::API_LOGIN, '/api/login', UserAccess::ALL, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_ORDER_ALL, '/api/order/all', UserAccess::API, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_ORDER_CANCEL, '/api/order/cancel', UserAccess::API, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_ORDER_ADD, '/api/order/add', UserAccess::API, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API, Route::TYPE_HIDDEN),
+		
 		new Route('Test', '/test', UserAccess::AUTH, Route::TYPE_HIDDEN),
 	]);
 	

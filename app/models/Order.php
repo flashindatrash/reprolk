@@ -12,10 +12,17 @@ class Order extends BaseModel {
 	const DEPLOY = 'deploy'; //принято в производство
 	const FINISHED = 'finished';
 	
+	const FIELD_TITLE = 'title'; //поле заголовка
 	const FIELD_STATUS = 'status'; //поле статуса
 	const FIELD_URGENT = 'urgent'; //поле срочности
 	const FIELD_COMMENT = 'comment'; //поле комментария
 	const FIELD_DATE_DUE = 'date_due'; //поле сроков
+	const FIELD_DATE_CREATED = 'date_created'; //поле когда создано
+	const FIELD_DATE_CHANGED = 'date_changed'; //поле когда изменено
+	const FIELD_RASTER_LINE = 'Raster_line'; //поле линеатуры
+	const FIELD_1C_ID = 'id_1c'; //поле для 1с id
+	const FIELD_1C_NUMBER = 'number_1c'; //поле для 1с number
+	const FIELD_PID = 'pid'; //поле id фотополимера
 	
 	public $id;
 	public $uid;
@@ -175,7 +182,11 @@ class Order extends BaseModel {
 		return self::getCount(self::createWhere($filter, $gid), self::createJoin());
 	}
 	
-	public static function getAll($fields, $filter, $gid = null, $order_by = null, $range = '0, 10') {
+	public static function getAll($order_fields, $filter, $gid = null, $order_by = null, $range = '0, 10') {
+		$fields = array();
+		foreach ($order_fields as $ofield) {
+			$fields[] = self::field($ofield);
+		}
 		$fields[] = self::field('uid');
 		$fields[] = self::field('id', null, 'id');
 		$fields[] = self::field('username', User::tableName(), 'username');

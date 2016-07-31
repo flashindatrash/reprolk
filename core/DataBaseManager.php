@@ -64,20 +64,20 @@ class DataBaseManager {
 		return $rows;
 	}
 	
-	public function insert($into, $fields, $values) {
-		$str = 'insert into ' . $this->tableName($into) . ' (' . self::array2fields($fields) . ') values ' . $values .';';
+	public function insert($into, $fields, $values, $duplicate = NULL) {
+		$str = 'insert into ' . $this->tableName($into) . ' (' . self::array2fields($fields) . ') values ' . $values . (is_null($duplicate) ? '' : ' ' . $duplicate->toString()) . ';';
 		if ($this->query($str)) {
 			return mysql_insert_id();
 		}
 		return null;
 	}
 	
-	public function insertRow($into, $fields, $values) {
+	public function insertRow($into, $fields, $values, $duplicate = NULL) {
 		if (count($fields)==0 || count($values)==0 || count($fields)!=count($values)) return null;
-		return self::insert($into, $fields, self::array2insert([self::array2values($values)]));
+		return self::insert($into, $fields, self::array2insert([self::array2values($values)]), $duplicate);
 	}
 	
-	public function insertRows($into, $fields, $values) {
+	public function insertRows($into, $fields, $values, $duplicate = NULL) {
 		if (count($fields)==0 || count($values)==0) return null;
 		$array = array();
 		foreach ($values as $value) {
@@ -85,7 +85,7 @@ class DataBaseManager {
 			$array[] = self::array2values($value);
 		}
 		if (count($array)==0) return null;
-		return self::insert($into, $fields, self::array2insert($array));
+		return self::insert($into, $fields, self::array2insert($array), $duplicate);
 	}
 	
 	public function delete($from, $where = NULL) {

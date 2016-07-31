@@ -8,14 +8,16 @@ include_once '../core/BaseController.php';
 include_once '../core/BaseModel.php';
 include_once '../core/View.php';
 include_once '../core/objects/Hook.php';
+include_once '../core/objects/Routes.php';
 include_once '../core/objects/Route.php';
 include_once '../core/objects/AccountRoute.php';
-include_once '../core/objects/Routes.php';
+include_once '../core/objects/ApiRoute.php';
 include_once '../core/objects/Session.php';
 include_once '../core/objects/MenuItem.php';
 include_once '../core/objects/Redirect.php';
 include_once '../core/objects/UserAccess.php';
 include_once '../core/objects/Account.php';
+include_once '../core/interfaces/IAuthentication.php';
 
 function p($x=''){
    print ps($x);
@@ -100,8 +102,8 @@ function removeArrayItem($value, &$arr) {
 function reArray($array, $key, $value) {
 	$a = array();
 	foreach ($array as $item) {
-		if (is_null($key)) $a[] = $item->$value;
-		else $a[$item->$key] = $item->$value;
+		if (is_null($key)) $a[] = is_null($value) ? $item : $item->$value;
+		else $a[$item->$key] = is_null($value) ? $item : $item->$value;
 	}
 	return $a;
 }
