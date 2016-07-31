@@ -6,14 +6,12 @@ include_once '../app/controllers/BaseOrderController.php';
 class OrderAddController extends BaseOrderController implements IRedirect {
 	
 	public $form;
-	public $photopolymers;
 	public $templates;
 	public $template_id;
 	public $template_fields;
 	
 	public function beforeRender() {
 		$gid = Account::getGid();
-		$this->photopolymers = reArray(GroupPhotopolymer::getAll($gid), 'pid', 'name');
 		$this->templates = Template::getAll($gid);
 		
 		$this->generateTemplate();
@@ -22,11 +20,6 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		
 		if ($this->add()) {
 			$this->view = 'system/redirect';
-			return;
-		}
-		
-		if (count($this->photopolymers)==0)  {
-			$this->addAlert(View::str('error_not_have_photopolymer'), 'warning');
 			return;
 		}
 		
@@ -42,7 +35,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		if ($this->template_id!=0) {
 			$this->form->setSession(reArray($this->template_fields, 'name', 'value'));
 		}
-		$this->form->setOption(array('pid' => $this->photopolymers));
+		
 		$this->form->setSession(array('date_due' => (new DateTime('tomorrow'))->format("Y-m-d")));
 	}
 	

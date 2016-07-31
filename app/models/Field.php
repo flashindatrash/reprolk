@@ -104,10 +104,9 @@ class Field extends BaseModel {
 	}
 	
 	//варианты для заполнения
-	public $option; //для указании кастомных вариантов
 	public function getOption() {
-		if (!is_null($this->option)) {
-			return $this->option;
+		if ($this->route==Route::ORDER_ADD && $this->name==Order::FIELD_PID) {
+			return reArray(GroupPhotopolymer::getAll(Account::getGid()), 'pid', 'name');
 		}
 		
 		switch($this->type) {
