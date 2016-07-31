@@ -41,7 +41,9 @@ class ApiFieldGetController extends BaseApiController {
 			if ($field->canUse()) {
 				//добавим варианты заполнения
 				if ($this->page==Route::ORDER_ADD && $field->name==Order::FIELD_PID) {
-					//для фотополимеров специальный option
+					//хардкор! 
+					//1C: Недопустимое имя свойства: '9' для чтения JSON в объект Структура
+					//ключом не может выступать число, ну что за бред
 					$field->addProperty("option", GroupPhotopolymer::getAll(Account::getGid()));
 				} else {
 					$field->addProperty("option", $field->getOption());
