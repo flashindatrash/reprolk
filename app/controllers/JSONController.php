@@ -10,15 +10,22 @@ class JSONController extends BaseController {
 	}
 	
 	public function getContent() {
-		$r = $this->alerts;
+		$r = [];
 		
-		foreach (['danger', 'warning', 'info'] as $type) {
-			if (count($r[$type])==0) unset($r[$type]);
+		$errors = array_merge($this->alerts['danger'], $this->alerts['warning']);
+		$info = array_merge($this->alerts['info'], $this->alerts['success']);
+		
+		if (count($errors)>0) {
+			$r['errors'] = $errors;
+		}
+		
+		if (count($info)>0) {
+			$r['info'] = $info;
 		}
 		
 		$r['response'] = $this->response;
 		$r['success'] = $this->success;
-		return json_encode($r);
+		return json_encode($r, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 	}
 	
 }
