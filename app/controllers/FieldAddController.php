@@ -29,7 +29,7 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 		if (hasPost('name')) $_POST['name'] = validSymbols(post('name'));
 		
 		if ($this->formValidate(['name', 'type', 'weight'])) {
-			if (Field::add(get('page'), post('type'), post('name'), post('value'), checkbox2bool(post('mandatory')), int(post('weight')), post('default'))) {
+			if (Field::add(get('page'), post('type'), post('name'), post('value'), toBool(post('mandatory')), int(post('weight')), post('default'))) {
 				return true;
 			} else {
 				$this->addAlert(sprintf(View::str('error_field_add'), post('name')), 'danger');

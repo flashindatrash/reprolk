@@ -95,7 +95,7 @@ class Form {
 	private function parsePost() {
 		foreach ($this->fields as $field) {
 			if ($field->type=='checkbox') {
-				$_POST[$field->name] = checkbox2bool(post($field->name));
+				$_POST[$field->name] = toBool(post($field->name));
 			}
 			
 			$hook = hook(HOOK_FORM_PARSEPOST, null, $field->name);
