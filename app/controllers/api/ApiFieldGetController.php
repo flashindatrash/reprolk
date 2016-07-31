@@ -44,7 +44,7 @@ class ApiFieldGetController extends BaseApiController {
 					//хардкор! 
 					//1C: Недопустимое имя свойства: '9' для чтения JSON в объект Структура
 					//ключом не может выступать число, ну что за бред
-					$field->addProperty("option", GroupPhotopolymer::getAll(Account::getGid()));
+					$field->addProperty("option", GroupPhotopolymer::getAll());
 				} else {
 					$field->addProperty("option", $field->getOption());
 				}

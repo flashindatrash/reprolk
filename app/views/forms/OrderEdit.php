@@ -1,9 +1,9 @@
 <?php
 //форма редактирования заказа
 
-include_once '../app/views/forms/Order.php';
+include_once '../app/views/forms/OrderAdd.php';
 
-class OrderEditForm extends OrderForm {
+class OrderEditForm extends OrderAddForm {
 	
 	public function view($field) {
 		switch ($field->name) {

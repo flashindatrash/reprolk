@@ -20,17 +20,23 @@ class Application {
 	}
 	
 	public function connect() {
+		//подключение к БД
 		self::$db->connect();
 		
 		//авторизация
 		if (hasPost(Auth::POST_KEY)) { //если есть ключ в POST'e
-			self::$user = Auth::userByKey(post(Auth::POST_KEY)); 
+			self::$user = Auth::userByKey(post(Auth::POST_KEY));
 		} else if (hasGet(Auth::POST_KEY)) { //если есть ключ в GET'e
 			self::$user = Auth::userByKey(get(Auth::POST_KEY));
 		} else if (Session::hasAuthKey()) { //если есть ключ в Session
 			self::$user = Auth::userByKey(Session::getAuthKey());
 		}
 		
+		if (!is_null(self::$user)) {
+			Session::setAuthKey(Application::$user->auth_key);
+		}
+		
+		//загрузка плагинов
 		self::$plugins = !is_null(self::$user) ? UserPlugin::getAll(self::$user->id, self::$user->gid) : [];
 	}
 	

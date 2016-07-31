@@ -23,6 +23,7 @@ class ApiOrderAddController extends BaseApiController {
 		if ($this->controller->add()) {
 			$this->success = true;
 			$this->response["order"] = $this->controller->order;
+			$this->response["test"] = $_FILES;
 		}
 		
 		$this->alerts = array_merge($this->alerts, $this->controller->alerts);

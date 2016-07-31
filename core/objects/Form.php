@@ -76,14 +76,6 @@ class Form {
 		}
 	}
 	
-	public function setOption($array) {
-		foreach ($this->fields as $field) {
-			if (array_key_exists($field->name, $array)) {
-				$field->option = $array[$field->name];
-			}
-		}
-	}
-	
 	public function setSession($array) {
 		foreach ($this->fields as $field) {
 			if (array_key_exists($field->name, $array)) {
