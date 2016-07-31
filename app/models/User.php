@@ -15,7 +15,9 @@ class User extends BaseModel {
 	public $username;
 	public $gid;
 	public $lang;
+	public $auth_key; //auth->auth_key
 	
+	public static $fields_all = array('id', 'email', 'password', 'username', 'group', 'gid', 'lang');
 	public static $fields_mandatory = array('email', 'password', 'username', 'group', 'gid');
 	
 	public static function tableName() {
@@ -43,17 +45,14 @@ class User extends BaseModel {
 	}
 	
 	public static function byId($id) {
-		$where = array();
-		$where[] = self::field('id') . ' = ' . $id;
-		return self::selectRow(null, $where);
+		return self::selectRow(self::$fields_all, [self::field('id') . ' = ' . $id]);
 	}
 	
 	public static function login($email, $password) {
 		$where = array();
 		$where[] = self::field('email') . ' = "' . $email . '"';
 		$where[] = self::field('password') . ' = "' . $password . '"';
-		
-		return self::selectRow(null, $where);
+		return self::selectRow(self::$fields_all, $where);
 	}
 	
 	public static function add($fields, $values) {
