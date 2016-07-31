@@ -38,6 +38,18 @@ class Account {
 		return self::isLogined() ? Application::$user->username : 'anonymous';
 	}
 	
+	public static function getEmail() {
+		return self::isLogined() ? Application::$user->email : null;
+	}
+	
+	public static function getPassword() {
+		return self::isLogined() ? Application::$user->password : null;
+	}
+	
+	public static function getAuthKey() {
+		return self::isLogined() ? Application::$user->auth_key : null;
+	}
+	
 	public static function getLang() {
 		return self::isLogined() ? Application::$user->lang : Locale::DEFAULT_LANGUAGE;
 	}
