@@ -15,9 +15,11 @@ class LoginController extends BaseController implements IRedirect {
 		
 		if ($formValidate) {
 			if (!isset($_POST['g-recaptcha-response']) || $captchaValidate) {
-				if (!$this->login()) {
+				if (!LoginController::login()) {
+					$this->addAlert(View::str('error_sign_in'));
 					$this->useCaptcha = true;
 				} else {
+					Session::setAuthKey(Application::$user->auth_key);
 					$this->view = 'system/redirect';
 				}
 			} else {
@@ -29,11 +31,15 @@ class LoginController extends BaseController implements IRedirect {
 		$this->addJSfile('https://www.google.com/recaptcha/api.js');
 	}
 	
-	private function login() {
+	public static function login() {
 		Application::$user = User::login(post('email'), post('password'));
-		if (Account::isLogined()) Session::setId(Application::$user->id);
-		else $this->addAlert(View::str('error_sign_in'));
-		return Account::isLogined();
+		$isLogined = Account::isLogined();
+		if ($isLogined) {
+			//сгенерируем новый authKey
+			Application::$user->auth_key = md5(Application::$user->email . '_' . Application::$user->password . '_' . time());
+			Auth::update(Application::$user->id, Application::$user->auth_key);
+		}
+		return $isLogined;
 	}
 	
 	//IRedirect

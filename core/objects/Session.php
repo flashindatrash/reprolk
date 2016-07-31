@@ -2,20 +2,20 @@
 
 class Session {
 	
-	const USER_ID = 'user_id';
+	const USER_AUTH_KEY = 'user_auth_key';
 	const USER_GROUP = 'user_group';
 	const USER_GID = 'user_gid';
 	
-	public static function hasId() {
-		return hasSession(self::USER_ID);
+	public static function hasAuthKey() {
+		return hasSession(self::USER_AUTH_KEY);
 	}
 	
-	public static function getId() {
-		return session(self::USER_ID);
+	public static function getAuthKey() {
+		return session(self::USER_AUTH_KEY);
 	}
 	
-	public static function setId($value) {
-		$_SESSION[self::USER_ID] = $value;
+	public static function setAuthKey($value) {
+		$_SESSION[self::USER_AUTH_KEY] = $value;
 	}
 	
 	public static function hasGroup() {
@@ -43,9 +43,9 @@ class Session {
 	}
 	
 	public static function clear() {
-		self::setId(null);
 		self::setGroup(null);
 		self::setGid(null);
+		self::setAuthKey(null);
 	}
 	
 }

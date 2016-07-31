@@ -20,7 +20,7 @@ class BaseModel {
 		return null;
 	}
 	
-	protected static function getClassName() {
+	public static function getClassName() {
 		return get_called_class();
 	}
 	
@@ -44,12 +44,12 @@ class BaseModel {
 		return Application::$db->truncate(static::tableName());
 	}
 	
-	protected static function insertRow($fields, $values) {
-		return Application::$db->insertRow(static::tableName(), $fields, $values);
+	protected static function insertRow($fields, $values, $duplicate = null) {
+		return Application::$db->insertRow(static::tableName(), $fields, $values, $duplicate);
 	}
 	
-	protected static function insertRows($fields, $values) {
-		return Application::$db->insertRows(static::tableName(), $fields, $values);
+	protected static function insertRows($fields, $values, $duplicate = null) {
+		return Application::$db->insertRows(static::tableName(), $fields, $values, $duplicate);
 	}
 	
 	protected static function update($fields, $values, $where = null) {
@@ -82,7 +82,7 @@ class BaseModel {
 	
 	protected static function field($field, $table_name = null, $as = null) {
 		if (is_null($table_name)) $table_name = static::tableName();
-		return static::table($table_name) . '.' . $field . (is_null($as) ? '' : ' as ' . $as);
+		return static::table($table_name) . '.' . $field . (is_null($as) ? '' : ' as `' . $as . '`');
 	}
 	
 	protected static function where($array, $comparison = 'and') {

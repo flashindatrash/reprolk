@@ -21,7 +21,16 @@ class Application {
 	
 	public function connect() {
 		self::$db->connect();
-		self::$user = Session::hasId() ? User::byId(Session::getId()) : null;
+		
+		//авторизация
+		if (hasPost(Auth::POST_KEY)) { //если есть ключ в POST'e
+			self::$user = Auth::userByKey(post(Auth::POST_KEY)); 
+		} else if (hasGet(Auth::POST_KEY)) { //если есть ключ в GET'e
+			self::$user = Auth::userByKey(get(Auth::POST_KEY));
+		} else if (Session::hasAuthKey()) { //если есть ключ в Session
+			self::$user = Auth::userByKey(Session::getAuthKey());
+		}
+		
 		self::$plugins = !is_null(self::$user) ? UserPlugin::getAll(self::$user->id, self::$user->gid) : [];
 	}
 	
@@ -40,6 +49,9 @@ class Application {
 		if (is_null($controller)) {
 			//контроллер не найден
 			$controller = $this->getFactory(self::$routes->byName(Route::NOT_FOUND));
+		} else if ($controller instanceof IAuthentication) {
+			//специальный контроллер, который не требует редиректа
+			$controller->authenticate($route->isAvailable(), Account::isLogined());
 		} else if (!$route->isAvailable()) {
 			if (!Account::isLogined()) {
 				//пользователь не залогинен
@@ -81,7 +93,7 @@ class Application {
 	
 	private function getFactory($route) {
 		$className = $this->controllerByRoute($route);
-		$fileName = self::$config['app']['controllers'] . $className . '.php';
+		$fileName = self::$config['app']['controllers'] . $route->dirController() . $className . '.php';
 		return require_class($fileName, $className);
 	}
 	
