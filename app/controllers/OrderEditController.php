@@ -20,7 +20,7 @@ class OrderEditController extends BaseOrderController {
 		
 		$this->form = $this->createForm('OrderEdit');
 		$this->form->loadFields(Route::ORDER_ADD);
-		$this->form->setValue(array('pid' => $this->photopolymers));
+		$this->form->setOption(array('pid' => $this->photopolymers));
 		
 		if ($this->edit()) {
 			$this->addAlert(View::str('success_save'), 'success');

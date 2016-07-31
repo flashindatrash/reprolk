@@ -10,6 +10,7 @@ class Form {
 		
 		//отсортируем смерженые поля по весу
 		uasort($this->fields, array($this, 'sortWeight'));
+		$this->fields = reArray($this->fields, null, null);
 		
 		//заполним постом
 		$this->parsePost();
@@ -63,7 +64,7 @@ class Form {
 				return View::input($field->name, $field->type);
 			case 'select':
 			case 'multiple':
-				return View::formNormal($field->name, $field->type, $field->getData(), false, true, $field->getValue());
+				return View::formNormal($field->name, $field->type, $field->getOption(), false, true, $field->getValue());
 			case 'checkbox':
 				return View::formOffset($field->name, $field->type, $field->getValue());
 			case 'file':
@@ -75,10 +76,10 @@ class Form {
 		}
 	}
 	
-	public function setValue($array) {
+	public function setOption($array) {
 		foreach ($this->fields as $field) {
 			if (array_key_exists($field->name, $array)) {
-				$field->value = $array[$field->name];
+				$field->option = $array[$field->name];
 			}
 		}
 	}
