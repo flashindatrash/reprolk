@@ -2,14 +2,16 @@
 
 class BaseController {
 	
+	const POST_VALIDATOR = 'send';
+	
 	private $template = 'base';
 	private $title = 'Repropark';
 	private $files = array('js' => ['jquery-1.11.3.min', 'bootstrap.min', 'bootstrap-switch.min', 'repropark'], 'css' => ['bootstrap.min', 'bootstrap-theme.min', 'bootstrap-switch.min', 'repropark']);
 	private $js_params = array();
 	private $menu = array();
 	
-	protected $alerts = array('danger' => [], 'warning' => [], 'info' => [], 'success' => []);
-	protected $view;
+	public $alerts = array('danger' => [], 'warning' => [], 'info' => [], 'success' => []);
+	public $view;
 	
 	public function __construct() {
 		$this->menu = MenuItem::parse(Application::$routes->all);
@@ -115,7 +117,7 @@ class BaseController {
 	}
 	
 	public function formValidate($fields) {
-		if (post('send')!='1') return false;
+		if (!toBool(post(self::POST_VALIDATOR))) return false;
 		$valid = true;
 		foreach ($fields as $field) {
 			if (!hasPost($field)) {

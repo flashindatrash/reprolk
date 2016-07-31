@@ -45,6 +45,11 @@ class Route {
 	const LANGUAGE_SET = 'LanguageSet';
 	const CRON = 'Cron';
 	const SWITCH_PLUGIN = 'SwitchPlugin';
+	const API_LOGIN = 'ApiLogin';
+	const API_ORDER_ADD = 'ApiOrderAdd';
+	const API_ORDER_ALL = 'ApiOrderAll';
+	const API_ORDER_CANCEL = 'ApiOrderCancel';
+	const API_FIELD_GET = 'ApiFieldGet';
 	
 	const TYPE_NORMAL = 0;
 	const TYPE_SUB = 1;
@@ -64,24 +69,34 @@ class Route {
 		$this->routes = is_null($routes) ? [] : $routes;
 	}
 	
+	//текст для ссылок
 	public function linkText() {
 		return Application::str('menu_' . $this->name);
 	}
 	
+	//текст в хлебных крошках
 	public function breadcrumpText() {
 		return $this->linkText();
 	}
 	
+	//текст в ссылках при наведении
 	public function linkTitle() {
 		return Application::str('menu_title_' . $this->name);
 	}
 	
+	//доступно ли
 	public function isAvailable() {
 		return is_null($this->permission) || UserAccess::check($this->permission);
 	}
 	
+	//виден ли в меню
 	public function isVisible() {
 		return $this->type!=Route::TYPE_HIDDEN && $this->isAvailable();
+	}
+	
+	//дирректория где лежит контроллер с этим роутом, по умолчанию все в корне
+	public function dirController() {
+		return '';
 	}
 	
 	public function forGet($get) {

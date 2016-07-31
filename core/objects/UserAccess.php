@@ -8,6 +8,7 @@ class UserAccess extends BaseModel {
 	
 	const ADMIN = 'admin';
 	const MANAGEMENT = 'management'; //доступность меню администрирования
+	const API = 'auth'; //доступ к апи всем авторизованным юзерам
 	const ORDER_VIEW = 'orderView';
 	const ORDER_ADD = 'orderAdd';
 	const ORDER_EDIT = 'orderEdit'; //кто может вносить правки в заказ

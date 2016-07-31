@@ -5,10 +5,10 @@ include_once '../core/objects/OrderFilter.php';
 class OrderAllController extends BaseController {
 	
 	const COUNT_PER_PAGE = 10;
+	const FIELDS_SQL = array(Order::FIELD_TITLE, Order::FIELD_RASTER_LINE, Order::FIELD_STATUS, Order::FIELD_DATE_DUE, Order::FIELD_URGENT);
 	
 	public $orders;
 	public $fields_view;
-	public $fields_sql;
 	public $order_filter;
 	public $order_by;
 	public $currentPage;
@@ -16,15 +16,14 @@ class OrderAllController extends BaseController {
 	
 	public function beforeRender() {
 		$this->order_filter = new OrderFilter();
-		$this->fields_sql = array('title', 'Raster_line', 'status', 'date_due', 'urgent');
-		$this->fields_view = array('title', 'photopolymer_name', 'Raster_line', 'status', 'date_due', 'username');
+		$this->fields_view = array(Order::FIELD_TITLE, 'photopolymer_name', Order::FIELD_RASTER_LINE, Order::FIELD_STATUS, Order::FIELD_DATE_DUE, 'username');
 		
 		$gid = null;
 		if (Account::isAdmin() && Session::hasGid() || !Account::isAdmin()) {
 			$gid = Account::getGid();
 		}
 		
-		//фильтр
+		//фильтр из GET'a
 		foreach (OrderFilter::fields() as $field) {
 			$this->order_filter->$field = hasGet($field) ? get($field) : null;
 		}
@@ -34,7 +33,7 @@ class OrderAllController extends BaseController {
 		if (hasGet('sort') && in_array(get('sort'), $this->fields_view)) {
 			$this->order_by = new SQLOrderBy(get('sort'), get('by'));
 		} else {
-			$this->order_by = new SQLOrderBy('date_due');
+			$this->order_by = new SQLOrderBy(Order::FIELD_DATE_DUE);
 		}
 		
 		//вторичная сортировка по дате изменения
@@ -44,10 +43,14 @@ class OrderAllController extends BaseController {
 		$this->applyPaginator($this->currentPage, $this->totalPages, Order::getCountTotal($this->order_filter, Account::getGid()), self::COUNT_PER_PAGE);
 		
 		//выборка заказов
-		$this->orders = Order::getAll($this->fields_sql, $this->order_filter, Account::getGid(), $this->order_by, self::COUNT_PER_PAGE * $this->currentPage . ', ' . self::COUNT_PER_PAGE);
+		$this->orders = self::loadOrders(self::FIELDS_SQL, $this->order_filter, $this->order_by, self::COUNT_PER_PAGE * $this->currentPage . ', ' . self::COUNT_PER_PAGE);
 		
 		$this->include_datetimepicker();
 		$this->include_other();
+	}
+	
+	public static function loadOrders($fields, $filter, $by, $range) {
+		return Order::getAll($fields, $filter, Account::getGid(), $by, $range);
 	}
 	
 	public function getContent() {
