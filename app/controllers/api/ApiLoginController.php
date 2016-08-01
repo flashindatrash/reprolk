@@ -9,7 +9,7 @@ params:
 	password
 	
 response:
-	authKey
+	auth_key
 */
 
 class ApiLoginController extends BaseApiController {
@@ -29,6 +29,8 @@ class ApiLoginController extends BaseApiController {
 		if ($this->success) {
 			$this->response[Auth::POST_KEY] = Account::getAuthKey();
 		}
+		
+		$this->mergeAlerts($this->controller);
 	}
 	
 }

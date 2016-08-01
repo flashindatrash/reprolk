@@ -83,6 +83,7 @@ try {
 		new ApiRoute(Route::API_ORDER_ALL, '/api/order/all', UserAccess::API, Route::TYPE_HIDDEN),
 		new ApiRoute(Route::API_ORDER_CANCEL, '/api/order/cancel', UserAccess::API, Route::TYPE_HIDDEN),
 		new ApiRoute(Route::API_ORDER_ADD, '/api/order/add', UserAccess::API, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_ORDER_REPEAT, '/api/order/repeat', UserAccess::API, Route::TYPE_HIDDEN),
 		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API, Route::TYPE_HIDDEN),
 		
 		new ApiRoute('ApiTest', '/api/test', UserAccess::ALL, Route::TYPE_HIDDEN),

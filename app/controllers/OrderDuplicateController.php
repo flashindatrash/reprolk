@@ -5,15 +5,19 @@ include_once '../app/controllers/OrderAddController.php';
 class OrderDuplicateController extends OrderAddController {
 	
 	public function beforeRender() {
+		$this->loadDuplicateOrder();
+		parent::beforeRender();
+	}
+	
+	public function loadDuplicateOrder() {
 		$this->loadOrder();
-		if (is_null($this->order)) return;
+		if (is_null($this->order)) return false;
 		
 		if (!$this->order->canDuplicate()) {
 			$this->addAlert(View::str('error_order_cannot_duplicate'), 'danger');
-			return;
+			return false;
 		}
-		
-		parent::beforeRender();
+		return true;
 	}
 	
 	public function createOrderForm() {

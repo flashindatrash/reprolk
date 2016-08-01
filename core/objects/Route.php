@@ -49,6 +49,7 @@ class Route {
 	const API_ORDER_ADD = 'ApiOrderAdd';
 	const API_ORDER_ALL = 'ApiOrderAll';
 	const API_ORDER_CANCEL = 'ApiOrderCancel';
+	const API_ORDER_REPEAT = 'ApiOrderRepeat';
 	const API_FIELD_GET = 'ApiFieldGet';
 	
 	const TYPE_NORMAL = 0;

@@ -7,6 +7,7 @@ class OrderAllController extends BaseController {
 	const COUNT_PER_PAGE = 10;
 	const FIELDS_SQL = array(Order::FIELD_TITLE, Order::FIELD_RASTER_LINE, Order::FIELD_STATUS, Order::FIELD_DATE_DUE, Order::FIELD_URGENT);
 	
+	public $total_count;
 	public $orders;
 	public $fields_view;
 	public $order_filter;
@@ -39,8 +40,11 @@ class OrderAllController extends BaseController {
 		//вторичная сортировка по дате изменения
 		$this->order_by->addOrder('date_changed', SQLOrderBy::DESC);
 		
+		//кол-во заказов
+		$this->total_count = Order::getCountTotal($this->order_filter, Account::getGid());
+		
 		//определим кол-во страниц
-		$this->applyPaginator($this->currentPage, $this->totalPages, Order::getCountTotal($this->order_filter, Account::getGid()), self::COUNT_PER_PAGE);
+		$this->applyPaginator($this->currentPage, $this->totalPages, $this->total_count, self::COUNT_PER_PAGE);
 		
 		//выборка заказов
 		$this->orders = self::loadOrders(self::FIELDS_SQL, $this->order_filter, $this->order_by, self::COUNT_PER_PAGE * $this->currentPage . ', ' . self::COUNT_PER_PAGE);

@@ -11,10 +11,10 @@
 	
 	$route->path = $redirect->url;
 	
-	//header("location:" . $route->path);
+	header("location:" . $route->path);
 	
-	print '<div class="alert alert-success" role="alert">' . $redirect->message . '</div>';
-	print '<p>' . sprintf(View::str('redirect'), $redirect->sTimeout(), View::link($route->name, View::str('here'))) . '</p>';
-	print '<script type="text/javascript">redirect("' . $route->path . '", ' . $redirect->timeout . ');</script>';
+	//print '<div class="alert alert-success" role="alert">' . $redirect->message . '</div>';
+	//print '<p>' . sprintf(View::str('redirect'), $redirect->sTimeout(), View::link($route->name, View::str('here'))) . '</p>';
+	//print '<script type="text/javascript">redirect("' . $route->path . '", ' . $redirect->timeout . ');</script>';
 ?>
 

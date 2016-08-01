@@ -35,6 +35,10 @@ class BaseApiController extends JSONController implements IAuthentication {
 		$_POST[BaseController::POST_VALIDATOR] = "1";
 	}
 	
+	protected function mergeAlerts($controller) {
+		$this->alerts = array_merge($this->alerts, $controller->alerts);
+	}
+	
 	protected function processingApi() {
 	
 	}
