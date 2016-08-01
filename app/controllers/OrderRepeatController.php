@@ -12,10 +12,8 @@ class OrderRepeatController extends OrderDuplicateController {
 	public function beforeRender() {
 		parent::beforeRender();
 		
-		if (!is_null($this->root) && !$this->root->canRepeat()) {
-			$this->addAlert(View::str('error_order_cannot_repeat'), 'danger');
+		if (is_null($this->root)) {
 			$this->view = null;
-			return;
 		}
 	}
 	
@@ -40,6 +38,12 @@ class OrderRepeatController extends OrderDuplicateController {
 	public function add() {
 		//перед добавлением запишем рутовый заказ
 		$this->root = $this->order;
+		
+		if (!is_null($this->root) && !$this->root->canRepeat()) {
+			$this->addAlert(View::str('error_order_cannot_repeat'), 'danger');
+			$this->root = null;
+			return false;
+		}
 		return parent::add();
 	}
 	

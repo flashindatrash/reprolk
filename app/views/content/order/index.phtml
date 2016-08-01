@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), count($this->orders)); ?>
+	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), $this->total_count); ?>
 		<div class="pull-right table-controls">
 			<?php 
 				print View::link('#', '<span class="glyphicon glyphicon-filter" aria-hidden="true"></span> ' . View::str('filter'), null, 'filter', 'btn btn-xs btn-primary', View::str('filter'), null, array('toggle' => 'modal', 'target' => '#filterModal'));
