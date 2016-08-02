@@ -35,8 +35,7 @@ class LoginController extends BaseController implements IRedirect {
 		$isLogined = Account::isLogined();
 		if ($isLogined) {
 			//сгенерируем новый authKey
-			Application::$user->auth_key = md5(Application::$user->email . '_' . Application::$user->password);
-			Auth::update(Application::$user->id, Application::$user->auth_key);
+			Account::setAuthKey(md5(Application::$user->email . '_' . Application::$user->password));
 		}
 		return $isLogined;
 	}
@@ -44,7 +43,7 @@ class LoginController extends BaseController implements IRedirect {
 	//IRedirect
 	public function getRedirect() {
 		$url = post('_url');
-		if ($url=='') $url = Application::$routes->byName(Route::ORDER_ALL)->forGet(Auth::POST_KEY . '=' . Application::$user->auth_key);
+		if ($url=='') $url = Application::$routes->byName(Route::ORDER_ALL)->forGet(Auth::FIELD_KEY . '=' . Application::$user->auth_key);
 		return new Redirect(View::str('sign_successfuly'), $url);
 	}
 	

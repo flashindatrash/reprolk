@@ -7,6 +7,7 @@ class Application {
     public static $config;
 	public static $routes;
 	public static $user;
+	public static $cookie;
 	
 	private static $lang;
 	private static $plugins;
@@ -23,17 +24,20 @@ class Application {
 		//подключение к БД
 		self::$db->connect();
 		
+		self::$cookie = new CookieStorage($_COOKIE);
+		
 		//авторизация
-		if (hasPost(Auth::POST_KEY)) { //если есть ключ в POST'e
-			self::$user = Auth::userByKey(post(Auth::POST_KEY));
-		} else if (hasGet(Auth::POST_KEY)) { //если есть ключ в GET'e
-			self::$user = Auth::userByKey(get(Auth::POST_KEY));
-		} else if (Session::hasAuthKey()) { //если есть ключ в Session
-			self::$user = Auth::userByKey(Session::getAuthKey());
+		if (hasPost(Auth::FIELD_KEY)) { //если есть ключ в POST'e
+			self::$user = Auth::userByKey(post(Auth::FIELD_KEY));
+		} else if (hasGet(Auth::FIELD_KEY)) { //если есть ключ в GET'e
+			self::$user = Auth::userByKey(get(Auth::FIELD_KEY));
+		} else if (self::$cookie->offsetExists(Auth::FIELD_KEY)) { //если есть ключ в Cookie
+			self::$user = Auth::userByKey(self::$cookie[Auth::FIELD_KEY]);
 		}
 		
+		//обновим в сессии ключ
 		if (!is_null(self::$user)) {
-			Session::setAuthKey(Application::$user->auth_key);
+			self::$cookie[Auth::FIELD_KEY] = Application::$user->auth_key;
 		}
 		
 		//загрузка плагинов
@@ -70,7 +74,7 @@ class Application {
 			//если все ок
 			//подключим плагины
 			foreach (self::$plugins as $plugin) {
-				$plugin->connect($this->controllerByRoute($route) . '.php');
+				$plugin->connect($route->controllerPath());
 			}
 		}
 			
@@ -98,13 +102,8 @@ class Application {
 	}
 	
 	private function getFactory($route) {
-		$className = $this->controllerByRoute($route);
-		$fileName = self::$config['app']['controllers'] . $route->dirController() . $className . '.php';
-		return require_class($fileName, $className);
-	}
-	
-	private function controllerByRoute($route) {
-		return $route->name . 'Controller';
+		$fileName = self::$config['app']['controllers'] . $route->controllerPath();
+		return require_class($fileName, $route->controllerName());
 	}
 	
 }

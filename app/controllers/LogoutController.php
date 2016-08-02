@@ -6,7 +6,7 @@ class LogoutController extends BaseController implements IRedirect {
 	
 	public function beforeRender() {
 		Application::$user = null;
-		Session::clear();
+		Application::$cookie[Auth::FIELD_KEY] = null;
 	}
 	
 	public function getContent() {

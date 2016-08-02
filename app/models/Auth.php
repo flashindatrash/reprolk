@@ -7,7 +7,7 @@ class Auth extends BaseModel {
 	public $uid;
 	public $auth_key;
 	
-	const POST_KEY		= 'auth_key';
+	const FIELD_KEY		= 'auth_key';
 	
 	public static function tableName() {
 		return 'auth';
@@ -20,13 +20,13 @@ class Auth extends BaseModel {
 	
 	public static function update($uid, $key) {
 		$duplicate = new SQLOnDuplicate();
-		$duplicate->addField(self::field('auth_key'));
-		return self::insertRow(['uid', 'auth_key'], [$uid, $key], $duplicate);
+		$duplicate->addField(self::field(self::FIELD_KEY));
+		return self::insertRow(['uid', self::FIELD_KEY], [$uid, $key], $duplicate);
 	}
 	
 	public static function userByKey($key) {
 		$fields = array();
-		$fields[] = self::field('auth_key');
+		$fields[] = self::field(self::FIELD_KEY);
 		foreach (User::$fields_all as $ufield) {
 			$fields[] = self::field($ufield, User::tableName(), $ufield);
 		}
@@ -35,7 +35,7 @@ class Auth extends BaseModel {
 		$join[] = self::inner('id', User::tableName(), 'uid');
 		
 		$where = array();
-		$where[] = self::field('auth_key') . ' = "' . $key . '"';
+		$where[] = self::field(self::FIELD_KEY) . ' = "' . $key . '"';
 		
 		return self::selectRow($fields, $where, $join);
 	}

@@ -50,6 +50,12 @@ class Account {
 		return self::isLogined() ? Application::$user->auth_key : null;
 	}
 	
+	public static function setAuthKey($value) {
+		if (!self::isLogined()) return;
+		Application::$user->auth_key = $value;
+		Auth::update(self::getId(), $value);
+	}
+	
 	public static function getLang() {
 		return self::isLogined() ? Application::$user->lang : Locale::DEFAULT_LANGUAGE;
 	}
