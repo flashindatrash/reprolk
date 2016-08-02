@@ -95,11 +95,17 @@ class Route {
 		return $this->type!=Route::TYPE_HIDDEN && $this->isAvailable();
 	}
 	
-	//дирректория где лежит контроллер с этим роутом, по умолчанию все в корне
-	public function dirController() {
-		return '';
+	//путь контроллера
+	public function controllerPath() {
+		return $this->controllerName() . '.php';
 	}
 	
+	//имя контроллера
+	public function controllerName() {
+		return $this->name . 'Controller';
+	}
+	
+	//вернуть путь с GET'ом
 	public function forGet($get) {
 		return $this->path . (!is_null($get) ? '?' . $get : '');
 	}

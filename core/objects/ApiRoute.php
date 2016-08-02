@@ -2,8 +2,8 @@
 
 class ApiRoute extends Route {
 	
-	public function dirController() {
-		return 'api/';
+	public function controllerPath() {
+		return 'api/' . parent::controllerPath();
 	}
 	
 }

@@ -6,7 +6,7 @@ try {
 	
 	define('PATH_PUBLIC_DIR', __DIR__);
 	
-	require_once ('../core/functions.php');
+	require_once ('../core/Includes.php');
 	
 	$config = parse_ini_file('../app/config/config.ini', true);
 	

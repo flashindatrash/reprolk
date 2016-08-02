@@ -27,7 +27,7 @@ class ApiLoginController extends BaseApiController {
 		$this->success = $this->controller->login();
 		
 		if ($this->success) {
-			$this->response[Auth::POST_KEY] = Account::getAuthKey();
+			$this->response[Auth::FIELD_KEY] = Account::getAuthKey();
 		}
 		
 		$this->mergeAlerts($this->controller);
