@@ -32,7 +32,7 @@ class DataBaseManager {
 		$from = ' from ' . $this->tableName($from);
 		$join = is_null($join) ? '' : ' ' . join(' ', $join);
 		$order = is_null($order) ? '' : ' ' . $order->toString();
-		$range = ' limit ' . (is_null($range) ? '0, 1' : $range);
+		$range = is_null($range) ? '' : ' limit ' . $range;
 		
 		$query = $this->query($select . $from . $join . self::convertWhere($where) . $order . $range);
 		return $query ? $query : null;
@@ -48,12 +48,11 @@ class DataBaseManager {
 	}
 	
 	public function selectRow($from, $className = NULL, $select = NULL, $where = NULL, $join = NULL) {
-		$result = $this->select($from, $select, $where, $join);
+		$result = $this->select($from, $select, $where, $join, null, '0, 1');
 		return !is_null($result) && mysql_num_rows($result)>0 ? mysql_fetch_object($result, $className) : null;
 	}
 	
 	public function selectRows($from, $className = NULL, $select = NULL, $where = NULL, $join = NULL, $order = NULL, $range = NULL) {
-		if (is_null($range)) $range = '0, 300';
 		$result = $this->select($from, $select, $where, $join, $order, $range);
 		$rows = array();
 		if (!is_null($result)) {
