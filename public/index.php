@@ -64,8 +64,6 @@ try {
 			]),
 		]),
 		
-		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
-		new Route(Route::LOGOUT, '/logout', UserAccess::AUTH, Route::TYPE_SUB),
 		new Route(Route::LOGIN, '/login', UserAccess::ALL, Route::TYPE_HIDDEN),
 		
 		new Route(Route::INDEX, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
@@ -75,16 +73,21 @@ try {
 		new Route(Route::NOT_FOUND, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
 		new Route(Route::ACCESS_DENIED, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
 		
+		//Sub menu
+		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
+		new Route(Route::API_DOCUMENTATION, '/api', UserAccess::AUTH, Route::TYPE_SUB),
+		new Route(Route::LOGOUT, '/logout', UserAccess::AUTH, Route::TYPE_SUB),
+		
 		//Ajax
-		new Route(Route::SWITCH_PLUGIN, '/ajax/plugin/switch', UserAccess::AUTH, Route::TYPE_HIDDEN),
+		new AjaxRoute(Route::SWITCH_PLUGIN, '/ajax/plugin/switch', UserAccess::AUTH),
 		
 		//Api
-		new ApiRoute(Route::API_LOGIN, '/api/login', UserAccess::ALL, Route::TYPE_HIDDEN),
-		new ApiRoute(Route::API_ORDER_ALL, '/api/order/all', UserAccess::API, Route::TYPE_HIDDEN),
-		new ApiRoute(Route::API_ORDER_CANCEL, '/api/order/cancel', UserAccess::API, Route::TYPE_HIDDEN),
-		new ApiRoute(Route::API_ORDER_ADD, '/api/order/add', UserAccess::API, Route::TYPE_HIDDEN),
-		new ApiRoute(Route::API_ORDER_REPEAT, '/api/order/repeat', UserAccess::API, Route::TYPE_HIDDEN),
-		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_LOGIN, '/api/login', UserAccess::ALL),
+		new ApiRoute(Route::API_ORDER_ALL, '/api/order/all', UserAccess::API),
+		new ApiRoute(Route::API_ORDER_CANCEL, '/api/order/cancel', UserAccess::API),
+		new ApiRoute(Route::API_ORDER_ADD, '/api/order/add', UserAccess::API),
+		new ApiRoute(Route::API_ORDER_REPEAT, '/api/order/repeat', UserAccess::API),
+		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API),
 		
 		new ApiRoute('ApiTest', '/api/test', UserAccess::ALL, Route::TYPE_HIDDEN),
 	]);
