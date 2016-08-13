@@ -1,8 +1,9 @@
 <?php
 
-include_once '../core/interfaces/IRedirect.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IRedirect.php');
 
-class LanguageSetController extends BaseController implements IRedirect {
+class LanguageSetController extends WebController implements IRedirect {
 	
 	public function beforeRender() {
 		if (hasGet('l') && in_array(get('l'), Locale::getLanguages())) {

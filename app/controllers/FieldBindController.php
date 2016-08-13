@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/BaseFieldController.php';
+Util::inc('controllers', 'BaseFieldController.php');
 
 class FieldBindController extends BaseFieldController {
 	

@@ -1,8 +1,9 @@
 <?php
 
-include '../core/interfaces/IRedirect.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IRedirect.php');
 
-class TransmitRightsController extends BaseController implements IRedirect {
+class TransmitRightsController extends WebController implements IRedirect {
 	
 	public $transmit_group;
 	public $users;

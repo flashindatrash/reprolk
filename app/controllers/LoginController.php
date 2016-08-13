@@ -1,9 +1,10 @@
 <?php
 
-include_once '../core/interfaces/IRedirect.php';
-include_once '../core/objects/Recaptcha.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IRedirect.php');
+Util::inc('objects', 'Recaptcha.php');
 
-class LoginController extends BaseController implements IRedirect {
+class LoginController extends WebController implements IRedirect {
 	
 	public $useCaptcha = false;
 	

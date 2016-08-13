@@ -1,7 +1,7 @@
 <?php
 
-include_once '../app/controllers/api/BaseApiController.php';
-include_once '../app/controllers/OrderAddController.php';
+Util::inc('controllers', 'api/BaseApiController.php');
+Util::inc('controllers', 'OrderAddController.php');
 
 /*
 params:

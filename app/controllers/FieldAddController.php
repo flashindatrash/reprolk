@@ -18,7 +18,7 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 		
 		$this->types = Field::getTypes();
 		$this->view = 'admin/field/add';
-		$this->addJSfile('controller/FieldAddController');
+		$this->addJSfile('controller/FieldAdd');
 	}
 	
 	//IRedirect

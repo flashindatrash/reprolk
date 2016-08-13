@@ -1,6 +1,8 @@
 <?php
 
-class FieldPagesController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class FieldPagesController extends WebController {
 	
 	public $routes;
 	

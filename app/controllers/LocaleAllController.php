@@ -1,6 +1,8 @@
 <?php
 
-class LocaleAllController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class LocaleAllController extends WebController {
 	
 	const COUNT_PER_PAGE = 10;
 	

@@ -1,8 +1,9 @@
 <?php
 
-include '../core/interfaces/IRedirect.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IRedirect.php');
 
-class ViewAsCancelController extends BaseController implements IRedirect {
+class ViewAsCancelController extends WebController implements IRedirect {
 	
 	public function beforeRender() {
 		Session::setGroup(null);

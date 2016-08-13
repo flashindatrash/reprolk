@@ -1,6 +1,8 @@
 <?php
 
-class UserHistoryController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class UserHistoryController extends WebController {
 	
 	public $history;
 	

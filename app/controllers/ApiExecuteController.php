@@ -1,8 +1,9 @@
 <?php
 
-include_once '../app/controllers/api/BaseApiController.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('controllers', 'api/BaseApiController.php');
 
-class ApiExecuteController extends BaseController {
+class ApiExecuteController extends WebController {
 	
 	public $route;
 	public $controller;

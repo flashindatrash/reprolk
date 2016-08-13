@@ -10,6 +10,7 @@ include_once '../core/BaseController.php';
 include_once '../core/BaseModel.php';
 
 include_once '../core/View.php';
+include_once '../core/Util.php';
 include_once '../core/objects/Hook.php';
 
 include_once '../core/objects/route/Routes.php';

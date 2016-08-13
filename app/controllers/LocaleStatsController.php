@@ -1,6 +1,8 @@
 <?php
 
-class LocaleStatsController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class LocaleStatsController extends WebController {
 	
 	public $total;
 	public $countByLang;

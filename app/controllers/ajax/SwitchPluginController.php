@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/JSONController.php';
+Util::inc('controllers', 'base/JSONController.php');
 
 class SwitchPluginController extends JSONController {
 	
@@ -8,7 +8,7 @@ class SwitchPluginController extends JSONController {
 		parent::beforeRender();
 		
 		if (!hasGet('name')) {
-			addAlert(View::str('error_unkhnow_plugin'), 'danger');
+			$this->addAlert(View::str('error_unkhnow_plugin'), 'danger');
 			return;
 		}
 		

@@ -1,8 +1,9 @@
 <?php
 
-include '../core/interfaces/ICatalog.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'ICatalog.php');
 
-class ApiDocumentationController extends BaseController implements ICatalog {
+class ApiDocumentationController extends WebController implements ICatalog {
 	
 	public function beforeRender() {
 		$this->view = 'system/catalog';

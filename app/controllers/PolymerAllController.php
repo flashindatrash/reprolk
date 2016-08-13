@@ -1,6 +1,8 @@
 <?php
 
-class PolymerAllController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class PolymerAllController extends WebController {
 	
 	public $photopolymers;
 	

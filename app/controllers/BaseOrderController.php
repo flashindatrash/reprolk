@@ -1,6 +1,8 @@
 <?php
 
-class BaseOrderController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class BaseOrderController extends WebController {
 	
 	public $order;
 	

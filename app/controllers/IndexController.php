@@ -1,8 +1,9 @@
 <?php
 
-include '../core/interfaces/ICatalog.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'ICatalog.php');
 
-class IndexController extends BaseController implements ICatalog {
+class IndexController extends WebController implements ICatalog {
 	
 	public function getRoutes() {
 		return Application::$routes->all;

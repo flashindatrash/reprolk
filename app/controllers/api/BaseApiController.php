@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/JSONController.php';
+Util::inc('controllers', 'base/JSONController.php');
 
 class BaseApiController extends JSONController implements IAuthentication {
 	

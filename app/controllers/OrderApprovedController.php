@@ -1,7 +1,7 @@
 <?php
 
-include_once '../core/interfaces/IRedirect.php';
-include_once '../app/controllers/BaseOrderController.php';
+Util::inc('controllers', 'BaseOrderController.php');
+Util::inc('interfaces', 'IRedirect.php');
 
 class OrderApprovedController extends BaseOrderController implements IRedirect {
 	

@@ -1,6 +1,8 @@
 <?php
 
-class UserAllController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class UserAllController extends WebController {
 	
 	public $users;
 	public $groups;

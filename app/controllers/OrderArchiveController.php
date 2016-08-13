@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/OrderAllController.php';
+Util::inc('controllers', 'OrderAllController.php');
 
 class OrderArchiveController extends OrderAllController {
 	

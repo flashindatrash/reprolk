@@ -1,8 +1,9 @@
 <?php
 
-include_once '../core/interfaces/IRedirect.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IRedirect.php');
 
-class LocaleEditController extends BaseController implements IRedirect {
+class LocaleEditController extends WebController implements IRedirect {
 	
 	public $key;
 	public $locale;
