@@ -26,6 +26,7 @@ class Route {
 	const PROFILE = 'User';
 	const USER_ADD = 'UserAdd';
 	const USER_ALL = 'UserAll';
+	const USER_HISTORY = 'UserHistory';
 	const TRANSMIT_RIGHTS = 'TransmitRights';
 	const ADMIN = 'Admin';
 	const VIEW_AS = 'ViewAs';
@@ -44,6 +45,7 @@ class Route {
 	const LOCALE_EDIT = 'LocaleEdit';
 	const LANGUAGE_SET = 'LanguageSet';
 	const API_DOCUMENTATION = 'ApiDocumentation';
+	const API_EXECUTE = 'ApiExecute';
 	const CRON = 'Cron';
 	const SWITCH_PLUGIN = 'SwitchPlugin';
 	const API_LOGIN = 'ApiLogin';
