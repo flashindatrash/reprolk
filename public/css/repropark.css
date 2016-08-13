@@ -295,3 +295,19 @@ ul.file li.extension {
 .filter-dialog {
 	width: 750px;
 }
+
+fieldset.plugin {
+	border: 1px solid silver;
+	margin-bottom: 20px;
+}
+
+fieldset.plugin legend {
+	width: auto;
+	border: none;
+	margin-left: 20px;
+	margin-bottom: 0;
+}
+
+fieldset.plugin .plugin-content {
+	padding: 20px;
+}

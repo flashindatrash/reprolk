@@ -72,9 +72,10 @@ class View {
 							'});</script>';
 				return '<div class="input-group date" data-date="" data-date-format="dd MM yyyy" data-link-field="input_' . $name . '" id="' . $name . '" data-link-format="yyyy-mm-dd">' . $input . $script . '</div>' . $hidden;
 			case 'textarea':
-				//name, type, value
+				//name, type, value, rows (3)
 				$value = $nArgs>=3 ? $args[2] : '';
-				return '<textarea class="form-control" name="' . $name . '" id="input_' . $name . '" placeholder="' . self::str($name) . '">' . $value . '</textarea>';
+				$rows = $nArgs>=4 ? $args[3] : 3;
+				return '<textarea class="form-control" name="' . $name . '" id="input_' . $name . '" rows="' . $rows . '" placeholder="' . self::str($name) . '">' . $value . '</textarea>';
 			case 'file': case 'files': 
 				//name, type, extensions, maxFileSize, maxFileCount
 				$extensions = $nArgs>=3 ? $args[2] : [];
@@ -234,7 +235,15 @@ class View {
 	}
 	
 	public static function plugin($name, $isEnabled) {
-		return self::input($name, 'switch', $isEnabled, ['data-type="plugin"', 'data-path="' . Route::byName(Route::SWITCH_PLUGIN)->path . '"', 'data-name="' . $name . '"']);
+		$html = '';
+		$html .= '<fieldset class="plugin">';
+		$html .= '<legend>' . $name . '</legend>';
+		$html .= '<div class="plugin-content">';
+		$html .= self::str('plugin_' . $name);
+		$html .= self::input('', 'switch', $isEnabled, ['data-type="plugin"', 'data-path="' . Route::byName(Route::SWITCH_PLUGIN)->path . '"', 'data-name="' . $name . '"']);
+		$html .= '</div>';
+		$html .= '</fieldset>';
+		return $html;
 	}
 	
 	public static function attachments($files) {
