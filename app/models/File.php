@@ -12,6 +12,8 @@ class File extends BaseModel {
 	public $uid; //order->uid
 	public $gid; //user->gid
 	
+	const EXT_PHP = 'php';
+	
 	public static function tableName() {
 		return 'files';
 	}

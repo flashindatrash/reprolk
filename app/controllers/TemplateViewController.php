@@ -4,7 +4,6 @@ class TemplateViewController extends BaseController {
 	
 	public $gid;
 	public $templates;
-	public $fields_view;
 	
 	private $route_delete;
 	private $route_edit;
@@ -22,7 +21,6 @@ class TemplateViewController extends BaseController {
 		
 		$this->gid = Account::isAdmin() ? get('gid') : Account::getGid();
 		$this->templates = Template::getAll($this->gid);
-		$this->fields_view = ["name"];
 		
 		if (count($this->templates)==0) {
 			$this->addAlert(View::str('info_templates_null'), 'info');
