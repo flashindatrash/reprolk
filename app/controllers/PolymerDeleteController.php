@@ -14,6 +14,7 @@ class PolymerDeleteController extends BaseController implements IRedirect, IConf
 		
 		if ($this->formValidate([])) {
 			if ($this->photopolymer->remove()) {
+				$this->setTemplate('empty');
 				$this->view = 'system/redirect';
 			} else {
 				$this->addAlert(View::str('error_photopolymer_delete'), 'danger');

@@ -9,7 +9,7 @@ class LoginController extends BaseController implements IRedirect {
 	
 	public function beforeRender() {
 		$recaptcha = new Recaptcha(Application::$config['recaptcha']);
-		$formValidate = $this->formValidate(['email', 'password']);
+		$formValidate = $this->loginValidate();
 		$captchaValidate = hasPost('g-recaptcha-response') && $recaptcha->check(post('g-recaptcha-response'));
 		$this->view = 'system/login';
 		
@@ -19,6 +19,7 @@ class LoginController extends BaseController implements IRedirect {
 					$this->addAlert(View::str('error_sign_in'));
 					$this->useCaptcha = true;
 				} else {
+					$this->setTemplate('empty');
 					$this->view = 'system/redirect';
 				}
 			} else {
@@ -28,6 +29,10 @@ class LoginController extends BaseController implements IRedirect {
 		}
 		
 		$this->addJSfile('https://www.google.com/recaptcha/api.js');
+	}
+	
+	public function loginValidate() {
+		return $this->formValidate(['email', 'password']);
 	}
 	
 	public function login() {

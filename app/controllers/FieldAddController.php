@@ -11,6 +11,7 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 		if (!$this->hasPage()) return;
 		
 		if ($this->add()) {
+			$this->setTemplate('empty');
 			$this->view = 'system/redirect';
 			return;
 		}

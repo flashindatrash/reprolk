@@ -19,6 +19,7 @@ class FieldDeleteController extends BaseController implements IRedirect, IConfir
 		
 		if ($this->formValidate([])) {
 			if ($this->field->remove()) {
+				$this->setTemplate('empty');
 				$this->view = 'system/redirect';
 			} else {
 				$this->addAlert(sprintf(View::str('error_field_delete'), $this->field->name), 'danger');

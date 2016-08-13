@@ -19,6 +19,7 @@ class LocaleEditController extends BaseController implements IRedirect {
 		$this->locale = Locale::byKey($this->key);
 		
 		if ($this->save()) {
+			$this->setTemplate('empty');
 			$this->view = 'system/redirect';
 			return;
 		}
