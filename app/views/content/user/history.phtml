@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+	<div class="panel-heading"><?php print sprintf(View::str('all_user_history_result'), count($this->history)); ?></div>
+	
+	<table class="table table-selected table-hover">
+		<thead>
+			<tr>
+				<?php
+				$html = '';
+				foreach (['username', 'action'] as $th) {
+					$html .= '<th>';
+					$html .= View::str($th);
+					$html .= '</th>';
+				}
+				print $html;
+				?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			$rows = '';
+			foreach ($this->history as $n => $record) {
+				$classes = array();
+				
+				$classes[] = 'table_row';
+				$classes[] = 'noselect';
+				
+				$route = Application::$routes->byName($record->route);
+				
+				$rows .= '<tr class="' . join (' ', $classes) . '">';
+				$rows .= '<td>' . $record->username . '</td>';
+				$rows .= '<td>' . (is_null($route) ? $record->route : '<i>' . $route->linkTitle() . '</i>') . '</td>';
+				$rows .= '</tr>';
+			}
+			print $rows;
+			?>
+		</tbody>
+	</table>
+</div>
