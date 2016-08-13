@@ -7,10 +7,8 @@ class ViewAsCancelController extends BaseController implements IRedirect {
 	public function beforeRender() {
 		Session::setGroup(null);
 		Session::setGid(null);
-	}
-	
-	public function getContent() {
-		$this->pick('system/redirect');
+		$this->setTemplate('empty');
+		$this->view = 'system/redirect';
 	}
 	
 	public function getRedirect() {

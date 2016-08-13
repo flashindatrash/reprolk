@@ -8,7 +8,7 @@ class LanguageSetController extends BaseController implements IRedirect {
 		if (hasGet('l') && in_array(get('l'), Locale::getLanguages())) {
 			Account::setLang(get('l'));
 		}
-		
+		$this->setTemplate('empty');
 		$this->view = 'system/redirect';
 	}
 	

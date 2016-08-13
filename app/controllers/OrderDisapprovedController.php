@@ -9,6 +9,7 @@ class OrderDisapprovedController extends BaseOrderController implements IRedirec
 		if (!$this->loadOrder()) return;
 		
 		if ($this->disapprove()) {
+			$this->setTemplate('empty');
 			$this->view = 'system/redirect';
 			return;
 		}

@@ -9,6 +9,7 @@ class OrderApprovedController extends BaseOrderController implements IRedirect {
 		if (!$this->loadOrder()) return;
 		
 		if ($this->approve()) {
+			$this->setTemplate('empty');
 			$this->view = 'system/redirect';
 			return;
 		}

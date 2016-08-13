@@ -19,6 +19,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		$this->createOrderForm();
 		
 		if ($this->add()) {
+			$this->setTemplate('empty');
 			$this->view = 'system/redirect';
 			return;
 		}

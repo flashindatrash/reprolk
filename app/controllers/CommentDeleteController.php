@@ -18,6 +18,7 @@ class CommentDeleteController extends BaseController implements IRedirect, IConf
 		
 		if ($this->formValidate([])) {
 			if ($this->comment->remove()) {
+				$this->setTemplate('empty');
 				$this->view = 'system/redirect';
 			} else {
 				$this->addAlert(View::str('error_comment_delete'), 'danger');

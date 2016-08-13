@@ -17,6 +17,7 @@ class TemplateDeleteController extends BaseController implements IRedirect, ICon
 		
 		if ($this->formValidate([])) {
 			if ($this->template->remove()) {
+				$this->setTemplate('empty');
 				$this->view = 'system/redirect';
 			} else {
 				$this->addAlert(View::str('error_template_delete'), 'danger');

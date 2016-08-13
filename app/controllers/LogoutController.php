@@ -7,10 +7,8 @@ class LogoutController extends BaseController implements IRedirect {
 	public function beforeRender() {
 		Application::$user = null;
 		Application::$cookie[Auth::FIELD_KEY] = null;
-	}
-	
-	public function getContent() {
-		$this->pick('system/redirect');
+		$this->setTemplate('empty');
+		$this->view = 'system/redirect';
 	}
 	
 	public function getRedirect() {

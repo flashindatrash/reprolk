@@ -16,6 +16,7 @@ class OrderCancelController extends BaseOrderController implements IRedirect, IC
 			return;
 		} if ($this->formValidate([])) {
 			if ($this->order->cancel()) {
+				$this->setTemplate('empty');
 				$this->view = 'system/redirect';
 				$this->save();
 			} else {

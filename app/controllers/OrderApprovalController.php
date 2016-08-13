@@ -22,8 +22,8 @@ class OrderApprovalController extends BaseOrderController {
 		
 		$this->revisions = Revision::getAll($this->order->id, new SQLOrderBy('rid'));
 		
-		$this->addCSSfile('order.revisions');
-		$this->addJSfile('order.revisions');
+		$this->addCSSfile('controller/OrderApproval');
+		$this->addJSfile('controller/OrderApproval');
 		$this->revisions_path = Application::$config['public']['revisions'];
 		
 		$this->view = 'order/approval';
