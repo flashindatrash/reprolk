@@ -8,6 +8,14 @@ class User extends BaseModel {
 	const MANAGER	= 'manager';
 	const ADMIN		= 'admin';
 	
+	const FIELD_ID = 'id';
+	const FIELD_GROUP = 'group';
+	const FIELD_EMAIL = 'email';
+	const FIELD_PASSWORD = 'password';
+	const FIELD_USERNAME = 'username';
+	const FIELD_LANG = 'lang';
+	const FIELD_GID = 'gid';
+	
 	public $id;
 	public $group;
 	public $email;
@@ -17,19 +25,19 @@ class User extends BaseModel {
 	public $lang;
 	public $auth_key; //auth->auth_key
 	
-	public static $fields_all = array('id', 'email', 'password', 'username', 'group', 'gid', 'lang');
-	public static $fields_mandatory = array('email', 'password', 'username', 'group', 'gid');
+	public static $fields_all = array(User::FIELD_ID, User::FIELD_EMAIL, User::FIELD_PASSWORD, User::FIELD_USERNAME, User::FIELD_GROUP, User::FIELD_GID, User::FIELD_LANG);
+	public static $fields_mandatory = array(User::FIELD_EMAIL, User::FIELD_PASSWORD, User::FIELD_USERNAME, User::FIELD_GROUP, User::FIELD_GID);
 	
 	public static function tableName() {
 		return 'users';
 	}
 	
 	public function editGroup($group) {
-		return $this->edit([self::field('group')], [$group]);
+		return $this->edit([self::field(User::FIELD_GROUP)], [$group]);
 	}
 	
 	public function editLang($lang) {
-		return $this->edit(['lang'], [$lang]);
+		return $this->edit([User::FIELD_LANG], [$lang]);
 	}
 	
 	public function edit($fields, $values) {
@@ -45,14 +53,14 @@ class User extends BaseModel {
 	}
 	
 	public static function byId($id) {
-		return self::selectRow(self::$fields_all, [self::field('id') . ' = ' . $id]);
+		return self::selectRow(User::$fields_all, [self::field(User::FIELD_ID) . ' = ' . $id]);
 	}
 	
 	public static function login($email, $password) {
 		$where = array();
-		$where[] = self::field('email') . ' = "' . $email . '"';
-		$where[] = self::field('password') . ' = "' . $password . '"';
-		return self::selectRow(self::$fields_all, $where);
+		$where[] = self::field(User::FIELD_EMAIL) . ' = "' . $email . '"';
+		$where[] = self::field(User::FIELD_PASSWORD) . ' = "' . $password . '"';
+		return self::selectRow(User::$fields_all, $where);
 	}
 	
 	public static function add($fields, $values) {
@@ -60,25 +68,25 @@ class User extends BaseModel {
 	}
 	
 	public static function editGroupById($id, $group) {
-		return self::editById($id, [self::field('group')], [$group]);
+		return self::editById($id, [self::field(User::FIELD_GROUP)], [$group]);
 	}
 	
 	public static function editById($id, $fields, $values) {
 		$where = array();
-		$where[] = self::field('id') . ' = ' . $id;
+		$where[] = self::field(User::FIELD_ID) . ' = ' . $id;
 		return self::update($fields, $values, $where);
 	}
 	
 	public static function getAllGroups() {
-		return self::selectRows(['gid', 'username'], null, null, new SQLOrderBy('`group`', 'desc', 'gid'));
+		return self::selectRows([User::FIELD_GID, User::FIELD_USERNAME], null, null, new SQLOrderBy(User::FIELD_GROUP, 'desc', User::FIELD_GID));
 	}
 	
 	public static function getAll($fields, $group = null, $gid = null) {
 		$where = array();
 		if (!is_null($group)) 
-			$where[] = self::field('group') . ' = "' . $group . '"';
+			$where[] = self::field(SELF::FIELD_GROUP) . ' = "' . $group . '"';
 		if (!is_null($gid)) 
-			$where[] = self::field('gid') . ' = ' . $gid;
+			$where[] = self::field(SELF::FIELD_GID) . ' = ' . $gid;
 		
 		return self::selectRows($fields, $where);
 	}
