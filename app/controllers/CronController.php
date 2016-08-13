@@ -14,12 +14,12 @@ class CronController extends BaseController {
 		$pDir = Application::$config['plugin']['dir'];
 		$pConfig = Application::$config['plugin']['config'];
 		
-		$plugins = $this->scandir($pDir);
+		$plugins = array_diff(scandir($pDir), array('..', '.'));
 		
 		foreach ($plugins as $name => $value) {
 			$this->addAlert(sprintf('Parse plugin %s', $value), 'warning');
 			$pugin_folder = $pDir . DIRECTORY_SEPARATOR . $value;
-			$struct = $this->scandir($pugin_folder);
+			$struct = array_diff(scandir($pugin_folder), array('..', '.'));
 			if (in_array($pConfig, $struct)) {
 				$ini = parse_ini_file($pugin_folder . DIRECTORY_SEPARATOR . $pConfig, true);
 				
@@ -35,8 +35,11 @@ class CronController extends BaseController {
 					return;
 				}
 				
+				$title = $base['title'];
+				$route = isset($base['route']) ? $base['route'] : null;
+				
 				//сохраним в базу
-				Plugin::add($base['title'], $struct);
+				Plugin::add($title, $route, $struct);
 				
 			} else {
 				$this->addAlert('Invalid plugin', 'warning');
@@ -44,10 +47,6 @@ class CronController extends BaseController {
 		}
 	}
 
-	private function scandir($dir) {
-		return array_diff(scandir($dir), array('..', '.'));
-	}
-	
 	
 }
 
