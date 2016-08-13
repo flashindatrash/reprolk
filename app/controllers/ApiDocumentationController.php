@@ -4,8 +4,11 @@ include '../core/interfaces/ICatalog.php';
 
 class ApiDocumentationController extends BaseController implements ICatalog {
 	
+	public function beforeRender() {
+		$this->view = 'system/catalog';
+	}
+	
 	public function getRoutes() {
-		$current = Application::$routes->current;
 		$routes = Application::$routes->findByClass('ApiRoute');
 		$ret = array();
 		foreach ($routes as $route) {
@@ -15,10 +18,6 @@ class ApiDocumentationController extends BaseController implements ICatalog {
 			$ret[] = $r;
 		}
 		return $ret;
-	}
-	
-	public function getContent() {
-		$this->pick('system/catalog');
 	}
 	
 }
