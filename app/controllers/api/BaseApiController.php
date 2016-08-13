@@ -6,12 +6,10 @@ class BaseApiController extends JSONController implements IAuthentication {
 	
 	protected $isAvailable = false;
 	protected $isLogined = false;
+	protected $request;
 	
-	function __construct() {
-		//если включены get запросы, то примержим их в post
-		if (Application::$config['admin']['apiUseGet']==1) {
-			$_POST = array_merge($_GET, $_POST);
-		}
+	public function __construct() {
+		$_POST = array_merge($_GET, $_POST);
 	}
 	
 	public function beforeRender() {
@@ -40,7 +38,13 @@ class BaseApiController extends JSONController implements IAuthentication {
 	}
 	
 	protected function processingApi() {
+		$this->request = $this->createRequestForm();
+		//выполнение апи, через эту функцию
+	}
 	
+	public function createRequestForm() {
+		$form = $this->createForm('ApiRequest');
+		return $form;
 	}
 	
 }

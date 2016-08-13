@@ -1,0 +1,14 @@
+<form method="post" class="form-horizontal">
+<?php 
+	print $this->form->render();
+	print View::formOffset('send', 'any', '<button id="execute" type="button" class="btn btn-primary">' . View::str('execute') . '</button>');
+?>
+</form>
+
+<hr>
+
+<form class="form-horizontal">
+<?php
+	print View::formNormal('response', 'textarea', null, 1);
+?>
+</form>
