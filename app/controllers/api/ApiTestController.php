@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/api/BaseApiController.php';
+Util::inc('controllers', 'api/BaseApiController.php');
 
 /*
 params:

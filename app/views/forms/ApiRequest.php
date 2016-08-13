@@ -1,6 +1,6 @@
 <?php
 
-//форма выполнения API
+//С„РѕСЂРјР° РІС‹РїРѕР»РЅРµРЅРёСЏ API
 
 include_once '../core/objects/Form.php';
 

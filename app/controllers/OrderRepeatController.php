@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/OrderDuplicateController.php';
+Util::inc('controllers', 'OrderDuplicateController.php');
 
 class OrderRepeatController extends OrderDuplicateController {
 	

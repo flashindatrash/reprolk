@@ -1,6 +1,8 @@
 <?php
 
-class TemplateViewController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class TemplateViewController extends WebController {
 	
 	public $gid;
 	public $templates;

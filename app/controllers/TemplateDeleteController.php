@@ -1,9 +1,10 @@
 <?php
 
-include_once '../core/interfaces/IRedirect.php';
-include_once '../core/interfaces/IConfirm.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IRedirect.php');
+Util::inc('interfaces', 'IConfirm.php');
 
-class TemplateDeleteController extends BaseController implements IRedirect, IConfirm {
+class TemplateDeleteController extends WebController implements IRedirect, IConfirm {
 	
 	private $template;
 	

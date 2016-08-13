@@ -1,8 +1,9 @@
 <?php
 
-include_once '../core/objects/OrderFilter.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('objects', 'OrderFilter.php');
 
-class OrderAllController extends BaseController {
+class OrderAllController extends WebController {
 	
 	const COUNT_PER_PAGE = 10;
 	const FIELDS_SQL = array(Order::FIELD_TITLE, Order::FIELD_RASTER_LINE, Order::FIELD_STATUS, Order::FIELD_DATE_DUE, Order::FIELD_URGENT);

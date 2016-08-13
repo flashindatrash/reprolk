@@ -1,6 +1,8 @@
 <?php
 
-class PolymerBindController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class PolymerBindController extends WebController {
 
 	public function beforeRender() {
 		if (!hasGet('gid')) {

@@ -1,9 +1,10 @@
 <?php
 
-include_once '../core/interfaces/IRedirect.php';
-include_once '../core/interfaces/IConfirm.php';
+Util::inc('controllers', 'base/WebController.php');
+Util::inc('interfaces', 'IConfirm.php');
+Util::inc('interfaces', 'IRedirect.php');
 
-class CommentDeleteController extends BaseController implements IRedirect, IConfirm {
+class CommentDeleteController extends WebController implements IRedirect, IConfirm {
 	
 	private $comment;
 	

@@ -1,8 +1,8 @@
 <?php
 
-include_once '../app/controllers/api/BaseApiController.php';
-include_once '../app/controllers/OrderAllController.php';
-include_once '../core/objects/OrderFilter.php';
+Util::inc('controllers', 'api/BaseApiController.php');
+Util::inc('controllers', 'OrderAllController.php');
+Util::inc('objects', 'OrderFilter.php');
 
 /*
 params:

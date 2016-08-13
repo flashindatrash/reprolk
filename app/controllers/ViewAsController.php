@@ -1,6 +1,8 @@
 <?php
 
-class ViewAsController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class ViewAsController extends WebController {
 	
 	public $groups;
 	public $gids;

@@ -1,6 +1,8 @@
 <?php
 
-class BaseFieldController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class BaseFieldController extends WebController {
 	
 	protected function hasPage() {
 		if (!hasGet('page') || is_null($this->getRoute())) {

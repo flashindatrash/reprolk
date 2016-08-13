@@ -1,6 +1,8 @@
 <?php
 
-class TemplateEditController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class TemplateEditController extends WebController {
 	
 	public $template;
 	public $fields;

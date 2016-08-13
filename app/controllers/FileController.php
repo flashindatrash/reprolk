@@ -1,6 +1,8 @@
 <?php
 
-class FileController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class FileController extends WebController {
 	
 	public $file;
 	public $view;

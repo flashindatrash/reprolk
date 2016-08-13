@@ -1,6 +1,6 @@
 <?php
 		
-include_once '../app/controllers/BaseOrderViewController.php';
+Util::inc('controllers', 'BaseOrderViewController.php');
 
 class OrderViewController extends BaseOrderViewController {
 	

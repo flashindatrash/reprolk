@@ -1,8 +1,8 @@
 <?php
 
-include_once '../app/controllers/BaseOrderController.php';
-include_once '../core/interfaces/IRedirect.php';
-include_once '../core/interfaces/IConfirm.php';
+Util::inc('controllers', 'BaseOrderController.php');
+Util::inc('interfaces', 'IRedirect.php');
+Util::inc('interfaces', 'IConfirm.php');
 
 class OrderDeleteController extends BaseOrderController implements IRedirect, IConfirm {
 	

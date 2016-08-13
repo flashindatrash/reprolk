@@ -1,6 +1,8 @@
 <?php
 
-class CronController extends BaseController {
+Util::inc('controllers', 'base/WebController.php');
+
+class CronController extends WebController {
 	
 	public function beforeRender() {
 		$this->cron_plugins();

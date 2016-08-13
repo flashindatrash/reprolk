@@ -1,6 +1,6 @@
 <?php
 
-include_once '../app/controllers/BaseOrderController.php';
+Util::inc('controllers', 'BaseOrderController.php');
 
 class OrderEditController extends BaseOrderController {
 	
