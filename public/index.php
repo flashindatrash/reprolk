@@ -17,19 +17,19 @@ try {
 	$app->setLang(Account::getLang());
 	
 	$app->setRoutes([
-		new Route(Route::ORDER_ALL, '/order/all', UserAccess::ORDER_VIEW, Route::TYPE_NORMAL, [
-			new Route(Route::ORDER_ADD, '/order/add', UserAccess::ORDER_ADD),
-			new Route(Route::ORDER_ARCHIVE, '/order/archive', UserAccess::ORDER_VIEW),
-			new Route(Route::COMMENT_DELETE, '/order/comment/delete', UserAccess::COMMENT_EDIT, Route::TYPE_HIDDEN),
-			new Route(Route::ORDER_VIEW, '/order/view', UserAccess::ORDER_VIEW, Route::TYPE_HIDDEN, [
-				new Route(Route::ORDER_EDIT, '/order/edit', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_DUPLICATE, '/order/duplicate', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_CANCEL, '/order/cancel', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_DELETE, '/order/delete', UserAccess::ORDER_DELETE, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_REPEAT, '/order/repeat', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_APPROVAL, '/order/approval', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_APPROVED, '/order/approve/success', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
-				new Route(Route::ORDER_DISAPPROVED, '/order/approve/cancel', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
+		new OrderRoute(Route::ORDER_ALL, '/order/all', UserAccess::ORDER_VIEW, Route::TYPE_NORMAL, [
+			new OrderRoute(Route::ORDER_ADD, '/order/add', UserAccess::ORDER_ADD),
+			new OrderRoute(Route::ORDER_ARCHIVE, '/order/archive', UserAccess::ORDER_VIEW),
+			new OrderRoute(Route::COMMENT_DELETE, '/order/comment/delete', UserAccess::COMMENT_EDIT, Route::TYPE_HIDDEN),
+			new OrderRoute(Route::ORDER_VIEW, '/order/view', UserAccess::ORDER_VIEW, Route::TYPE_HIDDEN, [
+				new OrderRoute(Route::ORDER_EDIT, '/order/edit', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_DUPLICATE, '/order/duplicate', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_CANCEL, '/order/cancel', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_DELETE, '/order/delete', UserAccess::ORDER_DELETE, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_REPEAT, '/order/repeat', UserAccess::ORDER_ADD, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_APPROVAL, '/order/approval', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_APPROVED, '/order/approve/success', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
+				new OrderRoute(Route::ORDER_DISAPPROVED, '/order/approve/cancel', UserAccess::ORDER_EDIT, Route::TYPE_HIDDEN),
 			]),
 		]),
 		
