@@ -5,7 +5,12 @@ class UserPlugin extends BaseModel {
 	public $plugin;
 	
 	public $name; //plugin -> Plugin::name
+	public $route; //plugin -> Plugin::route
 	public $files; //plugin -> Plugin::files
+	
+	const FIELD_PLUGIN = 'plugin';
+	const FIELD_UID = 'uid';
+	const FIELD_GID = 'gid';
 	
 	public static function tableName() {
 		return 'user_plugins';
@@ -21,17 +26,18 @@ class UserPlugin extends BaseModel {
 		return $uFile;
 	}
 	
-	public function connect($file) {
+	public function connect() {
+		if (!is_null($this->route) && $this->route!=Application::$routes->current->name) {
+			return; //этот плангин не подходит по роуту
+		}
+		
 		$files = $this->getFiles();
 		
-		if (!in_array($file, $files)) return;
-		
 		foreach ($files as $f) {
-			if ($file!=$f) continue;
-			
-			$f = Application::$config['plugin']['dir'] . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . $f;
-			if (file_exists($f)) {
-				require_once($f);
+			$file = new File();
+			$file->name = Application::$config['plugin']['dir'] . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . $f;
+			if ($file->extension()==File::EXT_PHP && file_exists($file->name)) {
+				require_once($file->name);
 			}
 		}
 	}
@@ -42,13 +48,13 @@ class UserPlugin extends BaseModel {
 		$fields = array();
 		$values = array();
 		
-		$fields[] = 'plugin';
+		$fields[] = UserPlugin::FIELD_PLUGIN;
 		$values[] = $plugin;
 		
-		$fields[] = 'uid';
+		$fields[] = UserPlugin::FIELD_UID;
 		$values[] = $uid;
 		
-		$fields[] = 'gid';
+		$fields[] = UserPlugin::FIELD_GID;
 		$values[] = $gid;
 		
 		return self::insertRow($fields, $values);
@@ -56,24 +62,25 @@ class UserPlugin extends BaseModel {
 	
 	public static function deleteByName($plugin, $uid = null, $gid = null) {
 		$where = array();
-		$where[] = self::field('plugin') . ' = "' . $plugin . '"';
-		if (!is_null($uid)) $where[] = self::field('uid') . ' = ' . $uid;
-		if (!is_null($gid)) $where[] = self::field('gid') . ' = ' . $gid;
+		$where[] = self::field(UserPlugin::FIELD_PLUGIN) . ' = "' . $plugin . '"';
+		if (!is_null($uid)) $where[] = self::field(UserPlugin::FIELD_UID) . ' = ' . $uid;
+		if (!is_null($gid)) $where[] = self::field(UserPlugin::FIELD_GID) . ' = ' . $gid;
 		
 		return self::delete($where);
 	}
 	
 	public static function getAll($uid = null, $gid = null) {
 		$fields = array();
-		$fields[] = self::field('name', Plugin::tableName(), 'name');
-		$fields[] = self::field('files', Plugin::tableName(), 'files');
+		foreach (Plugin::$fields as $field) {
+			$fields[] = self::field($field, Plugin::tableName(), $field);
+		}
 		
 		$join = array();
-		$join[] = self::inner('name', Plugin::tableName(), 'plugin');
+		$join[] = self::inner(Plugin::FIELD_NAME, Plugin::tableName(), UserPlugin::FIELD_PLUGIN);
 		
 		$where = array();
-		if (!is_null($uid)) $where[] = self::field('uid') . ' = ' . $uid;
-		if (!is_null($gid)) $where[] = self::field('gid') . ' = ' . $gid;
+		if (!is_null($uid)) $where[] = self::field(UserPlugin::FIELD_UID) . ' = ' . $uid;
+		if (!is_null($gid)) $where[] = self::field(UserPlugin::FIELD_GID) . ' = ' . $gid;
 		
 		if (count($where)>=2) {
 			$where = [DataBaseManager::where($where, 'or')];
