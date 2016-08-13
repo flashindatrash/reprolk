@@ -31,6 +31,7 @@ class ApiExecuteController extends WebController {
 		
 		//добавим необходимые ассеты для вьюхи
 		$this->addJSFile('controller/ApiExecute');
+		$this->addJSparam('method_path', $this->route->path);
 		
 		//выведем форму
 		$this->view = 'api/execute';
