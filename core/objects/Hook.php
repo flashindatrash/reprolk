@@ -1,6 +1,7 @@
 <?php
 	define('HOOK_FORM_PARSEPOST', 'FORM_PARSEPOST');
 	define('HOOK_FORM_RENDER', 'FORM_RENDER');
+	define('HOOK_APPLICATION_RENDER', 'APPLICATION_RENDER');
 
 	/** Plugin system **/
 
