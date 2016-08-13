@@ -38,19 +38,21 @@ try {
 			new Route(Route::TEMPLATE_DELETE, '/template/delete', UserAccess::TEMPLATE_EDIT, Route::TYPE_HIDDEN),
 		]),
 		
+		new Route(Route::USER_ALL, '/user/all', UserAccess::USER_VIEW, Route::TYPE_NORMAL, [
+			new Route(Route::USER_HISTORY, '/user/history', UserAccess::ADMIN),
+			new Route(Route::USER_ADD, '/user/add', UserAccess::USER_ADD),
+			new Route(Route::TRANSMIT_RIGHTS, '/user/transmit-rights', UserAccess::TRANSMIT_RIGHTS),
+			new Route(Route::VIEW_AS, '/user/view-as', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+				new Route(Route::VIEW_AS_CANCEL, '/user/view-as/cancel', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+			]),
+		]),
+			
 		new Route(Route::ADMIN, '/admin', UserAccess::MANAGEMENT, Route::TYPE_NORMAL, [
 			new Route(Route::FIELD_PAGES, '/admin/fields', UserAccess::ADMIN, Route::TYPE_NORMAL, [
 				new Route(Route::FIELD_PAGE, '/admin/fields/page', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 				new Route(Route::FIELD_DELETE, '/admin/fields/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 				new Route(Route::FIELD_ADD, '/admin/fields/add', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 				new Route(Route::FIELD_BIND, '/admin/fields/bind', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-			]),
-			new Route(Route::USER_ALL, '/admin/users', UserAccess::USER_VIEW, Route::TYPE_NORMAL, [
-				new Route(Route::USER_ADD, '/admin/user-add', UserAccess::USER_ADD),
-				new Route(Route::TRANSMIT_RIGHTS, '/admin/transmit-rights', UserAccess::TRANSMIT_RIGHTS),
-				new Route(Route::VIEW_AS, '/admin/view-as', UserAccess::ADMIN, Route::TYPE_NORMAL, [
-					new Route(Route::VIEW_AS_CANCEL, '/admin/view-as/cancel', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				]),
 			]),
 			
 			new Route(Route::POLYMER_ALL, '/admin/photopolymers', UserAccess::ADMIN, Route::TYPE_NORMAL, [
@@ -75,7 +77,9 @@ try {
 		
 		//Sub menu
 		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
-		new Route(Route::API_DOCUMENTATION, '/api', UserAccess::AUTH, Route::TYPE_SUB),
+		new Route(Route::API_DOCUMENTATION, '/api', UserAccess::AUTH, Route::TYPE_SUB, [
+			new Route(Route::API_EXECUTE, '/api/execute', UserAccess::AUTH, Route::TYPE_HIDDEN),
+		]),
 		new Route(Route::LOGOUT, '/logout', UserAccess::AUTH, Route::TYPE_SUB),
 		
 		//Ajax
