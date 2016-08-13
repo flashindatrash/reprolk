@@ -22,7 +22,7 @@ class SQLOrderBy {
 	}
 	
 	public function addOrder($field, $by) {
-		$this->orders[] = $field . ' ' . $by;
+		$this->orders[] = '`' . $field . '` ' . $by;
 	}
 	
 	public function toString() {
