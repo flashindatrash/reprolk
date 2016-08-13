@@ -15,6 +15,15 @@ class BaseController {
 	
 	public function __construct() {
 		$this->menu = MenuItem::parse(Application::$routes->all);
+		
+		if (Session::hasGroup()) {
+			//уведомление что пользователь просматривает страницу как ...
+			$this->addAlert(sprintf(View::str('warning_view_as'), 
+				View::str(Session::getGroup()), 
+				Session::getGid(), 
+				View::link(Route::VIEW_AS_CANCEL, View::str('cancel'))
+			), 'warning');
+		}
 	}
 	
 	public function setTemplate($template) {
