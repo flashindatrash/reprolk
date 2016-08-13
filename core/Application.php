@@ -54,44 +54,42 @@ class Application {
 	
 	public function getContent() {
 		$route = self::$routes->current;
-		$controller = !is_null($route) ? $this->getFactory($route) : null;
+		$controller = !is_null($route) ? self::getFactory($route) : null;
 		
 		if (is_null($controller)) {
 			//контроллер не найден
-			$controller = $this->getFactory(self::$routes->byName(Route::NOT_FOUND));
+			$controller = self::getFactory(self::$routes->byName(Route::NOT_FOUND));
 		} else if ($controller instanceof IAuthentication) {
 			//специальный контроллер, который не требует редиректа
 			$controller->authenticate($route->isAvailable(), Account::isLogined());
 		} else if (!$route->isAvailable()) {
 			if (!Account::isLogined()) {
 				//пользователь не залогинен
-				$controller = $this->getFactory(self::$routes->byName(Route::LOGIN));
+				$controller = self::getFactory(self::$routes->byName(Route::LOGIN));
 			} else {
 				//если нет доступа к текущему роуту
-				$controller = $this->getFactory(self::$routes->byName(Route::ACCESS_DENIED));
+				$controller = self::getFactory(self::$routes->byName(Route::ACCESS_DENIED));
 			}
 		} else {
-			//если все ок
+			//все ок
+		}
+		
+		
+		if (!is_null($route)) {
+			if (Account::isLogined()) {
+				//история посещений
+				UserHistory::add($route->name);
+			}
+			
 			//подключим плагины
 			foreach (self::$plugins as $plugin) {
-				$plugin->connect($route->controllerPath());
+				$plugin->connect();
 			}
 		}
-			
+		
 		$controller->beforeRender();
 		
-		if (Session::hasGroup()) {
-			//уведомление что пользователь просматривает страницу как ...
-			$controller->addAlert(sprintf($this->str('warning_view_as'), self::str(Session::getGroup()), View::link(Route::VIEW_AS_CANCEL, self::str('cancel'))), 'warning');
-		}
-		
-		if (self::$config['admin']['displaySQL']==1) {
-			//все sql запросы в beforeRender отобразятся на странице
-			$sql_history = self::$db->getHistory();
-			foreach ($sql_history as $sql) {
-				$controller->addAlert($sql, 'info');
-			}
-		}
+		hook(HOOK_APPLICATION_RENDER, null, $controller);
 		
 		$controller->render();
 	}
@@ -101,7 +99,7 @@ class Application {
 		return isset(self::$lang) && isset(self::$lang[$name]) && strlen(self::$lang[$name])>0 ? self::$lang[$name] : $name;
 	}
 	
-	private function getFactory($route) {
+	public static function getFactory($route) {
 		$fileName = self::$config['app']['controllers'] . $route->controllerPath();
 		return require_class($fileName, $route->controllerName());
 	}
