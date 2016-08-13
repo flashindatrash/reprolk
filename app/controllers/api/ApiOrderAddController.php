@@ -1,7 +1,7 @@
 <?php
 
 Util::inc('controllers', 'api/BaseApiController.php');
-Util::inc('controllers', 'OrderAddController.php');
+Util::inc('controllers', 'order/OrderAddController.php');
 
 /*
 params:
