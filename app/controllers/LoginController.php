@@ -1,22 +1,24 @@
 <?php
 
 Util::inc('controllers', 'base/WebController.php');
+Util::inc('controllers', 'api/ApiLoginController.php');
 Util::inc('interfaces', 'IRedirect.php');
 Util::inc('objects', 'Recaptcha.php');
 
 class LoginController extends WebController implements IRedirect {
 	
+	public $api;
 	public $useCaptcha = false;
 	
 	public function beforeRender() {
+		$this->api = new ApiLoginController();
 		$recaptcha = new Recaptcha(Application::$config['recaptcha']);
-		$formValidate = $this->loginValidate();
-		$captchaValidate = hasPost('g-recaptcha-response') && $recaptcha->check(post('g-recaptcha-response'));
+		
 		$this->view = 'system/login';
 		
-		if ($formValidate) {
-			if (!isset($_POST['g-recaptcha-response']) || $captchaValidate) {
-				if (!$this->login()) {
+		if ($this->api->checkRequest()) {
+			if (!isset($_POST['g-recaptcha-response']) || (hasPost('g-recaptcha-response') && $recaptcha->check(post('g-recaptcha-response')))) {
+				if (!$this->api->execute()) {
 					$this->addAlert(View::str('error_sign_in'));
 					$this->useCaptcha = true;
 				} else {
@@ -30,20 +32,6 @@ class LoginController extends WebController implements IRedirect {
 		}
 		
 		$this->addJSfile('https://www.google.com/recaptcha/api.js');
-	}
-	
-	public function loginValidate() {
-		return $this->formValidate(['email', 'password']);
-	}
-	
-	public function login() {
-		Application::$user = User::login(post('email'), post('password'));
-		$isLogined = Account::isLogined();
-		if ($isLogined) {
-			//сгенерируем новый authKey
-			Account::setAuthKey(md5(Application::$user->email . '_' . Application::$user->password));
-		}
-		return $isLogined;
 	}
 	
 	//IRedirect

@@ -11,8 +11,6 @@ class Field extends BaseModel {
 	public $templated;
 	public $weight;
 	
-	public $session; //то, что хранится в сессии (в POST например)
-	
 	public static function tableName() {
 		return 'fields';
 	}
@@ -22,6 +20,7 @@ class Field extends BaseModel {
 	public static function tableNameByRoute($route) {
 		switch ($route) {
 			case Route::ORDER_ADD: return Order::tableName();
+			case Route::ORDER_ALL: return Order::tableName();
 		}
 		return null;
 	}
@@ -104,7 +103,12 @@ class Field extends BaseModel {
 	}
 	
 	//варианты для заполнения
+	public $option;
 	public function getOption() {
+		if (!is_null($this->option)) {
+			//если опции указаны вручную
+			return $this->option;
+		}
 		switch($this->type) {
 			case 'select':
 			case 'multiple':
@@ -116,11 +120,17 @@ class Field extends BaseModel {
 	}
 	
 	//дефолтное значение
+	public $default;
 	public function getDefault() {
+		if (!is_null($this->default)) {
+			//если дефолт указан вручную
+			return $this->default;
+		}
 		$column = $this->getColumn();
 		return !is_null($column) ? $column->Default : null;
 	}
 	
+	public $session; //то, что хранится в сессии (в POST например)
 	public function getValue() {
 		return is_null($this->session) ? $this->getDefault() : $this->session;
 	}

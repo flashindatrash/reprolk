@@ -1,5 +1,8 @@
 $(document).ready(function(){
 	
+	//кнопка отправить
+	var button_send = $('#execute');
+	
 	//текстовое поле
 	var input_response = $('#input_response');
 	
@@ -9,7 +12,7 @@ $(document).ready(function(){
 	//выставим текстовое поле только для чтения
 	input_response.prop('readonly', true);
 	
-	$('#execute').click(function () {
+	button_send.click(function () {
 		var form = $(this).closest('form');
 		if (form) {
 			//сериализуем форму в объект
@@ -25,5 +28,7 @@ $(document).ready(function(){
 			});
 		}
 	});
+	
+	button_send.click();
 	
 });

@@ -21,6 +21,7 @@ class ApiExecuteController extends WebController {
 		//загрузим контроллер
 		$this->controller = Application::getFactory($this->route);
 		
+		//проверим что контроллер наследник BaseApiController
 		if (is_null($this->controller) || !$this->controller instanceof BaseApiController) {
 			sprintf(View::str('error_is_not_implemented'), $this->route->name, 'BaseApiController');
 			return;
@@ -28,6 +29,9 @@ class ApiExecuteController extends WebController {
 		
 		//загрузим форму отправки из полученного контроллера
 		$this->form = $this->controller->createRequestForm();
+		
+		//выставим дефолтные значения
+		$this->form->setDefault($this->controller->getDefaultRequest());
 		
 		//добавим необходимые ассеты для вьюхи
 		$this->addJSFile('controller/ApiExecute');

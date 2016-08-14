@@ -13,30 +13,22 @@ response:
 
 class ApiFieldGetController extends BaseApiController {
 	
-	private $page;
-	private $form;
 	private $fields;
 	
-	public function processingApi() {
-		if (!hasPost('page')) {
-			$this->addAlert(View::str('error_api_null_page'), 'danger');
-			return;
-		}
+	public function execute() {
+		$page = post('page');
 		
-		$this->page = post('page');
-		if (is_null(Application::$routes->byName($this->page))) {
+		if (is_null(Application::$routes->byName($page))) {
 			$this->addAlert(View::str('error_api_page_not_found'), 'danger');
-			return;
+			return false;
 		}
 		
-		$this->success = true;
-		
-		$this->form = new Form();
-		$this->form->loadFields($this->page);
+		$form = new Form();
+		$form->loadFields($page);
 		
 		//возмем все филды, которые canUse
 		$this->fields = array();
-		foreach ($this->form->fields as $field) {
+		foreach ($form->fields as $field) {
 			//возмем только те которые можно юзать
 			if ($field->canUse()) {
 				//добавим варианты заполнения
@@ -52,10 +44,27 @@ class ApiFieldGetController extends BaseApiController {
 				$this->fields[] = $field;
 			}
 		}
-		
-		$this->response["fields"] = $this->fields;
 	}
 	
+	public function responsed() {
+		return array(
+			'fields' => $this->fields
+		);
+	}
+	
+	public function getDefaultRequest() {
+		return array(
+			Auth::FIELD_KEY => Account::getAuthKey(),
+			'page' => Route::ORDER_ADD
+		);
+	}
+	
+	public function createRequestForm() {
+		$form = parent::createRequestForm();
+		$form->addField(Auth::FIELD_KEY, INPUT_TEXT, false);
+		$form->addField('page', INPUT_TEXT, true);
+		return $form;
+	}
 }
 
 ?>
