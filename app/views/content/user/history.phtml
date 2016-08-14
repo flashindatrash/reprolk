@@ -6,7 +6,7 @@
 			<tr>
 				<?php
 				$html = '';
-				foreach (['username', 'action'] as $th) {
+				foreach (['username', 'action', 'time'] as $th) {
 					$html .= '<th>';
 					$html .= View::str($th);
 					$html .= '</th>';
@@ -29,6 +29,7 @@
 				$rows .= '<tr class="' . join (' ', $classes) . '">';
 				$rows .= '<td>' . $record->username . '</td>';
 				$rows .= '<td>' . (is_null($route) ? $record->route : '<i>' . $route->linkTitle() . '</i>') . '</td>';
+				$rows .= '<td>' . $record->time . '</td>';
 				$rows .= '</tr>';
 			}
 			print $rows;
