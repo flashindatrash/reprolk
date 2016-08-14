@@ -27,7 +27,8 @@ class ApiOrderCancelController extends BaseApiController {
 			return false;
 		}
 		
-		if ($this->order->cancel()) {
+		//если включен безопасный режим, или заказ действительно отменен - возвращаем успех
+		if ($this->isSafeMode || $this->order->cancel()) {
 			return true;
 		}
 		
@@ -36,8 +37,7 @@ class ApiOrderCancelController extends BaseApiController {
 	
 	public function getDefaultRequest() {
 		return array(
-			Auth::FIELD_KEY => Account::getAuthKey(),
-			Order::FIELD_ID => 8305
+			Auth::FIELD_KEY => Account::getAuthKey()
 		);
 	}
 	

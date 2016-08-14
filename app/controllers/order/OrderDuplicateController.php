@@ -17,13 +17,15 @@ class OrderDuplicateController extends OrderAddController {
 			$this->addAlert(View::str('error_order_cannot_duplicate'), 'danger');
 			return false;
 		}
+		
 		return true;
 	}
 	
 	public function createOrderForm() {
 		unset($this->order->date_due); //очистим date_due, т.к. дальше форма должна создасться с завтрешним днем
 		
-		parent::createOrderForm();
+		$this->form = $this->createForm('OrderAdd');
+		$this->form->loadFields(Route::ORDER_ADD);
 		
 		$this->form->setSession(objectToArray($this->order));
 	}

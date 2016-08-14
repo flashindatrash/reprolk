@@ -5,8 +5,6 @@ Util::inc('controllers', 'api/ApiOrderAllController.php');
 
 class OrderAllController extends WebController {
 	
-	const COUNT_PER_PAGE = 10;
-	
 	public $api;
 	public $fields_view = array(Order::FIELD_TITLE, 'photopolymer_name', Order::FIELD_RASTER_LINE, Order::FIELD_STATUS, Order::FIELD_DATE_DUE, 'username');
 	

@@ -66,9 +66,9 @@ try {
 			]),
 		]),
 		
-		new Route(Route::LOGIN, '/login', UserAccess::ALL, Route::TYPE_HIDDEN),
-		
+		//System
 		new Route(Route::INDEX, '/', UserAccess::ALL, Route::TYPE_HIDDEN),
+		new Route(Route::LOGIN, '/login', UserAccess::ALL, Route::TYPE_HIDDEN),
 		new Route(Route::LANGUAGE_SET, '/lang', UserAccess::ALL, Route::TYPE_HIDDEN),
 		new Route(Route::FILE, '/file', UserAccess::AUTH, Route::TYPE_HIDDEN),
 		new Route(Route::CRON, '/cron', UserAccess::ALL, Route::TYPE_HIDDEN),
@@ -91,9 +91,7 @@ try {
 		new ApiRoute(Route::API_ORDER_CANCEL, '/api/order/cancel', UserAccess::API),
 		new ApiRoute(Route::API_ORDER_ADD, '/api/order/add', UserAccess::API),
 		new ApiRoute(Route::API_ORDER_REPEAT, '/api/order/repeat', UserAccess::API),
-		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API),
-		
-		new ApiRoute('ApiTest', '/api/test', UserAccess::ALL, Route::TYPE_HIDDEN),
+		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API)
 	]);
 	
 	

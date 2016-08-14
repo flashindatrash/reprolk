@@ -1,20 +1,16 @@
 <?php
 
 Util::inc('controllers', 'order/BaseOrderController.php');
+Util::inc('objects', 'order/TemplateStorage.php');
 Util::inc('interfaces', 'IRedirect.php');
 
 class OrderAddController extends BaseOrderController implements IRedirect {
 	
 	public $form;
 	public $templates;
-	public $template_id;
-	public $template_fields;
 	
 	public function beforeRender() {
-		$gid = Account::getGid();
-		$this->templates = Template::getAll($gid);
-		
-		$this->generateTemplate();
+		$this->templates = new TemplateStorage();
 		
 		$this->createOrderForm();
 		
@@ -31,18 +27,10 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 	}
 	
 	public function createOrderForm() {
-		$this->form = $this->createForm($this->getFormName());
+		$this->form = $this->createForm('OrderAdd');
 		$this->form->loadFields(Route::ORDER_ADD);
-		if ($this->template_id!=0) {
-			$this->form->setSession(reArray($this->template_fields, 'name', 'value'));
-		}
-		
-		$this->form->setSession(array('date_due' => (new DateTime('tomorrow'))->format("Y-m-d")));
-	}
-	
-	//IRedirect
-	public function getRedirect() {
-		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path);
+		//возмем значения из шаблона, если тот выбран
+		$this->form->setDefault($this->templates->getFieldsValue());
 	}
 	
 	public function add() {
@@ -71,30 +59,13 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		return false;
 	}
 	
-	protected function getFormName() {
-		return 'OrderAdd';
-	}
-	
-	protected function generateTemplate() {
-		$this->template_id = hasGet('template') ? get('template') : 0;
-		$this->template_fields = $this->template_id!=0 ? GroupTemplate::getAll($this->template_id) : [];
+	//IRedirect
+	public function getRedirect() {
+		return new Redirect(View::str('order_successfuly'), Application::$routes->byName(Route::ORDER_ALL)->path);
 	}
 	
 	protected function generateBreadcrump($items) {
-		$menu = '';
-		
-		if (count($this->templates)>0) {
-			$li = array();
-			$li[] = View::rightBreadcrumpLink(View::link(Route::ORDER_ADD, View::str('new_form')), $this->template_id==0);
-			$li[] = View::rightBreadcrumpLink(null); //separator
-			foreach ($this->templates as $template) {
-				$li[] = View::rightBreadcrumpLink(View::link(Route::ORDER_ADD, $template->name, 'template=' . $template->id), $this->template_id==$template->id);
-			}
-			
-			$menu = View::rightBreadcrumpDropdown(View::str('select_template'), $li);
-		}
-		
-		return parent::generateBreadcrump($items) . $menu;
+		return parent::generateBreadcrump($items) . $this->templates->generateBreadcrump();
 	}
 	
 }

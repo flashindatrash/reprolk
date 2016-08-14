@@ -4,9 +4,13 @@ Util::inc('controllers', 'base/JSONController.php');
 
 class BaseApiController extends JSONController implements IAuthentication {
 	
+	const FIELD_SAFE_MODE = 'safe_mode';
+	
 	protected $isAvailable = false;
 	protected $isLogined = false;
-	protected $request;
+	protected $isSafeMode = false;
+	
+	public $request;
 	
 	public function __construct() {
 		//DELETE!
@@ -23,6 +27,9 @@ class BaseApiController extends JSONController implements IAuthentication {
 			$this->addAlert(View::str('error_api_not_logined'), 'danger');
 			return;
 		}
+		
+		//безопасный режим, в случаи в котором в базу ничего не инсертится и не апдетится
+		$this->isSafeMode = toBool(get('safe_mode'));
 		
 		//проверим реквест
 		if ($this->checkRequest()) {

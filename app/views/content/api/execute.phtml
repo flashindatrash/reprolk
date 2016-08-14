@@ -1,3 +1,19 @@
+<dl class="dl-horizontal">
+	<dt><?php print View::str('method'); ?>:</dt>
+	<dd><?php print $this->route->path; ?></dd>
+	<dt><?php print View::str('description'); ?>:</dt>
+	<dd><?php print $this->route->linkTitle(); ?></dd>
+	<dt><?php print View::str('request'); ?>:</dt>
+	<dd><ul class="list-unstyled"><?php
+		foreach ($this->form->fields as $field) {
+			print '<li><b>' . $field->name . '</b> (' . $field->type . ')</li>';
+		}
+	?></ul></dd>
+</dl>
+
+
+<hr>
+
 <form method="post" class="form-horizontal">
 <?php 
 	print $this->form->render();

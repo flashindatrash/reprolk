@@ -35,7 +35,8 @@ class ApiExecuteController extends WebController {
 		
 		//добавим необходимые ассеты для вьюхи
 		$this->addJSFile('controller/ApiExecute');
-		$this->addJSparam('method_path', $this->route->path);
+		$this->addJSparam('method_path', $this->route->path . '?' . BaseApiController::FIELD_SAFE_MODE . '=1');
+		$this->include_datetimepicker();
 		
 		//выведем форму
 		$this->view = 'api/execute';

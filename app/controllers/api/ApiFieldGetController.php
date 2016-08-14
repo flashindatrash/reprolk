@@ -32,7 +32,7 @@ class ApiFieldGetController extends BaseApiController {
 			//возмем только те которые можно юзать
 			if ($field->canUse()) {
 				//добавим варианты заполнения
-				if ($this->page==Route::ORDER_ADD && $field->name==Order::FIELD_PID) {
+				if ($page==Route::ORDER_ADD && $field->name==Order::FIELD_PID) {
 					//хардкор! 
 					//1C: Недопустимое имя свойства: '9' для чтения JSON в объект Структура
 					//ключом не может выступать число, ну что за бред
@@ -44,6 +44,8 @@ class ApiFieldGetController extends BaseApiController {
 				$this->fields[] = $field;
 			}
 		}
+		
+		return true;
 	}
 	
 	public function responsed() {

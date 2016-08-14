@@ -1,10 +1,10 @@
 <?php
 
-//ôîðìà ôèëüòðà çàêàçà
+//Ñ„Ð¾Ñ€Ð¼Ð° Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð° Ð·Ð°ÐºÐ°Ð·Ð°
 
-Util::inc('objects', 'Form.php');
+Util::inc('forms', 'ApiRequest.php');
 
-class OrderFilterForm extends Form {
+class OrderFilterForm extends ApiRequestForm {
 	
 	public function loadFields($route, $gid = null) {
 		parent::loadFields($route, $gid);
@@ -19,24 +19,7 @@ class OrderFilterForm extends Form {
 		]);
 	}
 	
-	//êàñòîìíûé ðåíäåð ïîëåé
-	public function field_status($field) {
-		return View::formNormal($field->name, $field->type, $field->getOption(), false, false, $field->getValue());
-	}
-	
-	public function field_username($field) {
-		return View::formNormal($field->name, $field->type, $field->getOption(), true, false, $field->getValue());
-	}
-	
-	public function field_date_due($field) {
-		return View::formNormal($field->name, $field->type, $field->getValue(), false);
-	}
-	
-	public function field_date_created($field) {
-		return View::formNormal($field->name, $field->type, $field->getValue(), false);
-	}
-	
-	//ïîëó÷èòü âñåõ þçåðîâ äëÿ ñåëåêòà
+	//Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ð²ÑÐµÑ… ÑŽÐ·ÐµÑ€Ð¾Ð² Ð´Ð»Ñ ÑÐµÐ»ÐµÐºÑ‚Ð°
 	private function getUsers() {
 		$users = User::getAll([User::FIELD_ID, User::FIELD_USERNAME], null, $this->gid);
 		$arr = reArray($users, User::FIELD_ID, User::FIELD_USERNAME);
@@ -45,7 +28,7 @@ class OrderFilterForm extends Form {
 		return $arr;
 	}
 	
-	//ïîëó÷èòü âñå ñòàòóñû äëÿ ñåëåêòà
+	//Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ð²ÑÐµ ÑÑ‚Ð°Ñ‚ÑƒÑÑ‹ Ð´Ð»Ñ ÑÐµÐ»ÐµÐºÑ‚Ð°
 	private function getStatuses() {
 		switch (Application::$routes->current->name) {
 			case Route::ORDER_ALL:
