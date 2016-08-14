@@ -44,7 +44,7 @@ class Route {
 	const LOCALE_STATS = 'LocaleStats';
 	const LOCALE_EDIT = 'LocaleEdit';
 	const LANGUAGE_SET = 'LanguageSet';
-	const API_DOCUMENTATION = 'ApiDocumentation';
+	const API_REFERENCE = 'ApiReference';
 	const API_EXECUTE = 'ApiExecute';
 	const CRON = 'Cron';
 	const SWITCH_PLUGIN = 'SwitchPlugin';

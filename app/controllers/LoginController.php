@@ -36,8 +36,7 @@ class LoginController extends WebController implements IRedirect {
 	
 	//IRedirect
 	public function getRedirect() {
-		$url = post('_url');
-		if ($url=='') $url = Application::$routes->byName(Route::ORDER_ALL)->forGet(Auth::FIELD_KEY . '=' . Application::$user->auth_key);
+		$url = Application::$routes->byName(Route::ORDER_ALL)->forGet(Auth::FIELD_KEY . '=' . Application::$user->auth_key);
 		return new Redirect(View::str('sign_successfuly'), $url);
 	}
 	

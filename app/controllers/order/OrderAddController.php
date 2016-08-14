@@ -30,7 +30,7 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 		$this->form = $this->createForm('OrderAdd');
 		$this->form->loadFields(Route::ORDER_ADD);
 		//возмем значения из шаблона, если тот выбран
-		$this->form->setDefault($this->templates->getFieldsValue());
+		if (!is_null($this->templates)) $this->form->setDefault($this->templates->getFieldsValue());
 	}
 	
 	public function add() {

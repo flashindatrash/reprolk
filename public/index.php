@@ -77,7 +77,7 @@ try {
 		
 		//Sub menu
 		new AccountRoute(Route::PROFILE, '/user', UserAccess::AUTH, Route::TYPE_SUB),
-		new Route(Route::API_DOCUMENTATION, '/api', UserAccess::AUTH, Route::TYPE_SUB, [
+		new Route(Route::API_REFERENCE, '/api', UserAccess::AUTH, Route::TYPE_SUB, [
 			new Route(Route::API_EXECUTE, '/api/execute', UserAccess::AUTH, Route::TYPE_HIDDEN),
 		]),
 		new Route(Route::LOGOUT, '/logout', UserAccess::AUTH, Route::TYPE_SUB),
