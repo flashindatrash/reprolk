@@ -15,6 +15,23 @@ class ApiRequestForm extends Form {
 		$this->fields[] = $field;
 	}
 	
+	//кастомный рендер полей
+	public function field_status($field) {
+		return View::formNormal($field->name, $field->type, $field->getOption(), false, false, $field->getValue());
+	}
+	
+	public function field_username($field) {
+		return View::formNormal($field->name, $field->type, $field->getOption(), true, false, $field->getValue());
+	}
+	
+	public function field_date_due($field) {
+		return View::formNormal($field->name, $field->type, $field->getValue(), false);
+	}
+	
+	public function field_date_created($field) {
+		return View::formNormal($field->name, $field->type, $field->getValue(), false);
+	}
+	
 }
 
 ?>

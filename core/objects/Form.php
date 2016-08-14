@@ -77,18 +77,18 @@ class Form {
 	
 	public function view($field) {
 		switch ($field->type) {
-			case 'hidden':
+			case INPUT_HIDDEN:
 				return View::input($field->name, $field->type, $field->getValue());
-			case 'select':
-			case 'multiple':
+			case INPUT_SELECT:
+			case INPUT_MULTIPLE:
 				return View::formNormal($field->name, $field->type, $field->getOption(), false, true, $field->getValue());
-			case 'checkbox':
+			case INPUT_CHECKBOX:
 				return View::formOffset($field->name, $field->type, $field->getValue());
-			case 'file':
-			case 'files':
-			case 'submit':
+			case INPUT_FILE:
+			case INPUT_FILES:
+			case INPUT_SUBMIT:
 				return View::formOffset($field->name, $field->type);
-			case 'date':
+			case INPUT_DATE:
 				return View::formNormal($field->name, $field->type, $field->getValue(), true);
 			default:
 				return View::formNormal($field->name, $field->type, $field->getValue());
@@ -121,7 +121,7 @@ class Form {
 	
 	private function parsePost() {
 		foreach ($this->fields as $field) {
-			if ($field->type=='checkbox') {
+			if ($field->type==INPUT_CHECKBOX) {
 				$_POST[$field->name] = toBool(post($field->name));
 			}
 			

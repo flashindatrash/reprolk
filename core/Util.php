@@ -14,11 +14,13 @@ class Util {
 	public static function paging(&$currentPage, &$totalPages, $total, $perPage, $from = 'get') {
 		$totalPages = ceil($total / $perPage);
 		if ($from=='get') {
-			$currentPage = hasGet('page') ? get('page') : 0;
+			$currentPage = hasGet('page') ? int(get('page')) : 0;
 		} else {
-			$currentPage = hasPost('page') ? post('page') : 0;
+			$currentPage = hasPost('page') ? int(post('page')) : 0;
 		}
-		if ($currentPage>$totalPages-1) $currentPage = $totalPages-1;
+		
+		if ($totalPages==0) $currentPage = 0;
+		else if ($currentPage>$totalPages-1) $currentPage = $totalPages-1;
 		else if ($currentPage<0) $currentPage = 0;
 	}
 	

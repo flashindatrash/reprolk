@@ -18,21 +18,20 @@ class OrderRepeatController extends OrderDuplicateController {
 	}
 	
 	public function createOrderForm() {
+		unset($this->order->date_due); //очистим date_due, т.к. дальше форма должна создасться с завтрешним днем
+		
 		$this->order->title = sprintf(View::str('order_title_repeat'), $this->order->title);
 		
-		parent::createOrderForm();
+		$this->form = $this->createForm('OrderRepeat');
+		$this->form->loadFields(Route::ORDER_ADD);
 		
+		$this->form->setSession($this->order->toArray());
 		$this->form->setSession(array('pid' => $this->order->photopolymer_name));
 		
 		//перезапишем полям обязательно для заполнения
 		foreach ($this->form->fields as $field) {
 			$field->mandatory = in_array($field->name, self::MANDATORY);
 		}
-	}
-	
-	protected function generateTemplate() {
-		$this->template_id = 0;
-		$this->template_fields = [];
 	}
 	
 	public function add() {
@@ -81,10 +80,6 @@ class OrderRepeatController extends OrderDuplicateController {
 			
 		}
 		return $values;
-	}
-	
-	protected function getFormName() {
-		return 'OrderRepeat';
 	}
 	
 }

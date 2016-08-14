@@ -2,15 +2,6 @@
 
 Util::inc('controllers', 'api/BaseApiController.php');
 
-/*
-params:
-	
-	
-response:
-	orders[]
-	
-*/
-
 class ApiOrderAllController extends BaseApiController {
 	
 	const COUNT_PER_PAGE = 10;
@@ -74,6 +65,9 @@ class ApiOrderAllController extends BaseApiController {
 	
 	public function responsed() {
 		return array(
+			'total' => $this->total,
+			'current_page' => $this->currentPage,
+			'total_pages' => $this->totalPages,
 			'orders' => $this->orders
 		);
 	}

@@ -2,15 +2,6 @@
 
 Util::inc('controllers', 'api/BaseApiController.php');
 
-/*
-params:
-	email
-	password
-	
-response:
-	auth_key
-*/
-
 class ApiLoginController extends BaseApiController {
 	
 	public function beforeRender() {
