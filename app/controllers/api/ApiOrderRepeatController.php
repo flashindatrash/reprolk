@@ -20,7 +20,6 @@ class ApiOrderRepeatController extends BaseApiController {
 		
 		//загрузим дублированный заказ
 		if ($this->controller->loadDuplicateOrder()) {
-			$this->addPostValidator();
 			$this->controller->createOrderForm();
 			if ($this->controller->add()) {
 				$this->success = true;

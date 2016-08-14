@@ -16,8 +16,6 @@ class ApiOrderAddController extends BaseApiController {
 	private $controller;
 	
 	public function processingApi() {
-		$this->addPostValidator();
-		
 		$this->controller = new OrderAddController();
 		$this->controller->createOrderForm();
 		if ($this->controller->add()) {

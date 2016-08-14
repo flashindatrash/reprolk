@@ -2,8 +2,6 @@
 
 class BaseController {
 	
-	const POST_VALIDATOR = 'send';
-	
 	private $template = 'base';
 	private $title = 'Repropark';
 	
@@ -36,7 +34,6 @@ class BaseController {
 	}
 	
 	public function formValidate($fields) {
-		if (!toBool(post(self::POST_VALIDATOR))) return false;
 		$valid = true;
 		foreach ($fields as $field) {
 			if (!hasPost($field)) {

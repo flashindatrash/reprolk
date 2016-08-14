@@ -1,12 +1,16 @@
 <?php
 
+Util::inc('objects', 'Input.php');
+
 class Form {
 	
 	public $fields = [];
+	public $gid;
 	
 	public function loadFields($route, $gid = null) {
 		if (is_null($gid)) $gid = Account::getGid();
-		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, $gid));
+		$this->gid = $gid;
+		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, $this->gid));
 		
 		//отсортируем смерженые поля по весу
 		uasort($this->fields, array($this, 'sortWeight'));
@@ -45,6 +49,19 @@ class Form {
 		return $all;
 	}
 	
+	//field по имени
+	public function fieldByName($name) {
+		foreach($this->fields as $field) {
+			if ($field->name==$name) return $field;
+		}
+		return null;
+	}
+	
+	public function valueByName($name) {
+		$field = $this->fieldByName($name);
+		return !is_null($field) ? $field->getValue() : null;
+	}
+	
 	public function render() {
 		$html = View::formValidate();
 		foreach($this->fields as $field) {
@@ -61,7 +78,7 @@ class Form {
 	public function view($field) {
 		switch ($field->type) {
 			case 'hidden':
-				return View::input($field->name, $field->type);
+				return View::input($field->name, $field->type, $field->getValue());
 			case 'select':
 			case 'multiple':
 				return View::formNormal($field->name, $field->type, $field->getOption(), false, true, $field->getValue());
@@ -71,8 +88,26 @@ class Form {
 			case 'files':
 			case 'submit':
 				return View::formOffset($field->name, $field->type);
+			case 'date':
+				return View::formNormal($field->name, $field->type, $field->getValue(), true);
 			default:
 				return View::formNormal($field->name, $field->type, $field->getValue());
+		}
+	}
+	
+	public function setDefault($array) {
+		foreach ($this->fields as $field) {
+			if (array_key_exists($field->name, $array)) {
+				$field->default = $array[$field->name];
+			}
+		}
+	}
+	
+	public function setOption($array) {
+		foreach ($this->fields as $field) {
+			if (array_key_exists($field->name, $array)) {
+				$field->option = $array[$field->name];
+			}
 		}
 	}
 	

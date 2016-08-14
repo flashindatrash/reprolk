@@ -15,6 +15,7 @@ function ajax(path, data, success) {
 		url: path,
 		data: data,
 		success: success,
+		type: "POST",
 		dataType: "json"
 	});
 }

@@ -7,25 +7,7 @@
 			</div>
 			<form method="get" class="form-horizontal">
 				<div class="modal-body">
-					<?php
-						print View::input('sort', 'hidden', $this->order_by->field);
-						print View::input('by', 'hidden', $this->order_by->by);
-						print View::input('page', 'hidden', $this->currentPage);
-						print View::formSmall('status', 'multiple', $this->order_filter->statuses, false, false, $this->order_filter->status);
-						
-						print View::formSmall('search', 'text', $this->order_filter->search);
-						
-						$date_due = '<div class="col-sm-5">' . View::input('date_due_start', 'date', $this->order_filter->date_due_start, false) . '</div>' .
-									'<div class="col-sm-5">' . View::input('date_due_end', 'date', $this->order_filter->date_due_end, false) . '</div>';
-						print View::formAny('date_due', $date_due, 2);
-						
-						$date_created =	'<div class="col-sm-5">' . View::input('date_created_start', 'date', $this->order_filter->date_created_start, false) . '</div>' .
-										'<div class="col-sm-5">' . View::input('date_created_end', 'date', $this->order_filter->date_created_end, false) . '</div>';
-						print View::formAny('date_created', $date_created, 2);
-						
-						print View::formSmall('username', 'select', $this->order_filter->getUsers(), true, false, $this->order_filter->username);
-						
-					?>
+					<?php print $this->api->filter->render(); ?>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php print View::str('close'); ?></button>

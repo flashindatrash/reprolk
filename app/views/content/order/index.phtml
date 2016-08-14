@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), $this->total_count); ?>
+	<div class="panel-heading"><?php print sprintf(View::str('all_orders_result'), $this->api->total); ?>
 		<div class="pull-right table-controls">
 			<?php 
 				print View::link('#', '<span class="glyphicon glyphicon-filter" aria-hidden="true"></span> ' . View::str('filter'), null, 'filter', 'btn btn-xs btn-primary', View::str('filter'), null, array('toggle' => 'modal', 'target' => '#filterModal'));
@@ -20,7 +20,7 @@
 				$html = '';
 				foreach ($this->fields_view as $th) {
 					$html .= '<th>';
-					$html .= View::linkSort($th, $this->order_by);
+					$html .= View::linkSort($th, $this->api->sort_by);
 					$html .= '</th>';
 				}
 				print $html;
@@ -30,7 +30,7 @@
 		<tbody>
 			<?php
 			$orders = '';
-			foreach ($this->orders as $n => $order) {
+			foreach ($this->api->orders as $n => $order) {
 				$classes = array();
 				$data = array();
 				
@@ -58,5 +58,5 @@
 </div>
 
 <div class="paginator-block">
-	<?php print View::paginator($this->totalPages, $this->currentPage); ?>
+	<?php print View::paginator($this->api->totalPages, $this->api->currentPage); ?>
 </div>

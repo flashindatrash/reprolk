@@ -2,6 +2,8 @@
 
 class WebController extends BaseController {
 	
+	const POST_VALIDATOR = 'send';
+	
 	private $files = array('js' => ['jquery-1.11.3.min', 'bootstrap.min', 'bootstrap-switch.min', 'repropark'], 'css' => ['bootstrap.min', 'bootstrap-theme.min', 'bootstrap-switch.min', 'repropark']);
 	private $js_params = array();
 	private $menu = array();
@@ -81,13 +83,6 @@ class WebController extends BaseController {
 		print '<ul class="list-inline">' . implode('', $li) . '</ul>';
 	}
 	
-	protected function applyPaginator(&$currentPage, &$totalPages, $total, $perPage) {
-		$totalPages = ceil($total / $perPage);
-		$currentPage = hasGet('page') ? get('page') : 0;
-		if ($currentPage>$totalPages-1) $currentPage = $totalPages-1;
-		else if ($currentPage<0) $currentPage = 0;
-	}
-	
 	protected function generateBreadcrump($items) {
 		return $this->renderBreadcrump($items);
 	}
@@ -107,6 +102,7 @@ class WebController extends BaseController {
 	
 	private function renderMenu($items, $type) {
 		$ul = '<ul class="menu">';
+		$count = 0;
 		foreach ($items as $item) {
 			if ($item->type!=$type) continue;
 			$ul .= '<li class="' . $item->liClass() . '">';
@@ -115,9 +111,10 @@ class WebController extends BaseController {
 				$ul .= $this->renderMenu($item->items, $type);
 			}
 			$ul .= '</li>';
+			$count++;
 		}
 		$ul .= '</ul>';
-		return $ul;
+		return $count > 0 ? $ul : '';
 	}
 	
 	private function renderBreadcrump($items) {
@@ -136,6 +133,11 @@ class WebController extends BaseController {
 			}
 		}
 		return '';
+	}
+	
+	public function formValidate($fields) {
+		if (!toBool(post(self::POST_VALIDATOR))) return false;
+		return parent::formValidate($fields);
 	}
 	
 }

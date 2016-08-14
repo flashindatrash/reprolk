@@ -1,7 +1,8 @@
 <?php
+
 //базовая форма добавления
 
-include_once '../core/objects/Form.php';
+Util::inc('objects', 'Form.php');
 
 class OrderForm extends Form {
 	

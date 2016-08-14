@@ -7,13 +7,13 @@ class SwitchPluginController extends JSONController {
 	public function beforeRender() {
 		parent::beforeRender();
 		
-		if (!hasGet('name')) {
+		if (!hasPost('name')) {
 			$this->addAlert(View::str('error_unkhnow_plugin'), 'danger');
 			return;
 		}
 		
-		$name = get('name');
-		$enabled = toBool(get('enabled'));
+		$name = post('name');
+		$enabled = toBool(post('enabled'));
 		
 		if (!$enabled) {
 			$this->response['action'] = 'delete';

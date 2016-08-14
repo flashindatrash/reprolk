@@ -9,6 +9,7 @@ class BaseApiController extends JSONController implements IAuthentication {
 	protected $request;
 	
 	public function __construct() {
+		//DELETE!
 		$_POST = array_merge($_GET, $_POST);
 	}
 	
@@ -17,11 +18,23 @@ class BaseApiController extends JSONController implements IAuthentication {
 		
 		if (!$this->isAvailable) {
 			$this->addAlert(View::str('error_api_access_denied'), 'danger');
+			return;
 		} else if (!$this->isLogined) {
 			$this->addAlert(View::str('error_api_not_logined'), 'danger');
-		} else {
-			$this->processingApi();
+			return;
 		}
+		
+		//проверим реквест
+		if ($this->checkRequest()) {
+			//выполним метод
+			if ($this->execute()) {
+				$this->success = true;
+				$this->response = $this->responsed();
+			}
+		}
+		
+		//DELETE!
+		$this->processingApi();
 	}
 	
 	public function authenticate($isAvailable, $isLogined) {
@@ -29,16 +42,37 @@ class BaseApiController extends JSONController implements IAuthentication {
 		$this->isLogined = $isLogined;
 	}
 	
-	protected function addPostValidator() {
-		$_POST[BaseController::POST_VALIDATOR] = "1";
-	}
-	
+	//DELETE!
 	protected function mergeAlerts($controller) {
 		$this->alerts = array_merge($this->alerts, $controller->alerts);
 	}
 	
+	//удовлетворяет ли потребностям
+	public function checkRequest() {
+		if (is_null($this->request)) {
+			//лениво создадим форму реквеста
+			$this->request = $this->createRequestForm();
+		}
+		return $this->formValidate($this->request->fieldsMandatory());
+	}
+	
+	//выполнение апи
+	public function execute() {
+		return false;
+	}
+	
+	//ответ
+	public function responsed() {
+		return array();
+	}
+	
+	//дефолтный реквест, нужен только для тестового запроса
+	public function getDefaultRequest() {
+		return array();
+	}
+	
+	//DELETE!
 	protected function processingApi() {
-		$this->request = $this->createRequestForm();
 		//выполнение апи, через эту функцию
 	}
 	

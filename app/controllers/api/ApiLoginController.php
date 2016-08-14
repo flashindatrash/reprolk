@@ -1,7 +1,6 @@
 <?php
 
 Util::inc('controllers', 'api/BaseApiController.php');
-Util::inc('controllers', 'LoginController.php');
 
 /*
 params:
@@ -14,32 +13,41 @@ response:
 
 class ApiLoginController extends BaseApiController {
 	
-	private $controller;
-	
 	public function beforeRender() {
 		$this->isLogined = true; //подхачим, чтобы вызвать processingApi
 		parent::beforeRender();
 	}
 	
-	public function processingApi() {
-		$this->controller = new LoginController();
+	public function execute() {
+		Application::$user = User::login(post(User::FIELD_EMAIL), post(User::FIELD_PASSWORD));
 		
-		$this->addPostValidator();
-		if ($this->controller->loginValidate()) {
-			$this->success = $this->controller->login();
+		if (!Account::isLogined()) {
+			$this->addAlert(View::str('error_sign_in'), 'danger');
+			return false;
 		}
 		
-		if ($this->success) {
-			$this->response[Auth::FIELD_KEY] = Account::getAuthKey();
-		}
-		
-		$this->mergeAlerts($this->controller);
+		//сгенерируем новый authKey
+		Account::setAuthKey(md5(Application::$user->email . '_' . Application::$user->password));
+		return true;
+	}
+	
+	public function responsed() {
+		return array(
+			Auth::FIELD_KEY => Account::getAuthKey()
+		);
+	}
+	
+	public function getDefaultRequest() {
+		return array(
+			User::FIELD_EMAIL => Account::getEmail(),
+			User::FIELD_PASSWORD => Account::getPassword()
+		);
 	}
 	
 	public function createRequestForm() {
 		$form = parent::createRequestForm();
-		$form->addField(User::FIELD_EMAIL);
-		$form->addField(User::FIELD_PASSWORD);
+		$form->addField(User::FIELD_EMAIL, INPUT_EMAIL, true);
+		$form->addField(User::FIELD_PASSWORD, INPUT_PASSWORD, true);
 		return $form;
 	}
 	

@@ -1,9 +1,7 @@
 <form action="/login" method="post" class="form-horizontal">
 	<?php 
-		print View::formValidate();
+		print $this->api->request->render();
 		print View::input('_url', 'hidden', '');
-		print View::formNormal('email', 'email');
-		print View::formNormal('password', 'password');
 		if ($this->useCaptcha) print View::formOffset('captcha', 'any', '<div class="g-recaptcha" data-sitekey="6LcSXA8TAAAAAIi7wNkkwexFocdu7XbeyAb2HglT"></div>');
 		print View::formOffset('signup', 'submit');
 	?>

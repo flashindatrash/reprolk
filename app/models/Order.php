@@ -12,6 +12,7 @@ class Order extends BaseModel {
 	const DEPLOY = 'deploy'; //принято в производство
 	const FINISHED = 'finished';
 	
+	const FIELD_ID = 'id';
 	const FIELD_TITLE = 'title'; //поле заголовка
 	const FIELD_STATUS = 'status'; //поле статуса
 	const FIELD_URGENT = 'urgent'; //поле срочности
@@ -178,11 +179,11 @@ class Order extends BaseModel {
 		static
 	*/
 	
-	public static function getCountTotal($filter, $gid = null) {
-		return self::getCount(self::createWhere($filter, $gid), self::createJoin());
+	public static function getCountTotal($filter) {
+		return self::getCount(self::createWhere($filter), self::createJoin());
 	}
 	
-	public static function getAll($order_fields, $filter, $gid = null, $order_by = null, $range = '0, 10') {
+	public static function getAll($order_fields, $filter, $order_by = null, $range = '0, 10') {
 		$fields = array();
 		foreach ($order_fields as $ofield) {
 			$fields[] = self::field($ofield);
@@ -191,32 +192,45 @@ class Order extends BaseModel {
 		$fields[] = self::field('id', null, 'id');
 		$fields[] = self::field('username', User::tableName(), 'username');
 		$fields[] = self::field('name', Photopolymer::tableName(), 'photopolymer_name');
-		return self::selectRows($fields, self::createWhere($filter, $gid), self::createJoin(), $order_by, $range);
+		return self::selectRows($fields, self::createWhere($filter), self::createJoin(), $order_by, $range);
 	}
 	
-	private static function createWhere($filter, $gid = null) {
+	private static function createWhere($filter) {
 		$where = array();
-		if (!is_null($gid)) 
-			$where[] = self::field('gid', User::tableName()) . ' = ' . $gid;
-		if (!is_null($filter->status) && count($filter->status)>0) {
+		$where[] = self::field(User::FIELD_GID, User::tableName()) . ' = ' . $filter->gid;
+		
+		//статус
+		$status = $filter->valueByName('status');
+		if (!is_null($status) && count($status)>0) {
 			$statuses = array();
-			foreach ($filter->status as $status) {
+			foreach ($status as $status) {
 				$statuses[] = self::field('status') . ' = "' . $status . '"';
 			}
 			$where[] = self::where($statuses, 'or');
 		}
 		
-		if (!is_null($filter->search))				$where[] = self::field('title') . ' REGEXP "' . $filter->searchRegexp() . '"';
+		//поиск
+		$search = $filter->valueByName('search');
+		if (!is_null($search)) $where[] = self::field('title') . ' REGEXP "' . self::createSearch($search) . '"';
 		
-		$date_due_equal = is_null($filter->date_due_start) || is_null($filter->date_due_end);
-		$date_created_equal = is_null($filter->date_created_start) || is_null($filter->date_created_end);
+		//сроки
+		$date_due = $filter->valueByName('date_due');
+		if (!is_null($date_due)) $where[] = self::field('date_due') . ' = "' . $date_due . '"';
 		
-		if (!is_null($filter->date_due_start))		$where[] = self::field('date_due') . ' ' . ($date_due_equal ? '=' : '>=') . ' "' . $filter->date_due_start . '"';
-		if (!is_null($filter->date_due_end))		$where[] = self::field('date_due') . ' ' . ($date_due_equal ? '=' : '<=') . ' "' . $filter->date_due_end . '"';
-		if (!is_null($filter->date_created_start))	$where[] = self::field('date_created') . ' ' . ($date_created_equal ? '=' : '>=') . ' "' . $filter->date_created_start . '"';
-		if (!is_null($filter->date_created_end))	$where[] = self::field('date_created') . ' ' . ($date_created_equal ? '=' : '<=') . ' "' . $filter->date_created_end . '"';
-		if (!is_null($filter->username) && $filter->username!=0) $where[] = self::field('uid') . ' = ' . $filter->username;
+		//дата создания
+		$date_created = $filter->valueByName('date_created');
+		if (!is_null($date_created)) $where[] = self::field('date_created') . ' = "' . $date_created . '"';
+		
+		//пользователь
+		$username = $filter->valueByName('username');
+		if (!is_null($username) && $username!=0) $where[] = self::field('uid') . ' = ' . $username;
+		
 		return $where;
+	}
+	
+	private static function createSearch($search) {
+		$regexp = str_replace('*', '.*', $search);
+		return $regexp;
 	}
 	
 	private static function createJoin() {
