@@ -3,6 +3,7 @@
 	print View::formValidate();
 	print View::formNormal('name', 'text');
 	print View::formNormal('type', 'select', $this->types, false, false);
+	print View::formOffset('customized', 'checkbox');
 	print View::formNormal('value', 'text');
 	print View::formNormal('default', 'text');
 	print View::formNormal('weight', 'numeric', 0);

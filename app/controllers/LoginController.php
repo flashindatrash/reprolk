@@ -31,12 +31,35 @@ class LoginController extends WebController implements IRedirect {
 			}
 		}
 		
+		$field = new Field();
+		$field->name = 'redirect';
+		$field->type = INPUT_HIDDEN;
+		if (hasPost('redirect')) {
+			$field->session = post('redirect');
+		} else {
+			$field->session = get('_url');
+		}
+		$this->api->request->fields[] = $field;
+		
+		
 		$this->addJSfile('https://www.google.com/recaptcha/api.js');
 	}
 	
 	//IRedirect
 	public function getRedirect() {
-		$url = Application::$routes->byName(Route::ORDER_ALL)->forGet(Auth::FIELD_KEY . '=' . Application::$user->auth_key);
+		if (hasPost('redirect')) {
+			$route = Application::$routes->parseUrl(post('redirect'));
+		}	
+		
+		if (is_null($route)) {
+			$route = Application::$routes->byName(Route::ORDER_ALL);
+		}
+		
+		$gets = array();
+		$gets[Auth::FIELD_KEY] = Application::$user->auth_key;
+		
+		$url = $route->forGet(Util::httpQuery($gets));
+		
 		return new Redirect(View::str('sign_successfuly'), $url);
 	}
 	

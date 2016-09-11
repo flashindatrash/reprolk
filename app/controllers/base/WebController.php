@@ -135,11 +135,17 @@ class WebController extends BaseController {
 		return '';
 	}
 	
-	public function formValidate($fields) {
-		if (!toBool(post(self::POST_VALIDATOR))) return false;
-		return parent::formValidate($fields);
+	public function hasBeenPost() {
+		return toBool(post(self::POST_VALIDATOR));
 	}
 	
+	public function formValidate($fields) {
+		return $this->hasBeenPost() && parent::formValidate($fields);
+	}
+	
+	protected function mergeAlerts($api) {
+		$this->alerts = array_merge($this->alerts, $api->alerts);
+	}
 }
 
 ?>

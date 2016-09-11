@@ -11,6 +11,10 @@ class Util {
 		}
 	}
 	
+	public static function httpQuery($query) {
+		return http_build_query($query);
+	}
+	
 	public static function paging(&$currentPage, &$totalPages, $total, $perPage, $from = 'get') {
 		$totalPages = ceil($total / $perPage);
 		if ($from=='get') {

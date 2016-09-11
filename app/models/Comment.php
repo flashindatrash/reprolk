@@ -64,7 +64,7 @@ class Comment extends BaseModel {
 	}
 	
 	public static function add($oid, $message, $status = '') {
-		$fields = [Comment::FIELD_OID, Comment::FIELD_UID, Comment::FIELD_MESSAGE, Comment::FORMAT_DATE, Comment::FIELD_STATUS];
+		$fields = [Comment::FIELD_OID, Comment::FIELD_UID, Comment::FIELD_MESSAGE, Comment::FIELD_DATE, Comment::FIELD_STATUS];
 		$values = [$oid, Account::getId(), $message, date(Comment::FORMAT_DATE), $status];
 		return self::insertRow($fields, $values);
 	}

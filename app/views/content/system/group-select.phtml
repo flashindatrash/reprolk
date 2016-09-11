@@ -9,7 +9,9 @@
 
 <form method="get" class="form-horizontal">
 <?php 
-	if (hasGet('page')) print View::input('page', 'hidden', get('page'));
+	foreach(gets() as $key => $value) {
+		print View::input($key, 'hidden', $value);
+	}
 	print View::formNormal('gid', 'select', $groups, true, false);
 	print View::formOffset('select', 'submit');
 ?>

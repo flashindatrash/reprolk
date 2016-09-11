@@ -149,15 +149,6 @@ class Order extends BaseModel {
 		if ($success) {
 			foreach ($fields as $i => $field) {
 				$this->$field = $values[$i];
-				
-				//хак, при обновлении pid, меняем photopolymer_name и photopolymer_id_1c
-				if ($field=="pid") {
-					$photopolymer = Photopolymer::byId($values[$i]);
-					if (!is_null($photopolymer)) {
-						$this->photopolymer_name = $photopolymer->name;
-						$this->photopolymer_id_1c = $photopolymer->id_1c;
-					}
-				}
 			}
 		}
 		return $success;
@@ -191,14 +182,16 @@ class Order extends BaseModel {
 		$fields[] = self::field('uid');
 		$fields[] = self::field('id', null, 'id');
 		$fields[] = self::field('username', User::tableName(), 'username');
-		$fields[] = self::field('name', Photopolymer::tableName(), 'photopolymer_name');
+		$fields[] = self::field('name', Option::tableName(), 'photopolymer_name');
 		return self::selectRows($fields, self::createWhere($filter), self::createJoin(), $order_by, $range);
 	}
 	
 	private static function createWhere($filter) {
 		$where = array();
-		$where[] = self::field(User::FIELD_GID, User::tableName()) . ' = ' . $filter->gid;
-		
+		if (!is_null($filter->gid)) {
+			$where[] = self::field(User::FIELD_GID, User::tableName()) . ' = ' . $filter->gid;
+		}
+
 		//статус
 		$status = $filter->valueByName('status');
 		if (!is_null($status) && count($status)>0) {
@@ -236,7 +229,7 @@ class Order extends BaseModel {
 	private static function createJoin() {
 		$join = array();
 		$join[] = self::inner('id', User::tableName(), 'uid');
-		$join[] = self::inner('id', Photopolymer::tableName(), 'pid');
+		$join[] = self::inner('id', Option::tableName(), 'pid');
 		return $join;
 	}
 	
@@ -245,12 +238,12 @@ class Order extends BaseModel {
 		$fields[] = self::field('*');
 		$fields[] = self::field('username', User::tableName(), 'username');
 		$fields[] = self::field('gid', User::tableName(), 'gid');
-		$fields[] = self::field('name', Photopolymer::tableName(), 'photopolymer_name');
-		$fields[] = self::field('id_1c', Photopolymer::tableName(), 'photopolymer_id_1c');
+		$fields[] = self::field('name', Option::tableName(), 'photopolymer_name');
+		$fields[] = self::field('id_1c', Option::tableName(), 'photopolymer_id_1c');
 		
 		$join = array();
 		$join[] = self::inner('id', User::tableName(), 'uid');
-		$join[] = self::inner('id', Photopolymer::tableName(), 'pid');
+		$join[] = self::inner('id', Option::tableName(), 'pid');
 		
 		$where = array();
 		$where[] = self::field('id') . ' = ' .$id;

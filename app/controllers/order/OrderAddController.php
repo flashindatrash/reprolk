@@ -1,5 +1,6 @@
 <?php
 
+Util::inc('controllers', 'api/ApiOrderAddController.php');
 Util::inc('controllers', 'order/BaseOrderController.php');
 Util::inc('objects', 'order/TemplateStorage.php');
 Util::inc('interfaces', 'IRedirect.php');
@@ -8,8 +9,10 @@ class OrderAddController extends BaseOrderController implements IRedirect {
 	
 	public $form;
 	public $templates;
+	public $api;
 	
 	public function beforeRender() {
+		$this->api = new ApiOrderAddController();
 		$this->templates = new TemplateStorage();
 		
 		$this->createOrderForm();

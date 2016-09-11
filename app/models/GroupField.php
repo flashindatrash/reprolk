@@ -29,8 +29,10 @@ class GroupField extends Field {
 		$where = array();
 		$where[] = self::field('route', Field::tableName()) . ' = "' . $route . '"';
 		$where[] = self::field('system', Field::tableName()) . ' = 0';
-		$where[] = self::field('gid') . ' = ' . $gid;
-		
+		if (!is_null($gid)) {
+			$where[] = self::field('gid') . ' = ' . $gid;
+		}
+
 		$join = array();
 		$join[] = self::inner('id', Field::tableName(), 'fid');
 		

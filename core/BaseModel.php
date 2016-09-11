@@ -36,8 +36,8 @@ class BaseModel {
 		return Application::$db->selectRows(static::tableName(), static::getClassName(), $select, $where, $join, $order, $range);
 	}
 	
-	protected static function delete($where = null) {
-		return Application::$db->delete(static::tableName(), $where);
+	protected static function delete($where = null, $join = null) {
+		return Application::$db->delete(static::tableName(), $where, $join);
 	}
 	
 	protected static function truncate() {

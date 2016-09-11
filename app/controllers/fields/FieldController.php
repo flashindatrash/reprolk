@@ -1,23 +1,20 @@
 <?php
 
-Util::inc('controllers', 'BaseFieldController.php');
+Util::inc('controllers', 'fields/BaseFormController.php');
 
-class FieldPageController extends BaseFieldController {
+class FieldController extends BaseFormController {
 	
-	public $page;
 	public $fields;
 	
 	public function beforeRender() {
 		if (!$this->hasPage()) return;
 		
-		$this->page = $this->getRoute();
-		
 		if ($this->editWeight()) {
 			$this->addAlert(View::str('success_save'), 'success');
 		}
 		
-		$this->fields = Field::getAll($this->page->name);
-		$this->view = 'admin/field/page';
+		$this->fields = Field::getAll($this->pageName);
+		$this->view = 'admin/field/index';
 	}
 	
 	private function editWeight() {

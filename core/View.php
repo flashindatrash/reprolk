@@ -218,7 +218,7 @@ class View {
 	public static function paginatorPage($page) {
 		$gets = gets();
 		$gets['page'] = $page;
-		return self::getValues($gets);
+		return Util::httpQuery($gets);
 	}
 	
 	public static function linkSort($field, $order) {
@@ -229,7 +229,7 @@ class View {
 		$gets = gets();
 		$gets['sort'] = $field;
 		$gets['by'] = $by;
-		$html = '<a href="?' . self::getValues($gets) . '">' . self::str( $field ) . '</a>';
+		$html = '<a href="?' . Util::httpQuery($gets) . '">' . self::str( $field ) . '</a>';
 		if ($field==$order->field) $html .= self::orderBy($order);
 		return $html;
 	}
@@ -316,10 +316,6 @@ class View {
 	
 	public static function icon($value) {
 		return '<span class="glyphicon glyphicon-' . $value . '" aria-hidden="true"></span>';
-	}
-	
-	public static function getValues($arr) {
-		return http_build_query($arr);
 	}
 	
 	private static function orderBy($order) {

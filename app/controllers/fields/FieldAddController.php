@@ -1,9 +1,9 @@
 <?php
 
-include_once '../app/controllers/BaseFieldController.php';
-include_once '../core/interfaces/IRedirect.php';
+Util::inc('controllers', 'fields/BaseFormController.php');
+Util::inc('interfaces', 'IRedirect.php');
 
-class FieldAddController extends BaseFieldController implements IRedirect {
+class FieldAddController extends BaseFormController implements IRedirect {
 	
 	public $types;
 	
@@ -30,7 +30,7 @@ class FieldAddController extends BaseFieldController implements IRedirect {
 		if (hasPost('name')) $_POST['name'] = validSymbols(post('name'));
 		
 		if ($this->formValidate(['name', 'type', 'weight'])) {
-			if (Field::add(get('page'), post('type'), post('name'), post('value'), toBool(post('mandatory')), int(post('weight')), post('default'))) {
+			if (Field::add(get('page'), post('type'), post('name'), post('value'), toBool(post('mandatory')), toBool(post('customized')), int(post('weight')), post('default'))) {
 				return true;
 			} else {
 				$this->addAlert(sprintf(View::str('error_field_add'), post('name')), 'danger');

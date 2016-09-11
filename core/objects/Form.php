@@ -8,7 +8,7 @@ class Form {
 	public $gid;
 	
 	public function loadFields($route, $gid = null) {
-		if (is_null($gid)) $gid = Account::getGid();
+		if (is_null($gid) && !Account::isAdmin()) $gid = Account::getGid();
 		$this->gid = $gid;
 		$this->fields = array_merge(Field::getAll($route, false), GroupField::getAll($route, $this->gid));
 		

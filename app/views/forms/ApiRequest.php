@@ -15,12 +15,25 @@ class ApiRequestForm extends Form {
 		$this->fields[] = $field;
 	}
 	
+	//спрятать элемент как невидимый, выставив ему значение
+	public function hide($name, $value) {
+		$field = $this->fieldByName($name);
+		if (!is_null($field)) {
+			$field->type = INPUT_HIDDEN;
+			$field->session = $value;
+		}
+	}
+	
 	//кастомный рендер полей
 	public function field_status($field) {
 		return View::formNormal($field->name, $field->type, $field->getOption(), false, false, $field->getValue());
 	}
 	
 	public function field_username($field) {
+		return View::formNormal($field->name, $field->type, $field->getOption(), true, false, $field->getValue());
+	}
+	
+	public function field_pid($field) {
 		return View::formNormal($field->name, $field->type, $field->getOption(), true, false, $field->getValue());
 	}
 	
