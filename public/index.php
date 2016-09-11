@@ -17,6 +17,7 @@ try {
 	$app->setLang(Account::getLang());
 	
 	$app->setRoutes([
+		//Orders
 		new OrderRoute(Route::ORDER_ALL, '/order/all', UserAccess::ORDER_VIEW, Route::TYPE_NORMAL, [
 			new OrderRoute(Route::ORDER_ADD, '/order/add', UserAccess::ORDER_ADD),
 			new OrderRoute(Route::ORDER_ARCHIVE, '/order/archive', UserAccess::ORDER_VIEW),
@@ -33,11 +34,13 @@ try {
 			]),
 		]),
 		
+		//Templates
 		new Route(Route::TEMPLATE_VIEW, '/template', UserAccess::TEMPLATE_VIEW, Route::TYPE_NORMAL, [
 			new Route(Route::TEMPLATE_EDIT, '/template/edit', UserAccess::TEMPLATE_EDIT, Route::TYPE_HIDDEN),
 			new Route(Route::TEMPLATE_DELETE, '/template/delete', UserAccess::TEMPLATE_EDIT, Route::TYPE_HIDDEN),
 		]),
 		
+		//Users
 		new Route(Route::USER_ALL, '/user/all', UserAccess::USER_VIEW, Route::TYPE_NORMAL, [
 			new Route(Route::USER_HISTORY, '/user/history', UserAccess::ADMIN),
 			new Route(Route::USER_ADD, '/user/add', UserAccess::USER_ADD),
@@ -46,19 +49,21 @@ try {
 				new Route(Route::VIEW_AS_CANCEL, '/user/view-as/cancel', UserAccess::ADMIN, Route::TYPE_HIDDEN),
 			]),
 		]),
-			
-		new Route(Route::ADMIN, '/admin', UserAccess::MANAGEMENT, Route::TYPE_NORMAL, [
-			new Route(Route::FIELD_PAGES, '/admin/fields', UserAccess::ADMIN, Route::TYPE_NORMAL, [
-				new Route(Route::FIELD_PAGE, '/admin/fields/page', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				new Route(Route::FIELD_DELETE, '/admin/fields/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				new Route(Route::FIELD_ADD, '/admin/fields/add', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				new Route(Route::FIELD_BIND, '/admin/fields/bind', UserAccess::ADMIN, Route::TYPE_HIDDEN),
+		
+		//Admin
+		new Route(Route::ADMIN, '/admin', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+			new FormListRoute(Route::FORM_LIST, '/admin/form', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+				new Route(Route::FIELD_ADD, '/admin/fields/add', UserAccess::ADMIN, Route::TYPE_HIDDEN, null, Route::PATH_FIELDS),
+				new Route(Route::FIELD_DELETE, '/admin/fields/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN, null, Route::PATH_FIELDS),
+				new Route(Route::FIELD_BIND, '/admin/fields/bind', UserAccess::ADMIN, Route::TYPE_HIDDEN, null, Route::PATH_FIELDS),
+			]),
+
+			new OptionListRoute(Route::OPTION_LIST, '/admin/field', UserAccess::ADMIN, Route::TYPE_NORMAL, [
+				new Route(Route::OPTION_ADD, '/admin/option/add', UserAccess::ADMIN, Route::TYPE_HIDDEN, null, Route::PATH_FIELDS),
+				new Route(Route::OPTION_DELETE, '/admin/option/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN, null, Route::PATH_FIELDS),
+				new Route(Route::OPTION_BIND, '/admin/option/group', UserAccess::ADMIN, Route::TYPE_HIDDEN, null, Route::PATH_FIELDS),
 			]),
 			
-			new Route(Route::POLYMER_ALL, '/admin/photopolymers', UserAccess::ADMIN, Route::TYPE_NORMAL, [
-				new Route(Route::POLYMER_DELETE, '/admin/photopolymers/delete', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-				new Route(Route::POLYMER_BIND, '/admin/photopolymers/group', UserAccess::ADMIN, Route::TYPE_HIDDEN),
-			]),
 			
 			new Route(Route::LOCALE_STATS, '/admin/locale', UserAccess::ADMIN, Route::TYPE_NORMAL, [
 				new Route(Route::LOCALE_ALL, '/admin/locale/all', UserAccess::ADMIN, Route::TYPE_NORMAL),
@@ -83,7 +88,7 @@ try {
 		new Route(Route::LOGOUT, '/logout', UserAccess::AUTH, Route::TYPE_SUB),
 		
 		//Ajax
-		new AjaxRoute(Route::SWITCH_PLUGIN, '/ajax/plugin/switch', UserAccess::AUTH),
+		new Route(Route::SWITCH_PLUGIN, '/ajax/plugin/switch', UserAccess::AUTH, Route::TYPE_HIDDEN, null, Route::PATH_AJAX),
 		
 		//Api
 		new ApiRoute(Route::API_LOGIN, '/api/login', UserAccess::ALL),
@@ -91,7 +96,9 @@ try {
 		new ApiRoute(Route::API_ORDER_CANCEL, '/api/order/cancel', UserAccess::API),
 		new ApiRoute(Route::API_ORDER_ADD, '/api/order/add', UserAccess::API),
 		new ApiRoute(Route::API_ORDER_REPEAT, '/api/order/repeat', UserAccess::API),
-		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API)
+		new ApiRoute(Route::API_FIELD_GET, '/api/field/get', UserAccess::API),
+		new ApiRoute(Route::API_OPTION_ADD, '/api/option/add', UserAccess::API),
+		new ApiRoute(Route::API_OPTION_DELETE, '/api/option/delete', UserAccess::API)
 	]);
 	
 	

@@ -1,6 +1,7 @@
 <form method="post" class="form-horizontal" id="form-bind">
 <?php
 	print View::formValidate();
+	print View::input('fid', 'hidden', $this->fid);
 	print View::input('gid', 'hidden', get('gid'));
 	print View::input('ids', 'hidden');
 	

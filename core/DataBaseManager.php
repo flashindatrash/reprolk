@@ -87,8 +87,9 @@ class DataBaseManager {
 		return self::insert($into, $fields, self::array2insert($array), $duplicate);
 	}
 	
-	public function delete($from, $where = NULL) {
-		$str = 'delete from ' . $this->tableName($from) . self::convertWhere($where);
+	public function delete($from, $where = NULL, $join = NULL) {
+		$join = is_null($join) ? '' : ' using ' . $from . ' ' . join(' ', $join); //без using не работает
+		$str = 'delete from ' . $this->tableName($from) . $join . self::convertWhere($where);
 		return $this->query($str) ? true : false;
 	}
 	

@@ -9,18 +9,21 @@ class Field extends BaseModel {
 	public $system;
 	public $mandatory;
 	public $templated;
+	public $customized;
 	public $weight;
 	
+	const FIELD_ID = 'id';
+	const FIELD_NAME = 'name';
+
 	public static function tableName() {
 		return 'fields';
 	}
 	
-	public static $fields = array('id', 'route', 'name', 'type', 'system', 'mandatory', 'templated', 'weight');
+	public static $fields = array('id', 'route', 'name', 'type', 'system', 'mandatory', 'templated', 'customized', 'weight');
 	
 	public static function tableNameByRoute($route) {
 		switch ($route) {
 			case Route::ORDER_ADD: return Order::tableName();
-			case Route::ORDER_ALL: return Order::tableName();
 		}
 		return null;
 	}
@@ -71,6 +74,10 @@ class Field extends BaseModel {
 	public function isTemplated() {
 		return $this->templated==1;
 	}
+
+	public function isCustomized() {
+		return $this->customized==1;
+	}
 	
 	/*
 		can...
@@ -109,9 +116,15 @@ class Field extends BaseModel {
 			//если опции указаны вручную
 			return $this->option;
 		}
+		
 		switch($this->type) {
 			case 'select':
 			case 'multiple':
+				//кастомные селекты возмем из GroupOption
+				if ($this->isCustomized()) {
+					return reArray(GroupOption::getAll($this->id), GroupOption::FIELD_OID, 'name');
+				}
+				//или из енама
 				$column = $this->getColumn();
 				return !is_null($column) ? $column->enum() : [];
 			default:
@@ -163,6 +176,10 @@ class Field extends BaseModel {
 	/*
 		selects
 	*/
+
+	public static function hasId($id) {
+		return !is_null(self::byId($id));
+	}
 	
 	public static function byId($id) {
 		$where = array();
@@ -170,6 +187,10 @@ class Field extends BaseModel {
 		return self::selectRow(null, $where);
 	}
 	
+	public static function getCustomized() {
+		return self::selectRows([Field::FIELD_ID, Field::FIELD_NAME], [self::field('customized') . ' = 1']);
+	}
+
 	public static function getAll($route, $showCommon = true, $showSystem = true) {
 		$where = array();
 		$where[] = self::field('route') . ' = "' . $route . '"';
@@ -178,7 +199,7 @@ class Field extends BaseModel {
 		return self::selectRows(null, $where, null, new SQLOrderBy('weight', 'asc'));
 	}
 	
-	public static function add($route, $type, $name, $value, $mandatory, $weight, $default) {
+	public static function add($route, $type, $name, $value, $mandatory, $customized, $weight, $default) {
 		$table = self::tableNameByRoute($route);
 		if (is_null($table)) return null;
 		

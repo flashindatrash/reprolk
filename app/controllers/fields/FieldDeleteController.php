@@ -31,7 +31,7 @@ class FieldDeleteController extends WebController implements IRedirect, IConfirm
 	}
 	
 	public function getRedirect() {
-		return new Redirect(View::str('field_delete_successfuly'), Application::$routes->byName(Route::FIELD_PAGE)->path . '?page=' . $this->field->route); 
+		return new Redirect(View::str('field_delete_successfuly'), Application::$routes->byName(Route::FORMLIST)->path . '/' . $this->field->route); 
 	}
 	
 	public function getConfirm() {

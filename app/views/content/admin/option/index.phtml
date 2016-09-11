@@ -1,0 +1,16 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<?php print View::str('photopolymers_all_list_header'); ?>
+		<div class="pull-right">
+			<?php print View::link(Route::OPTION_ADD, '', 'fid=' . $this->fid, null, 'btn btn-xs btn-primary glyphicon glyphicon-plus', null, 'left'); ?>
+			<?php print View::link(Route::OPTION_BIND, '', 'fid=' . $this->fid, null, 'btn btn-xs btn-primary glyphicon glyphicon-user', null, 'left'); ?>
+		</div>
+	</div>
+	<ul class="list-group">
+	<?php
+	foreach ($this->options as $option) {
+		print '<li class="list-group-item">' . $option->name . View::link(Route::OPTION_DELETE, '<div class="pull-right"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>', 'id=' . $option->id) . '</li>';
+	}
+	?>
+	</ul>
+</div>

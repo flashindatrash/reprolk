@@ -20,9 +20,11 @@ class Route {
 	const ORDER_APPROVAL = 'OrderApproval';
 	const ORDER_APPROVED = 'OrderApproved';
 	const ORDER_DISAPPROVED = 'OrderDisapproved';
-	const POLYMER_ALL = 'PolymerAll';
-	const POLYMER_BIND = 'PolymerBind';
-	const POLYMER_DELETE = 'PolymerDelete';
+	const OPTION_LIST = 'OptionList';
+	const OPTION = 'Option';
+	const OPTION_ADD = 'OptionAdd';
+	const OPTION_BIND = 'OptionBind';
+	const OPTION_DELETE = 'OptionDelete';
 	const PROFILE = 'User';
 	const USER_ADD = 'UserAdd';
 	const USER_ALL = 'UserAll';
@@ -32,8 +34,8 @@ class Route {
 	const VIEW_AS = 'ViewAs';
 	const VIEW_AS_CANCEL = 'ViewAsCancel';
 	const COMMENT_DELETE = 'CommentDelete';
-	const FIELD_PAGES = 'FieldPages';
-	const FIELD_PAGE = 'FieldPage';
+	const FORM_LIST = 'FormList';
+	const FIELD = 'Field';
 	const FIELD_DELETE = 'FieldDelete';
 	const FIELD_ADD = 'FieldAdd';
 	const FIELD_BIND = 'FieldBind';
@@ -48,29 +50,39 @@ class Route {
 	const API_EXECUTE = 'ApiExecute';
 	const CRON = 'Cron';
 	const SWITCH_PLUGIN = 'SwitchPlugin';
+	
 	const API_LOGIN = 'ApiLogin';
 	const API_ORDER_ADD = 'ApiOrderAdd';
 	const API_ORDER_ALL = 'ApiOrderAll';
 	const API_ORDER_CANCEL = 'ApiOrderCancel';
 	const API_ORDER_REPEAT = 'ApiOrderRepeat';
 	const API_FIELD_GET = 'ApiFieldGet';
+	const API_OPTION_ADD = 'ApiOptionAdd';
+	const API_OPTION_DELETE = 'ApiOptionDelete';
 	
 	const TYPE_NORMAL = 0;
 	const TYPE_SUB = 1;
 	const TYPE_HIDDEN = 2;
+
+	const PATH_FIELDS = 'fields/';
+	const PATH_API = 'api/';
+	const PATH_AJAX = 'ajax/';
+	const PATH_ORDER = 'order/';
 	
 	public $name;
 	public $path;
 	public $permission;
 	public $type;
 	public $routes;
+	public $controllerPath;
 	
-	public function __construct($name, $path = '/', $permission = null, $type = 0, $routes = null) {
+	public function __construct($name, $path = '/', $permission = null, $type = 0, $routes = null, $controllerPath = '') {
 		$this->name = $name;
-		$this->path = $path;
+		$this->path = strtolower($path);
 		$this->permission = $permission;
 		$this->type = $type;
 		$this->routes = is_null($routes) ? [] : $routes;
+		$this->controllerPath = $controllerPath;
 	}
 	
 	//клонирование роута
@@ -105,7 +117,7 @@ class Route {
 	
 	//путь контроллера
 	public function controllerPath() {
-		return $this->controllerName() . '.php';
+		return $this->controllerPath . $this->controllerName() . '.php';
 	}
 	
 	//имя контроллера

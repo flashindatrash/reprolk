@@ -1,8 +1,8 @@
 <?php
 
-Util::inc('controllers', 'BaseFieldController.php');
+Util::inc('controllers', 'fields/BaseFormController.php');
 
-class FieldBindController extends BaseFieldController {
+class FieldBindController extends BaseFormController {
 	
 	public function beforeRender() {
 		if (!$this->hasPage()) return;
@@ -13,7 +13,7 @@ class FieldBindController extends BaseFieldController {
 			$this->save();
 			
 			$this->view = 'admin/field/bind';
-			$this->addJSparam('all', reArray(Field::getAll(get('page'), true, false), 'id', 'name'));
+			$this->addJSparam('all', reArray(Field::getAll($this->pageName, true, false), 'id', 'name'));
 			$this->addJSparam('current', reArray(GroupField::getFids(get('gid')), null, 'fid'));
 			$this->addJSfile('bind');
 		}

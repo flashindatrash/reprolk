@@ -11,10 +11,6 @@ class OrderAddForm extends OrderForm {
 		$this->setDefault([
 			Order::FIELD_DATE_DUE => (new DateTime('tomorrow'))->format("Y-m-d")
 		]);
-		
-		$this->setOption([
-			Order::FIELD_PID => reArray(GroupPhotopolymer::getAll(), GroupPhotopolymer::FIELD_PID, 'name')
-		]);
 	}
 	
 	public function field_pid($field) {

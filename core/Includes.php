@@ -17,8 +17,10 @@ include_once '../core/objects/route/Routes.php';
 include_once '../core/objects/route/Route.php';
 include_once '../core/objects/route/AccountRoute.php';
 include_once '../core/objects/route/ApiRoute.php';
-include_once '../core/objects/route/AjaxRoute.php';
 include_once '../core/objects/route/OrderRoute.php';
+include_once '../core/objects/route/DataRoute.php';
+include_once '../core/objects/route/FormListRoute.php';
+include_once '../core/objects/route/OptionListRoute.php';
 
 include_once '../core/objects/Session.php';
 include_once '../core/objects/CookieStorage.php';

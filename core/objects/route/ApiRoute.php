@@ -3,11 +3,7 @@
 class ApiRoute extends Route {
 	
 	public function __construct($name, $path = '/', $permission = null) {
-		parent::__construct($name, $path, $permission, Route::TYPE_HIDDEN);
-	}
-	
-	public function controllerPath() {
-		return 'api/' . parent::controllerPath();
+		parent::__construct($name, $path, $permission, Route::TYPE_HIDDEN, null, Route::PATH_API);
 	}
 	
 	//текст для ссылок для API Documentation
